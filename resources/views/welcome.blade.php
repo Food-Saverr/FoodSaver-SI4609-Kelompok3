@@ -235,6 +235,101 @@
     </div>
   </section>
 
+  <!-- FAQ Section -->
+  <section id="faq" class="py-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+    <div class="container mx-auto px-6 md:px-12 lg:px-20">
+      <!-- Heading -->
+      <div class="max-w-2xl mx-auto text-center mb-16">
+        <h2 class="text-3xl md:text-4xl title-font font-extrabold gradient-text mb-4 animate-fade-up">
+          Pertanyaan Umum
+        </h2>
+        <p class="text-gray-600 md:text-lg leading-relaxed animate-fade-up-delay">
+          Temukan jawaban atas pertanyaan Anda tentang FoodSaver dan bagaimana kami membantu mengurangi pemborosan makanan.
+        </p>
+      </div>
+
+      <!-- FAQ Items -->
+      <div class="max-w-3xl mx-auto space-y-6">
+        <!-- FAQ Item 1 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Apa itu FoodSaver?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            FoodSaver adalah platform yang membantu mengurangi pemborosan makanan dengan mendistribusikan makanan berlebih ke pihak yang membutuhkan.
+          </p>
+        </details>
+
+        <!-- FAQ Item 2 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.1s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Bagaimana cara bergabung dengan FoodSaver?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            Klik tombol "Gabung Sekarang" pada halaman utama dan lengkapi formulir pendaftaran dengan informasi yang valid.
+          </p>
+        </details>
+
+        <!-- FAQ Item 3 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.2s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Bagaimana cara mendonasikan makanan?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            Setelah mendaftar, Anda bisa menambahkan stok makanan yang ingin didonasikan melalui dashboard dan menentukan lokasi serta jadwal pengambilan.
+          </p>
+        </details>
+
+        <!-- FAQ Item 4 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.3s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Apa saja keuntungan menggunakan FoodSaver?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            Dengan FoodSaver, Anda membantu mengurangi pemborosan makanan, bergabung dengan komunitas peduli, dan menikmati layanan penyaluran yang cepat, terpercaya, serta terintegrasi.
+          </p>
+        </details>
+
+        <!-- FAQ Item 5 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.4s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Bagaimana keamanan data di FoodSaver?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            FoodSaver menggunakan protokol keamanan dan enkripsi tingkat tinggi untuk menjaga kerahasiaan data pribadi dan transaksi pengguna.
+          </p>
+        </details>
+
+        <!-- FAQ Item 6 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.5s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Apakah FoodSaver tersedia di seluruh Indonesia?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            Saat ini FoodSaver telah hadir di beberapa kota besar dan terus berkembang untuk menjangkau wilayah Indonesia yang lebih luas.
+          </p>
+        </details>
+
+        <!-- FAQ Item 7 -->
+        <details class="group bg-white/80 backdrop-blur-xl p-6 rounded-2xl custom-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fade-up" style="animation-delay: 0.6s;">
+          <summary class="cursor-pointer text-lg md:text-xl font-semibold text-gray-800 flex items-center justify-between">
+            <span>Bagaimana jika saya mengalami masalah saat menggunakan platform?</span>
+            <i class="fas fa-chevron-down text-orange-500 w-5 h-5 transition-transform duration-300 group-open:rotate-180"></i>
+          </summary>
+          <p class="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+            Tim dukungan FoodSaver siap membantu 24/7. Silakan hubungi kami melalui halaman kontak untuk mendapatkan bantuan lebih lanjut.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact Section -->
   <section id="kontak" class="py-20 bg-orange-50">
     <div class="container mx-auto px-6 md:px-12 lg:px-20">
