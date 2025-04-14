@@ -12,7 +12,7 @@
 
     {{-- Tombol Kembali --}}
     <div class="mb-6">
-      <a href="{{ route('dashboard.admin') }}"
+      <a href="{{ route('admin.dashboard') }}"
          class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-300">
         ← Kembali ke Dashboard
       </a>

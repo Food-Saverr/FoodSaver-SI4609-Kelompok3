@@ -13,11 +13,9 @@ return new class extends Migration
             $table->string('Nama_Makanan');
             $table->integer('Jumlah_Tersedia');
             $table->integer('Jumlah_Didonasi');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('penggunas')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('penggunas')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     public function down(): void
