@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -10,51 +9,45 @@ use App\Models\Pengguna;
 
 class LoginController extends Controller
 {
-    /**
-     * Menampilkan form login.
-     */
+    // Tampilkan form login
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Memproses request login.
-     */
+    // Proses login
     public function login(Request $request)
     {
-        // Validasi input login
+        // Validasi input
         $request->validate([
-            'Email_Pengguna'   => 'required|email',
-            'Password_Pengguna'=> 'required|string',
+            'Email_Pengguna'    => 'required|email',
+            'Password_Pengguna' => 'required|string',
         ]);
 
         // Cari pengguna berdasarkan email
         $user = Pengguna::where('Email_Pengguna', $request->Email_Pengguna)->first();
 
-        // Jika user ditemukan dan password cocok
         if ($user && Hash::check($request->Password_Pengguna, $user->Password_Pengguna)) {
-            // Lakukan autentikasi menggunakan sistem session Laravel
             Auth::login($user, $request->has('remember'));
 
-            // Cek role pengguna untuk menentukan redirect yang sesuai
+            // Redirect berdasarkan role
             if ($user->Role_Pengguna === 'Pengguna') {
-                // TODO: Ganti '/dashboard-user' dengan route/view untuk pengguna
-                return redirect()->intended('/dashboard-user');
+                return redirect()->route('dashboard.pengguna');
+            } elseif ($user->Role_Pengguna === 'Donatur') {
+                return redirect()->route('dashboard.donatur');
             } elseif ($user->Role_Pengguna === 'Admin') {
-                // TODO: Ganti '/dashboard-admin' dengan route/view untuk admin
-                return redirect()->intended('/dashboard-admin');
+                return redirect()->route('dashboard.admin');
             }
-            // Fallback redirect jika role tidak diketahui
-            return redirect()->intended('/');
+            // Jika role tidak dikenal, arahkan ke landing page atau halaman default
+            return redirect()->route('landing');
         }
 
-        // TODO: Jika autentikasi gagal, redirect kembali dengan error pop-up!
         return redirect()->back()->withErrors([
             'Email_Pengguna' => 'Email atau Password salah.',
         ])->withInput();
     }
 
+    // Fitur logout
     public function logout(Request $request)
     {
         Auth::logout();

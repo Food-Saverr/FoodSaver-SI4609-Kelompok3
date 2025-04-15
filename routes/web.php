@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
-
+// Landing Page (bisa diakses semua)
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('welcome'); // Landing Page
+})->name('landing');
 
+// Grup untuk user yang belum login (guest)
 Route::middleware('guest')->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'showRegisterForm'])->name('registrasi.form');
     Route::post('/registrasi', [RegisterController::class, 'register'])->name('registrasi');
@@ -17,12 +18,24 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
 });
 
-// TODO: Route yang bisa diakses setelah autentikasi masukin sini!
+// Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Dashboard untuk role Pengguna
+    Route::get('/dashboard-pengguna', function () {
+        return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
+    })->name('dashboard.pengguna');
 
+    // Dashboard untuk role Donatur
+    Route::get('/dashboard-donatur', function () {
+        return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
+    })->name('dashboard.donatur');
+
+    // Dashboard untuk role Admin
+    Route::get('/dashboard-admin', function () {
+        return view('dashboard-admin'); // file: resources/views/dashboard-admin.blade.php
+    })->name('dashboard.admin');
+
+    // Fitur logout
     Route::post('/logout', function () {
         Auth::logout();
         return redirect('/');
