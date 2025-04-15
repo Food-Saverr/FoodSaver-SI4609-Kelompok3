@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\RiwayatPermintaanController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -35,6 +37,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard-admin'); // file: resources/views/dashboard-admin.blade.php
     })->name('dashboard.admin');
 
+    Route::get('/request', [RequestController::class, 'index'])->name('request.index');
+    Route::get('/request/create/{idMakanan}', [RequestController::class, 'create'])->name('request.create');
+    Route::post('/request/store/{idMakanan}', [RequestController::class, 'store'])->name('request.store');
+    Route::get('/riwayat', [RiwayatPermintaanController::class, 'index'])->name('riwayat.index');
     // Fitur logout
     Route::post('/logout', function () {
         Auth::logout();

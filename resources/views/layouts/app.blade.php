@@ -54,6 +54,7 @@
             <a href="" class="text-white hover:text-orange-200 transition-colors">Food Listing</a>
             <a href="" class="text-white hover:text-orange-200 transition-colors">Forum</a>
             <a href="" class="text-white hover:text-orange-200 transition-colors">Artikel</a>
+            <a href="{{ route('request.index') }}" class="text-white hover:text-orange-200 transition-colors">Request Makanan</a>
 
             @guest
             <a href="{{ route('login.form') }}" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">
