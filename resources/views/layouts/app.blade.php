@@ -61,27 +61,43 @@
             @endguest
             @auth
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center space-x-2 text-white hover:text-orange-200 font-semibold focus:outline-none">
+                    <button 
+                        @click="open = !open" 
+                        class="flex items-center gap-2 text-white hover:text-orange-200 font-semibold focus:outline-none"
+                    >
                         @if(Auth::user()->foto)
-                            <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Profile" class="w-8 h-8 rounded-full object-cover border-2 border-white">
+                            <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Profile"
+                                class="w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm">
                         @else
                             <i class="fas fa-user-circle text-2xl"></i>
                         @endif
-                        <span>{{ Auth::user()->Nama_Pengguna }}</span>
-                        <i class="fas fa-chevron-down text-sm"></i>
+                        <span class="hidden md:inline">{{ Auth::user()->Nama_Pengguna }}</span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.293l3.71-4.063a.75.75 0 011.14.98l-4.25 4.657a.75.75 0 01-1.14 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
                     </button>
 
                     <!-- Dropdown Menu -->
                     <div 
                         x-show="open" 
                         @click.away="open = false"
-                        x-transition 
-                        class="absolute right-0 mt-2 w-48 bg-white text-orange-600 rounded-xl shadow-lg py-2 z-50"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-1"
+                        class="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl ring-1 ring-orange-200 z-50"
                     >
-                        <a href="" class="block px-4 py-2 hover:bg-orange-100">Lihat Profil</a>
+                        <div class="px-4 py-3 text-sm text-gray-600 border-b border-orange-100">
+                            {{ Auth::user()->Nama_Pengguna }}
+                        </div>
+                        <a href="" class="block px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 transition">Lihat Profil</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-orange-100">Logout</button>
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 transition">
+                                Logout
+                            </button>
                         </form>
                     </div>
                 </div>
