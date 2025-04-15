@@ -40,4 +40,9 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/');
     })->name('logout');
+
+    // Route untuk profil
+    Route::get('/dashboard/profile', function () {
+        return view('profile.show');
+    })->name('profile.show');
 });

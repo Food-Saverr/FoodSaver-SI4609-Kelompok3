@@ -104,7 +104,7 @@
                     <p class="text-xs text-gray-500">Pengguna FoodSaver</p>
                 </div>
                 </div>
-                <a href="" 
+                <a href="{{ route('profile.show') }}" 
                 class="block px-5 py-3 text-sm text-gray-700 hover:bg-orange-100 hover:text-orange-600 transition font-medium">
                 <i class="fas fa-user mr-2 text-orange-500 group-hover:text-orange-600"></i> Lihat Profil
                 </a>
