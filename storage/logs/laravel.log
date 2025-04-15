@@ -3145,6 +3145,7 @@ Stack trace:
 #35 C:\\laragon\\www\\FoodSaver-SI4609-Kelompok3\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
 #36 {main}
 "} 
+<<<<<<< HEAD
 [2025-04-18 17:08:32] local.ERROR: No arguments expected for "migrate:fresh" command, got "terus". {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): No arguments expected for \"migrate:fresh\" command, got \"terus\". at C:\\Users\\rizka\\OneDrive\\Documents\\GitHub\\FoodSaver-SI4609-Kelompok3\\vendor\\symfony\\console\\Input\\ArgvInput.php:199)
 [stacktrace]
 #0 C:\\Users\\rizka\\OneDrive\\Documents\\GitHub\\FoodSaver-SI4609-Kelompok3\\vendor\\symfony\\console\\Input\\ArgvInput.php(92): Symfony\\Component\\Console\\Input\\ArgvInput->parseArgument()
@@ -4554,3 +4555,5 @@ Stack trace:
 #50 C:\\Users\\rizka\\OneDrive\\Documents\\GitHub\\FoodSaver-SI4609-Kelompok3\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #51 {main}
 "} 
+=======
+>>>>>>> e0dfd381 (FS-22- Commit #1)

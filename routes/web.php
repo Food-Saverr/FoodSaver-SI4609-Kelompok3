@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminDashboardController;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0dfd381 (FS-22- Commit #1)
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -36,7 +39,10 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard untuk role Admin
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
+<<<<<<< HEAD
     Route::get('/admin/donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.donasi');
+=======
+>>>>>>> e0dfd381 (FS-22- Commit #1)
 
     // Fitur logout
     Route::post('/logout', function () {
