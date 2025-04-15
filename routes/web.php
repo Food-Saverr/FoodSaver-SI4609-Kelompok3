@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DonationController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -34,6 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-admin', function () {
         return view('dashboard-admin'); // file: resources/views/dashboard-admin.blade.php
     })->name('dashboard.admin');
+
+    // Dashboard donation
+    Route::get('/donation/create', [DonationController::class, 'create'])->name('donation.create')->middleware('auth');
+    Route::post('/donation', [DonationController::class, 'store'])->name('donation.store');
 
     // Fitur logout
     Route::post('/logout', function () {

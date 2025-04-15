@@ -1,0 +1,162 @@
+<!-- resources/views/layouts/app.blade.php -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@yield('title', 'FoodSaver - Selamatkan Makanan, Selamatkan Dunia')</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+        body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8fafc;
+        overflow-x: hidden;
+        }
+        .title-font {
+        font-family: 'Montserrat', sans-serif;
+        }
+        .navbar-scrolled {
+        backdrop-filter: blur(8px);
+        background-color: rgba(249, 115, 22, 0.95);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-hidden {
+        transform: translateY(-100%);
+        transition: transform 0.3s ease-in-out;
+        }
+        .animate-scale {
+        transition: all 0.3s ease-in-out;
+        }
+        .animate-scale:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.4);
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            let lastScrollTop = 0;
+            let scrollThreshold = 50;
+            let upScrollCount = 0;
+            let headerHidden = false;
+
+            window.addEventListener('scroll', function () {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > scrollThreshold) {
+                    header.classList.add('navbar-scrolled');
+                    
+                    if (scrollTop > lastScrollTop) {
+                        // scroll kebawah
+                        header.classList.add('navbar-hidden');
+                        headerHidden = true;
+                        upScrollCount = 0;
+
+                    } else {
+                        // keatas
+                        upScrollCount++;
+                        if (headerHidden && upScrollCount >= 50) {
+                            header.classList.remove('navbar-hidden');
+                            headerHidden = false;
+                            upScrollCount = 0;
+                        }
+                       
+                    }
+                } else {
+                    // 
+                    header.classList.remove('navbar-scrolled');
+                    header.classList.remove('navbar-hidden');
+                }
+
+                lastScrollTop = scrollTop;
+            });
+        });
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 scroll-smooth">
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full bg-gradient-to-r from-orange-500 to-orange-600 shadow z-50 transition-all duration-500 h-16 md:h-20">
+        <div class="container mx-auto h-full flex items-center justify-between px-4">
+            <img src="/FoodSaver (3).png" alt="FoodSaver Logo" class="h-10 md:h-12 w-auto" />
+
+        <nav class="hidden md:flex items-center space-x-6">
+            <a href="{{ route('dashboard.pengguna') }}" class="text-white hover:text-orange-200 transition-colors">Home</a>
+            <a href="" class="text-white hover:text-orange-200 transition-colors">Food Listing</a>
+            <a href="" class="text-white hover:text-orange-200 transition-colors">Forum</a>
+            <a href="" class="text-white hover:text-orange-200 transition-colors">Artikel</a>
+            <a href="{{ route('donation.create') }}" class="text-white hover:text-orange-200 transition-colors">Donasi untuk Web</a>
+            @guest
+                <a href="{{ route('login.form') }}" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">
+                    Login
+                </a>
+            @endguest
+            @auth
+                <div x-data="{ open: false }" class="relative">
+                    <button 
+                        @click="open = !open" 
+                        class="flex items-center gap-2 text-white hover:text-orange-200 font-semibold focus:outline-none"
+                    >
+                        @if(Auth::user()->foto)
+                            <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Profile"
+                                class="w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm">
+                        @else
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        @endif
+                        <span class="hidden md:inline">{{ Auth::user()->Nama_Pengguna }}</span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.293l3.71-4.063a.75.75 0 011.14.98l-4.25 4.657a.75.75 0 01-1.14 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div 
+                        x-show="open" 
+                        @click.away="open = false"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-1"
+                        class="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl ring-1 ring-orange-200 z-50"
+                    >
+                        <div class="px-4 py-3 text-sm text-gray-600 border-b border-orange-100">
+                            {{ Auth::user()->Nama_Pengguna }}
+                        </div>
+                        <a href="" class="block px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 transition">Lihat Profil</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 transition">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
+        </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-10 px-4 container mx-auto">
+        @yield('content')
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-orange-900 text-orange-100 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <img src="/FoodSaver (3).png" alt="Logo" class="h-16 mx-auto mb-8 floating">
+            <p class="mb-8">&copy; 2025 FoodSaver. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-orange-400"><i class="fab fa-instagram text-2xl"></i></a>
+                <a href="#" class="hover:text-orange-400"><i class="fab fa-facebook text-2xl"></i></a>
+                <a href="#" class="hover:text-orange-400"><i class="fab fa-twitter text-2xl"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

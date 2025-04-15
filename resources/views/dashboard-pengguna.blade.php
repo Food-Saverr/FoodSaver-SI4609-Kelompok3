@@ -45,9 +45,9 @@
 
     <!-- Call to Action -->
     <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-8 text-center shadow-xl animate-fade-up">
-      <h2 class="text-2xl font-bold mb-2">Punya Makanan Berlebih?</h2>
-      <p class="mb-4">Donasikan sekarang dan bantu mereka yang membutuhkan. Setiap sumbangan berarti!</p>
-      <a href="" class="bg-white text-orange-600 px-6 py-3 rounded-full font-semibold hover:bg-orange-100 transition animate-scale inline-flex items-center gap-2">
+      <h2 class="text-2xl font-bold mb-2">Yuk Dukung FoodSaver</h2>
+      <p class="mb-4">Donasikan seikhlasnya untuk membantu perkembangan FoodSaver. Setiap sumbangan berarti!</p>
+      <a href="{{ route('donation.create') }}" class="bg-white text-orange-600 px-6 py-3 rounded-full font-semibold hover:bg-orange-100 transition animate-scale inline-flex items-center gap-2">
         <i class="fas fa-donate"></i> Donasi Sekarang
       </a>
     </div>
