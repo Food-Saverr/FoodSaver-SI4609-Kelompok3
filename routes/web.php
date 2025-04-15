@@ -18,6 +18,20 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
 });
 
+// Grup untuk user yang sudah login (auth) dan kembali ke website
+Route::get('/', function () {
+    if (Auth::check()) {
+        // Redirect sesuai role
+        $role = Auth::user()->Role_Pengguna;
+        return match ($role) {
+            'Admin' => redirect()->route('dashboard.admin'),
+            'Donatur' => redirect()->route('dashboard.donatur'),
+            default => redirect()->route('dashboard.pengguna'),
+        };
+    }
+    return view('welcome'); // Kalau belum login
+})->name('landing');
+
 // Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
     // Dashboard untuk role Pengguna
