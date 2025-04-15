@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AdminDashboardController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -31,9 +32,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard.donatur');
 
     // Dashboard untuk role Admin
-    Route::get('/dashboard-admin', function () {
-        return view('dashboard-admin'); // file: resources/views/dashboard-admin.blade.php
-    })->name('dashboard.admin');
+    Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
 
     // Fitur logout
     Route::post('/logout', function () {
