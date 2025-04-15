@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('Email_Pengguna')->unique();
             $table->string('Password_Pengguna');
             $table->text('Alamat_Pengguna');
-            $table->enum('Role_Pengguna', ['Pengguna', 'Admin'])->default('Pengguna');
+            $table->enum('Role_Pengguna', ['Pengguna','Donatur', 'Admin'])->default('Pengguna');
             $table->rememberToken()->nullable();
             $table->timestamps();
         });
