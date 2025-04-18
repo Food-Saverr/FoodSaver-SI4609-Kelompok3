@@ -16,4 +16,14 @@ class Permintaan extends Model
         'ID_Pengguna',
         'ID_Makanan',
     ];
+    public function makanan()
+    {
+        return $this->belongsTo(Makanan::class, 'ID_Makanan');
+    }
+
+    public function pengguna()
+    {
+        return $this->belongsTo(Pengguna::class, 'ID_Pengguna');
+    }
 }
+

@@ -24,22 +24,14 @@ class RequestController extends Controller
 
     // Menyimpan permintaan makanan oleh pengguna
     public function store(Request $request, $idMakanan)
-    {
-        // Validasi untuk waktu pengambilan
-        $request->validate([
-            'Waktu_Pengambilan' => 'required|date|after:now', // Waktu pengambilan harus setelah waktu sekarang
-        ]);
+{
+    Permintaan::create([
+        'ID_Pengguna' => auth()->id(),
+        'ID_Makanan' => $idMakanan,
+        'Waktu_Permintaan' => now(),
+        'Status_Permintaan' => 'Menunggu',
+    ]);
 
-        // Menyimpan permintaan baru dengan status 'Menunggu'
-        Permintaan::create([
-            'ID_Pengguna' => auth()->id(), // ID Pengguna yang sedang login
-            'ID_Makanan' => $idMakanan, // ID Makanan yang dipilih
-            'Waktu_Permintaan' => now(),
-            'Waktu_Pengambilan' => $request->Waktu_Pengambilan,
-            'Status_Permintaan' => 'Menunggu', // Status permintaan awal
-        ]);
-
-        // Setelah permintaan dibuat, arahkan pengguna ke halaman riwayat permintaan
-        return redirect()->route('request.index')->with('success', 'Permintaan makanan berhasil dibuat! Menunggu persetujuan Admin.');
+    return redirect()->route('request.history')->with('success', 'Permintaan makanan berhasil dibuat! Menunggu persetujuan Admin.');
     }
 }

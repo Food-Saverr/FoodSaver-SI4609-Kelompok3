@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/request', [RequestController::class, 'index'])->name('request.index');
     Route::get('/request/create/{idMakanan}', [RequestController::class, 'create'])->name('request.create');
     Route::post('/request/store/{idMakanan}', [RequestController::class, 'store'])->name('request.store');
-    Route::get('/riwayat', [RiwayatPermintaanController::class, 'index'])->name('riwayat.index');
+    Route::get('/riwayat-permintaan', [RiwayatPermintaanController::class, 'index'])->name('request.history');
+
     // Fitur logout
     Route::post('/logout', function () {
         Auth::logout();

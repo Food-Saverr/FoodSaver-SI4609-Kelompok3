@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('Kategori_Makanan')->nullable();
             $table->string('Status_Makanan')->default('Tersedia');
             $table->dateTime('Tanggal_Kedaluwarsa')->nullable();
+            $table->string('Foto')->nullable();
             $table->string('Lokasi_Makanan')->nullable();
             $table->unsignedBigInteger('ID_Pengguna');
             $table->timestamps();
