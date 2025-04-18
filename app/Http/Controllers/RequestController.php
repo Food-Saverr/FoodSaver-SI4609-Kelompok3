@@ -34,4 +34,14 @@ class RequestController extends Controller
 
     return redirect()->route('request.history')->with('success', 'Permintaan makanan berhasil dibuat! Menunggu persetujuan Admin.');
     }
+    public function destroy($idMakanan)
+        {
+            $permintaan = Permintaan::where('ID_Makanan', $idMakanan)
+            ->where('ID_Pengguna', auth()->id())
+            ->firstOrFail();
+
+            $permintaan->delete();
+
+            return redirect()->back()->with('success', 'Permintaan berhasil dihapus.');
+        }
 }

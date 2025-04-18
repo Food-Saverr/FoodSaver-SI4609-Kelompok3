@@ -16,7 +16,16 @@
         <tbody>
             @foreach($permintaans as $permintaan)
                 <tr class="border-t border-orange-500">
-                    <td class="px-4 py-3">{{ $permintaan->makanan->Nama_Makanan }}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <form action="{{ route('request.destroy', ['idMakanan' => $permintaan->ID_Makanan]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus permintaan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-bold text-sm">❌</button>
+                            </form>
+                            <span>{{ $permintaan->makanan->Nama_Makanan }}</span>
+                        </div>
+                    </td>
                     <td class="px-4 py-3">{{ \Carbon\Carbon::parse($permintaan->makanan->Tanggal_Kedaluwarsa)->format('Y-m-d') }}</td>
                     <td class="px-4 py-3">{{ $permintaan->makanan->Lokasi_Makanan }}</td>
                     <td class="px-4 py-3">

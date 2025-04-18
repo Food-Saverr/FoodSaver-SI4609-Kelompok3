@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/request/create/{idMakanan}', [RequestController::class, 'create'])->name('request.create');
     Route::post('/request/store/{idMakanan}', [RequestController::class, 'store'])->name('request.store');
     Route::get('/riwayat-permintaan', [RiwayatPermintaanController::class, 'index'])->name('request.history');
+    Route::delete('/request/{idMakanan}', [RequestController::class, 'destroy'])->name('request.destroy');
+
 
     // Fitur logout
     Route::post('/logout', function () {
