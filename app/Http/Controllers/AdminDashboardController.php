@@ -20,11 +20,14 @@ class AdminDashboardController extends Controller
         $jumlahMakananTersedia = Makanan::where('status', 'tersedia')->count();
         $jumlahMakananDidonasikan = Makanan::where('status', 'didonasikan')->count();
 
+        $totalDonasi = Donasi::sum('jumlah');
+
         return view('dashboard-admin', compact(
             'jumlahDonatur',
             'jumlahPenerima',
             'jumlahMakananTersedia',
             'jumlahMakananDidonasikan',
+            'totalDonasi',
         ));
     }
 }
