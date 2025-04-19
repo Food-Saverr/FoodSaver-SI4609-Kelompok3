@@ -73,15 +73,12 @@
                                 class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             >
                                 <option value="">-- Pilih Kategori --</option>
-                                <option value="Makanan Pokok" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Pokok' ? 'selected' : '' }}>Makanan Pokok</option>
+                                <option value="Makanan Berat" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Berat' ? 'selected' : '' }}>Makanan Berat</option>
+                                <option value="Makanan Ringan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Ringan' ? 'selected' : '' }}>Makanan Ringan</option>
+                                <option value="Makanan Penutup" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Penutup' ? 'selected' : '' }}>Makanan Penutup</option>
+                                <option value="Minuman" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
                                 <option value="Sayuran" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Sayuran' ? 'selected' : '' }}>Sayuran</option>
                                 <option value="Buah-buahan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Buah-buahan' ? 'selected' : '' }}>Buah-buahan</option>
-                                <option value="Protein Hewani" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Protein Hewani' ? 'selected' : '' }}>Protein Hewani</option>
-                                <option value="Protein Nabati" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Protein Nabati' ? 'selected' : '' }}>Protein Nabati</option>
-                                <option value="Makanan Ringan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Ringan' ? 'selected' : '' }}>Makanan Ringan</option>
-                                <option value="Makanan Siap Saji" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Siap Saji' ? 'selected' : '' }}>Makanan Siap Saji</option>
-                                <option value="Minuman" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
-                                <option value="Lainnya" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                     </div>
@@ -190,7 +187,7 @@
                             placeholder="Masukkan jumlah (misal: 10)"
                             value="{{ old('Jumlah_Makanan', $makanan->Jumlah_Makanan) }}"
                             class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
-                            min="1"
+                            min="0"
                             required
                         />
                     </div>

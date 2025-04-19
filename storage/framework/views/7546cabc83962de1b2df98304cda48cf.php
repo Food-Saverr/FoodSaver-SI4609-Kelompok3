@@ -234,7 +234,7 @@
                             required
                         >
                             <option value="" <?php echo e(old('Role_Pengguna') == '' ? 'selected' : ''); ?> disabled>Pilih peran Anda</option>
-                            <option value="Pengguna" <?php echo e(old('Role_Pengguna') == 'Penerima' ? 'selected' : ''); ?>>Penerima Makanan</option>
+                            <option value="Pengguna" <?php echo e(old('Role_Pengguna') == 'Pengguna' ? 'selected' : ''); ?>>Penerima Makanan</option>
                             <option value="Donatur" <?php echo e(old('Role_Pengguna') == 'Donatur' ? 'selected' : ''); ?>>Donatur Makanan</option>
                         </select>
                     </div>

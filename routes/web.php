@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminMakananController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\FoodListingController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -65,4 +66,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     
     // Menghapus data makanan
     Route::delete('/food-listing/{makanan}', [AdminMakananController::class, 'destroy'])->name('admin.food-listing.destroy');
+});
+
+// --- Rute untuk Fitur Makanan Pengguna ---
+Route::middleware(['auth'])->prefix('pengguna')->group(function () {
+    Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
+    Route::get('/food-listing/{makanan}', [FoodListingController::class, 'show'])->name('pengguna.food-listing.show');
 });

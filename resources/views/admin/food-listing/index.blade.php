@@ -144,7 +144,7 @@
                             </div>
                         </td>
                         <td class="py-3 px-4">
-                            {{ $makanan->Jumlah_Makanan ? $makanan->Jumlah_Makanan . ' porsi' : 'Tidak ditentukan' }}
+                            {{ $makanan->Jumlah_Makanan ? $makanan->Jumlah_Makanan . ' porsi' : 'Habis' }}
                         </td>
                         @if(Auth::user()->Role_Pengguna === 'Admin')
                             <td class="py-3 px-4">

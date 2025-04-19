@@ -234,7 +234,7 @@
                             required
                         >
                             <option value="" {{ old('Role_Pengguna') == '' ? 'selected' : '' }} disabled>Pilih peran Anda</option>
-                            <option value="Pengguna" {{ old('Role_Pengguna') == 'Penerima' ? 'selected' : '' }}>Penerima Makanan</option>
+                            <option value="Pengguna" {{ old('Role_Pengguna') == 'Pengguna' ? 'selected' : '' }}>Penerima Makanan</option>
                             <option value="Donatur" {{ old('Role_Pengguna') == 'Donatur' ? 'selected' : '' }}>Donatur Makanan</option>
                         </select>
                     </div>

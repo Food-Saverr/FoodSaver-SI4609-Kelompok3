@@ -29,7 +29,7 @@ class RegisterController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[\W]/'
             ],
-            'Role_Pengguna'    => 'required|in:Penerima,Donatur',
+            'Role_Pengguna'    => 'required|in:Pengguna,Donatur',
             'Alamat_Pengguna'  => 'required|string',
         ], [
             'Role_Pengguna.required' => 'Peran harus dipilih.',
