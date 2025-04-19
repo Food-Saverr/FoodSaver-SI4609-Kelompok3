@@ -1,115 +1,184 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FoodSaver - Selamatkan Makanan, Selamatkan Dunia</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8fafc;
-      overflow-x: hidden;
-    }
-    .title-font {
-      font-family: 'Montserrat', sans-serif;
-    }
-    .navbar-scrolled {
-      backdrop-filter: blur(8px);
-      background-color: rgba(249, 115, 22, 0.95);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    .animate-fade-up {
-      opacity: 0;
-      animation: fadeUp 0.8s forwards ease-out;
-    }
-    .animate-fade-up-delay {
-      opacity: 0;
-      animation: fadeUp 0.8s forwards ease-out;
-      animation-delay: 0.3s;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-scale {
-      transition: all 0.3s ease-in-out;
-    }
-    .animate-scale:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.4);
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, #f97316, #ea580c);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .custom-shadow {
-      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 3px 20px -5px rgba(0, 0, 0, 0.1);
-    }
-    .hero-pattern {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .floating {
-      animation: float 6s ease-in-out infinite;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-      100% { transform: translateY(0px); }
-    }
-  </style>
-  <script>
-    window.addEventListener('scroll', function() {
-      const header = document.querySelector('header');
-      if (window.scrollY > 50) {
-        header.classList.add('navbar-scrolled');
-      } else {
-        header.classList.remove('navbar-scrolled');
-      }
-    });
-  </script>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 scroll-smooth">
+<!-- resources/views/admin/dashboard.blade.php -->
+@extends('layouts.appadmin')
 
-  <!-- Navbar -->
-  <header class="fixed top-0 w-full bg-gradient-to-r from-orange-500 to-orange-600 shadow z-50 transition-all duration-500 h-16 md:h-20">
-    <div class="container mx-auto h-full flex items-center justify-between px-4">
-      <img src="{{ asset('FoodSaver (3).png') }}" alt="FoodSaver Logo" class="h-10 md:h-12 w-auto" />
-      <nav class="hidden md:flex items-center space-x-6">
-        <a href="#features" class="text-white hover:text-orange-200 transition-colors">About</a>
-        <a href="#testimoni" class="text-white hover:text-orange-200 transition-colors">Testimoni</a>
-        <a href="#faq" class="text-white hover:text-orange-200 transition-colors">FAQ</a>
-        <a href="#kontak" class="text-white hover:text-orange-200 transition-colors">Kontak</a>
+@section('title', 'Dashboard Admin - FoodSaver')
 
-        @guest
-          <a href="{{ route('login.form') }}" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">Login</a>
-        @endguest
-
-        @auth
-          <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">Logout</button>
-          </form>
-        @endauth
-      </nav>
+@section('content')
+<section class="pt-20 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold title-font gradient-text animate-fade-up">
+                Dashboard Admin
+            </h1>
+            <p class="text-gray-600 mt-2 animate-fade-up-delay">
+                Pantau perkembangan pengguna dan aktivitas donasi makanan di platform <span class="font-semibold text-orange-600">FoodSaver</span>.
+            </p>
+        </div>
+        
+        <!-- Quick Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 animate-fade-up-delay">
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Total Pengguna</p>
+                        <h3 class="text-2xl font-bold">{{ $jumlahDonatur + $jumlahPenerima }}</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span>Donatur: <strong class="text-gray-700">{{ $jumlahDonatur }}</strong></span>
+                    <span>Penerima: <strong class="text-gray-700">{{ $jumlahPenerima }}</strong></span>
+                </div>
+            </div>
+            
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-green-100 text-green-600 p-3 rounded-full">
+                        <i class="fas fa-utensils text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Makanan Tersedia</p>
+                        <h3 class="text-2xl font-bold">{{ $jumlahMakananTersedia }}</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span>Minggu ini: <strong class="text-gray-700">+12</strong></span>
+                    <span><a href="{{ route('admin.food-listing.index') }}" class="text-orange-500 hover:underline">Lihat semua</a></span>
+                </div>
+            </div>
+            
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-orange-100 text-orange-600 p-3 rounded-full">
+                        <i class="fas fa-handshake text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Donasi Selesai</p>
+                        <h3 class="text-2xl font-bold">{{ $jumlahMakananDidonasikan }}</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span>Hari ini: <strong class="text-gray-700">+3</strong></span>
+                    <span>Minggu ini: <strong class="text-gray-700">+21</strong></span>
+                </div>
+            </div>
+            
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
+                        <i class="fas fa-comments text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Diskusi Forum</p>
+                        <h3 class="text-2xl font-bold">24</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span>Minggu ini: <strong class="text-gray-700">+5</strong></span>
+                    <span><a href="#" class="text-orange-500 hover:underline">Lihat semua</a></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 title-font">Tindakan Cepat</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="{{ route('admin.food-listing.create') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                    <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                        <i class="fas fa-plus text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Tambah Makanan</h3>
+                        <p class="text-sm text-gray-500">Tambahkan donasi makanan baru</p>
+                    </div>
+                </a>
+                
+                <a href="#" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                        <i class="fas fa-user-plus text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Tambah Pengguna</h3>
+                        <p class="text-sm text-gray-500">Daftarkan pengguna baru</p>
+                    </div>
+                </a>
+                
+                <a href="#" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                    <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                        <i class="fas fa-newspaper text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Tambah Artikel</h3>
+                        <p class="text-sm text-gray-500">Buat artikel edukasi baru</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Recent Activities -->
+        <div>
+            <h2 class="text-2xl font-bold mb-6 title-font">Aktivitas Terbaru</h2>
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl custom-shadow overflow-hidden">
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 text-orange-600 p-2 rounded-full mr-4">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Donasi Baru: Sayur Segar</h4>
+                            <p class="text-sm text-gray-500">Donatur: Ahmad | 15 menit yang lalu</p>
+                        </div>
+                        <a href="#" class="ml-auto text-sm text-orange-500 hover:underline">Detail</a>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 text-green-600 p-2 rounded-full mr-4">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Donasi Terambil: Makanan Pokok</h4>
+                            <p class="text-sm text-gray-500">Penerima: Budi | 1 jam yang lalu</p>
+                        </div>
+                        <a href="#" class="ml-auto text-sm text-orange-500 hover:underline">Detail</a>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Pengguna Baru: Citra</h4>
+                            <p class="text-sm text-gray-500">Role: Donatur | 3 jam yang lalu</p>
+                        </div>
+                        <a href="#" class="ml-auto text-sm text-orange-500 hover:underline">Detail</a>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 text-purple-600 p-2 rounded-full mr-4">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Forum Baru: Tips Menyimpan Makanan</h4>
+                            <p class="text-sm text-gray-500">Oleh: Dina | 5 jam yang lalu</p>
+                        </div>
+                        <a href="#" class="ml-auto text-sm text-orange-500 hover:underline">Detail</a>
+                    </div>
+                </div>
+                
+                <div class="p-4 text-center">
+                    <a href="#" class="text-sm text-orange-500 hover:underline">Lihat semua aktivitas</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="pt-28 md:pt-36 pb-16 bg-orange-500 bg-opacity-90 text-white text-center relative z-10">
-    <div class="container mx-auto px-4">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 title-font">Selamatkan Makanan,<br />Selamatkan Dunia</h1>
-      <p class="text-lg md:text-xl mb-6">Bergabunglah dengan FoodSaver untuk mengurangi limbah makanan dan berbagi kebaikan demi masa depan yang lebih hijau.</p>
-      <a href="#daftar" class="bg-white text-orange-600 px-6 py-3 rounded-full font-semibold hover:bg-orange-100 transition animate-scale inline-flex items-center gap-2">
-        <i class="fas fa-user-plus"></i> Gabung Sekarang
-      </a>
-    </div>
-  </section>
-
-</body>
-</html>
+</section>
+@endsection

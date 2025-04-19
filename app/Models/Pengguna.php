@@ -28,4 +28,9 @@ class Pengguna extends Authenticatable
     protected $hidden = [
         'Password_Pengguna',
     ];
+
+    public function makanans()
+    {
+        return $this->hasMany(Makanan::class, 'ID_Pengguna', 'ID_Pengguna');
+    }
 }
