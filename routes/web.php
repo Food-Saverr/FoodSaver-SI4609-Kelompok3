@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminDashboardController;
 
+
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
     return view('welcome'); // Landing Page
@@ -17,6 +18,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/registrasi', [RegisterController::class, 'register'])->name('registrasi');
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
 });
 
 // Grup untuk user yang sudah login
@@ -33,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard untuk role Admin
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
+    Route::get('/admin/donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.donasi');
 
     // Fitur logout
     Route::post('/logout', function () {

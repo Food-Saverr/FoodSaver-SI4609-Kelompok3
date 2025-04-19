@@ -9,15 +9,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('penggunas', function (Blueprint $table) {
-            $table->id('ID_Pengguna');
+            $table->id(); // ← ini WAJIB supaya bisa jadi foreign key
             $table->string('Nama_Pengguna');
             $table->string('Email_Pengguna')->unique();
             $table->string('Password_Pengguna');
-            $table->text('Alamat_Pengguna');
-            $table->enum('Role_Pengguna', ['Pengguna','Donatur', 'Admin'])->default('Pengguna');
-            $table->rememberToken()->nullable();
+            $table->string('Alamat_Pengguna')->nullable();
+            $table->string('Role_Pengguna')->default('User');
             $table->timestamps();
         });
+        
     }
     
     public function down(): void

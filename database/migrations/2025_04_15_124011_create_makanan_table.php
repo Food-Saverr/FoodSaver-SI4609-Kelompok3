@@ -14,7 +14,7 @@ return new class extends Migration
             $table->integer('Jumlah_Tersedia');
             $table->integer('Jumlah_Didonasi');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('penggunas')->onDelete('cascade');
             $table->timestamps();
         });
     }
