@@ -26,4 +26,13 @@ class AdminDashboardController extends Controller
 
         return view('StatistikPengguna', compact('jumlahDonatur', 'jumlahPenerima'));
     }
+
+    public function statistikMakanan()
+{
+    $jumlahMakananTersedia = Makanan::where('status', 'tersedia')->count();
+    $jumlahMakananDidonasikan = Makanan::where('status', 'didonasikan')->count();
+
+    return view('admin.makanan', compact('jumlahMakananTersedia', 'jumlahMakananDidonasikan'));
+}
+
 }

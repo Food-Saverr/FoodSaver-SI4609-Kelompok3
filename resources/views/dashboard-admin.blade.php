@@ -28,6 +28,27 @@
         <p>Penerima: <strong>{{ $jumlahPenerima }}</strong></p>
         <canvas id="penggunaChart" height="200"></canvas>
       </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <div class="flex items-center space-x-4 mb-2">
+          <div class="bg-green-100 text-green-600 p-3 rounded-full">
+            <i class="fas fa-utensils text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold">Makanan Tersedia</h3>
+        </div>
+        <p><strong>{{ $jumlahMakananTersedia }}</strong> item</p>
+        <canvas id="makananTersediaChart" height="200"></canvas>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <div class="flex items-center space-x-4 mb-2">
+          <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+            <i class="fas fa-hand-holding-heart text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold">Didonasikan</h3>
+        </div>
+        <p><strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
+        <canvas id="makananDidonasikanChart" height="200"></canvas>
+      </div>
   </div>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -42,6 +63,20 @@
         label: 'Jumlah Pengguna',
         data: [{{ $jumlahDonatur }}, {{ $jumlahPenerima }}],
         backgroundColor: ['#007bff', '#28a745'],
+        borderColor: ['#fff', '#fff'],
+        borderWidth: 1
+      }]
+    }
+  });
+  var ctx2 = document.getElementById('makananTersediaChart').getContext('2d');
+  var makananTersediaChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: ['Makanan Tersedia', 'Makanan Didonasikan'],
+      datasets: [{
+        label: 'Jumlah Makanan',
+        data: [{{ $jumlahMakananTersedia }}, {{ $jumlahMakananDidonasikan }}],
+        backgroundColor: ['#4caf50', '#ff9800'],
         borderColor: ['#fff', '#fff'],
         borderWidth: 1
       }]

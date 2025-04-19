@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
     Route::get('/admin/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
     Route::get('/admin/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.pengguna');
+    Route::get('/admin/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+
 
     // Fitur logout
     Route::post('/logout', function () {
