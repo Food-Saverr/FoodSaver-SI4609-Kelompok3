@@ -14,72 +14,122 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12 animate-fade-up animate-scale">
-      <div class="bg-white p-6 rounded-2xl shadow-md">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 animate-fade-up animate-scale">
+      <a href="{{ route('admin.pengguna') }}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center space-x-4 mb-2">
           <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
             <i class="fas fa-users text-xl"></i>
           </div>
-          <h3 class="text-lg font-semibold">Pengguna</h3>
+          <h3 class="text-lg font-semibold">Statistik Pengguna</h3>
         </div>
         <p>Donatur: <strong>{{ $jumlahDonatur }}</strong></p>
         <p>Penerima: <strong>{{ $jumlahPenerima }}</strong></p>
         <canvas id="penggunaChart" height="200"></canvas>
-      </div>
-
-      <div class="bg-white p-6 rounded-2xl shadow-md">
+      </a>
+      <a href="{{ route('admin.makanan') }}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center space-x-4 mb-2">
           <div class="bg-green-100 text-green-600 p-3 rounded-full">
             <i class="fas fa-utensils text-xl"></i>
           </div>
-          <h3 class="text-lg font-semibold">Makanan Tersedia</h3>
+          <h3 class="text-lg font-semibold">Statistik Makanan</h3>
         </div>
-        <p><strong>{{ $jumlahMakananTersedia }}</strong> item</p>
-        <canvas id="makananTersediaChart" height="200"></canvas>
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <div class="space-y-2">
+          <p>Tersedia: <strong>{{ $jumlahMakananTersedia }}</strong> item</p>
+          <p>Didonasikan: <strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
+        </div>
+        <canvas id="makananChart" height="200"></canvas>
+      </a>
+      <a href="{{ route('admin.donasi') }}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center space-x-4 mb-2">
-          <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
-            <i class="fas fa-hand-holding-heart text-xl"></i>
+          <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
+            <i class="fas fa-donate text-xl"></i>
           </div>
-          <h3 class="text-lg font-semibold">Didonasikan</h3>
+          <h3 class="text-lg font-semibold">Statistik Donasi</h3>
         </div>
-        <p><strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
-        <canvas id="makananDidonasikanChart" height="200"></canvas>
-      </div>
+        <p class="text-xl font-bold text-purple-700">Total: {{ $totalDonasi }} Porsi</p>
+        <canvas id="donasiChart" height="200"></canvas>
+      </a>
+    </div>
   </div>
 </section>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Chart.js for Pengguna Terdaftar (Donatur vs Penerima)
-  var ctx1 = document.getElementById('penggunaChart').getContext('2d');
-  var penggunaChart = new Chart(ctx1, {
+  var ctxPengguna = document.getElementById('penggunaChart').getContext('2d');
+  var penggunaChart = new Chart(ctxPengguna, {
     type: 'pie',
     data: {
       labels: ['Donatur', 'Penerima'],
       datasets: [{
-        label: 'Jumlah Pengguna',
         data: [{{ $jumlahDonatur }}, {{ $jumlahPenerima }}],
-        backgroundColor: ['#007bff', '#28a745'],
-        borderColor: ['#fff', '#fff'],
-        borderWidth: 1
+        backgroundColor: ['#3b82f6', '#10b981'],
+        borderWidth: 0
       }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
     }
   });
-  var ctx2 = document.getElementById('makananTersediaChart').getContext('2d');
-  var makananTersediaChart = new Chart(ctx2, {
+
+  var ctxMakanan = document.getElementById('makananChart').getContext('2d');
+  var makananChart = new Chart(ctxMakanan, {
     type: 'bar',
     data: {
-      labels: ['Makanan Tersedia', 'Makanan Didonasikan'],
+      labels: ['Tersedia', 'Didonasikan'],
       datasets: [{
-        label: 'Jumlah Makanan',
         data: [{{ $jumlahMakananTersedia }}, {{ $jumlahMakananDidonasikan }}],
-        backgroundColor: ['#4caf50', '#ff9800'],
-        borderColor: ['#fff', '#fff'],
-        borderWidth: 1
+        backgroundColor: ['#22c55e', '#eab308'],
+        borderWidth: 0
       }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
     }
   });
+  var ctxDonasi = document.getElementById('donasiChart').getContext('2d');
+  var donasiChart = new Chart(ctxDonasi, {
+    type: 'line',
+    data: {
+      labels: ['Total Donasi'],
+      datasets: [{
+        data: [{{ $totalDonasi }}],
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 @endsection

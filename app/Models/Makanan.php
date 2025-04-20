@@ -12,15 +12,15 @@ class Makanan extends Model
     protected $table = 'makanan';
 
     protected $fillable = [
-        'nama',
-        'deskripsi',
-        'jumlah',
-        'status', 
-        'user_id',
+        'Nama_Makanan',
+        'Jumlah_Tersedia',
+        'Jumlah_Didonasi',
+        'status',
+        'user_id'
     ];
 
-    public function user()
+    public function pengguna()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Pengguna::class, 'user_id', 'ID_Pengguna');
     }
 }

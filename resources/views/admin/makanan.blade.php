@@ -6,7 +6,6 @@
 <section class="pt-28 md:pt-32 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
   <div class="container mx-auto px-4">
 
-    <!-- Tombol Kembali -->
     <div class="mb-6">
       <a href="{{ route('admin.dashboard') }}"
          class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
@@ -24,7 +23,6 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 animate-fade-up animate-scale">
-      <!-- Statistik Makanan -->
       <div class="bg-white rounded-2xl shadow-md p-6">
         <div class="flex items-center space-x-4 mb-2">
           <div class="bg-green-100 text-green-600 p-3 rounded-full">
@@ -32,8 +30,8 @@
           </div>
           <h3 class="text-lg font-semibold">Ketersediaan Makanan</h3>
         </div>
-        <p class="text-gray-700">Tersedia: <strong>{{ $jumlahMakananTersedia }}</strong> item</p>
-        <p class="text-gray-700">Didonasikan: <strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
+        <p class="text-gray-700">Tersedia: <strong>{{ $jumlahMakananTersedia ?? 0 }}</strong> item</p>
+        <p class="text-gray-700">Didonasikan: <strong>{{ $jumlahMakananDidonasikan ?? 0 }}</strong> item</p>
         <p class="text-sm text-gray-500 mt-2">Jumlah makanan yang tercatat pada platform.</p>
         <canvas id="makananChart" height="200"></canvas>
       </div>
@@ -50,7 +48,7 @@
       labels: ['Tersedia', 'Didonasikan'],
       datasets: [{
         label: 'Jumlah Makanan',
-        data: [{{ $jumlahMakananTersedia }}, {{ $jumlahMakananDidonasikan }}],
+        data: [{{ $jumlahMakananTersedia ?? 0 }}, {{ $jumlahMakananDidonasikan ?? 0 }}],
         backgroundColor: ['#4caf50', '#ff9800'],
         borderColor: ['#fff', '#fff'],
         borderWidth: 1

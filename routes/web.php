@@ -18,8 +18,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/registrasi', [RegisterController::class, 'register'])->name('registrasi');
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('/login', [LoginController::class, 'login'])->name('login');
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
 });
 
 // Grup untuk user yang sudah login
@@ -34,12 +32,44 @@ Route::middleware('auth')->group(function () {
         return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
     })->name('dashboard.donatur');
 
-    // Dashboard untuk role Admin
-    Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
-    Route::get('/admin/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
-    Route::get('/admin/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.pengguna');
-    Route::get('/admin/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+    // Dashboard dan fitur Admin
+    Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+        Route::get('/dashboard', function () {
+            if (auth()->user()->Role_Pengguna !== 'Admin') {
+                return redirect('/')->with('error', 'Unauthorized access.');
+            }
+            return app()->make(AdminDashboardController::class)->index();
+        })->name('admin.dashboard');
 
+        Route::get('/statistik-pengguna', function () {
+            if (auth()->user()->Role_Pengguna !== 'Admin') {
+                return redirect('/')->with('error', 'Unauthorized access.');
+            }
+            return app()->make(AdminDashboardController::class)->statistikPengguna();
+        })->name('admin.pengguna');
+
+        Route::get('/statistik-makanan', function () {
+            if (auth()->user()->Role_Pengguna !== 'Admin') {
+                return redirect('/')->with('error', 'Unauthorized access.');
+            }
+            return app()->make(AdminDashboardController::class)->statistikMakanan();
+        })->name('admin.makanan');
+
+        Route::get('/statistik-donasi', function () {
+            if (auth()->user()->Role_Pengguna !== 'Admin') {
+                return redirect('/')->with('error', 'Unauthorized access.');
+            }
+            return app()->make(AdminDashboardController::class)->statistikDonasi();
+        })->name('admin.donasi');
+    });
+
+    // Alternative URL for admin dashboard
+    Route::get('/dashboard-admin', function () {
+        if (auth()->user()->Role_Pengguna !== 'Admin') {
+            return redirect('/')->with('error', 'Unauthorized access.');
+        }
+        return app()->make(AdminDashboardController::class)->index();
+    })->name('dashboard.admin');
 
     // Fitur logout
     Route::post('/logout', function () {

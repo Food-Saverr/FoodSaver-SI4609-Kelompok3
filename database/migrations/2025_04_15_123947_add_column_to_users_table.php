@@ -8,8 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Menambahkan kolom 'donasi_count' untuk menghitung jumlah donasi yang diterima oleh pengguna
+        Schema::table('penggunas', function (Blueprint $table) {
             $table->integer('donasi_count')->default(0);
         });
     }
