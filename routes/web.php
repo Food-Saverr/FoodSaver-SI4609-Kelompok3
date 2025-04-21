@@ -11,6 +11,7 @@ use App\Http\Controllers\DonaturDashboardController;
 use App\Http\Controllers\FoodListingController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\DonaturRequestController;
+use App\Http\Controllers\AdminRequestController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/food-listing', [AdminMakananController::class, 'index'])->name('admin.food-listing.index');
     Route::get('/food-listing/{makanan}', [AdminMakananController::class, 'show'])->name('admin.food-listing.show');
     Route::delete('/food-listing/{makanan}', [AdminMakananController::class, 'destroy'])->name('admin.food-listing.destroy');
+    Route::get('/admin/request/{id_makanan}', [AdminRequestController::class, 'index'])->name('admin.request.index');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
