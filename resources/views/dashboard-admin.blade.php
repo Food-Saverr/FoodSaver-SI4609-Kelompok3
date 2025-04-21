@@ -115,6 +115,17 @@
                         <p class="text-sm text-gray-500">Buat artikel edukasi baru</p>
                     </div>
                 </a>
+
+                <a href="{{ route('admin.donation.index') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                    <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Donasi Keuangan</h3>
+                        <p class="text-sm text-gray-500">Monitoring donasi keuangan untuk FoodSaver</p>
+                    </div>
+                </a>
+                
             </div>
         </div>
         
