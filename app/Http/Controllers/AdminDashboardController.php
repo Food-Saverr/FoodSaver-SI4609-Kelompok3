@@ -59,9 +59,7 @@ class AdminDashboardController extends Controller
             'totalDonasi',
             'totalArtikel',
             'artikelLabels',
-            'artikelData',
-            'totalDonasi',
-            'totalDonasi'
+            'artikelData'
         ));
     }
 
@@ -73,35 +71,6 @@ class AdminDashboardController extends Controller
         // Mendapatkan data donatur dan penerima per bulan
         $donaturPerBulan = DB::table('penggunas')
             ->select(
-
-        $penggunaBaru = Pengguna::select(
-            DB::raw('MONTH(created_at) as bulan'),
-            DB::raw('COUNT(*) as total')
-        )
-        ->whereYear('created_at', date('Y'))
-        ->groupBy(DB::raw('MONTH(created_at)'))
-        ->orderBy('bulan')
-        ->get();
-
-        return view('admin.statistik-pengguna', compact('jumlahDonatur', 'jumlahPenerima', 'penggunaBaru'));
-    }
-
-    public function statistikMakanan()
-    {
-        $jumlahMakananTersedia = Makanan::where('status', 'tersedia')->count();
-        $jumlahMakananDidonasikan = Makanan::where('status', 'didonasikan')->count();
-
-        return view('statistik-pengguna', compact(
-            'jumlahMakananTersedia',
-            'jumlahMakananDidonasikan'
-        ));
-    }
-
-    public function detailDonasi()
-    {
-        $totalDonasi = Donasi::sum('jumlah');
-
-        $donasiPerBulan = Donasi::select(
                 DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('COUNT(*) as total')
             )
@@ -127,6 +96,7 @@ class AdminDashboardController extends Controller
             'penerimaPerBulan'
         ));
     }
+
     public function statistikMakanan()
     {
         $jumlahMakananTersedia = DB::table('makanan')->sum('Jumlah_Tersedia');
@@ -220,24 +190,6 @@ class AdminDashboardController extends Controller
             'artikelList',
             'labels',
             'data'
-        ));
-    }
-
-    public function showTotalArtikel()
-    {
-        $totalArtikel = Artikel::where('status', 'dipublikasikan')->count();
-        $artikelDraft = Artikel::where('status', 'draft')->count();
-        $artikelDihapus = Artikel::where('status', 'dihapus')->count();
-        $artikelList = Artikel::where('status', 'dipublikasikan')
-            ->with('user')
-            ->latest()
-            ->get();
-
-        return view('admin.artikel', compact(
-            'totalArtikel',
-            'artikelDraft',
-            'artikelDihapus',
-            'artikelList'
         ));
     }
 }

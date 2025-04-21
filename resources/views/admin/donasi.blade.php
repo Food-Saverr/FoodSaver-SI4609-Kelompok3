@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="container px-6 mx-auto grid">
+<<<<<<< HEAD
     <!-- Tombol Kembali -->
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     <div class="mb-6 mt-6">
         <a href="{{ route('admin.dashboard') }}"
            class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
@@ -16,9 +19,13 @@
         Statistik Donasi
     </h2>
 
+<<<<<<< HEAD
     <!-- Cards -->
     <div class="grid gap-6 mb-8 md:grid-cols-1">
         <!-- Total Donasi Card -->
+=======
+    <div class="grid gap-6 mb-8 md:grid-cols-1">
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs">
             <h4 class="mb-4 font-semibold text-gray-800">
                 Total Donasi Keseluruhan
@@ -29,9 +36,13 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Charts -->
     <div class="grid gap-6 mb-8 md:grid-cols-2">
         <!-- Donasi Per Bulan Chart -->
+=======
+    <div class="grid gap-6 mb-8 md:grid-cols-2">
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs">
             <h4 class="mb-4 font-semibold text-gray-800">
                 Donasi Per Bulan
@@ -55,8 +66,11 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
         <!-- Top Donatur -->
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs">
             <h4 class="mb-4 font-semibold text-gray-800">
                 Top 5 Donatur
@@ -67,7 +81,10 @@
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
                                 <th class="px-4 py-3">Nama Donatur</th>
+<<<<<<< HEAD
                                 <th class="px-4 py-3">Nama Makanan</th>
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
                                 <th class="px-4 py-3">Total Donasi</th>
                             </tr>
                         </thead>
@@ -78,9 +95,12 @@
                                     {{ $donatur->Nama_Pengguna }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
+<<<<<<< HEAD
                                     {{ $donatur->Nama_Makanan }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
                                     {{ $donatur->total_donasi }} Porsi
                                 </td>
                             </tr>
@@ -96,6 +116,7 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+<<<<<<< HEAD
     // Data untuk grafik donasi per bulan
     const donasiData = @json($donasiPerBulan);
     
@@ -116,16 +137,31 @@
     const values = Object.values(groupedData);
 
     // Hitung statistik
+=======
+    const donasiData = @json($donasiPerBulan);
+
+    const namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+ 
+    const labels = donasiData.map(data => namaBulan[data.bulan - 1]);
+    const values = donasiData.map(data => data.total_donasi);
+
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     const maxDonasi = Math.max(...values);
     const minDonasi = Math.min(...values);
     const avgDonasi = values.reduce((a, b) => a + b, 0) / values.length;
 
+<<<<<<< HEAD
     // Update statistik di HTML
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     document.getElementById('maxDonasi').textContent = maxDonasi + ' Porsi';
     document.getElementById('minDonasi').textContent = minDonasi + ' Porsi';
     document.getElementById('avgDonasi').textContent = Math.round(avgDonasi) + ' Porsi';
 
+<<<<<<< HEAD
     // Buat sparkline
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     new Chart(document.getElementById('sparkline'), {
         type: 'line',
         data: {

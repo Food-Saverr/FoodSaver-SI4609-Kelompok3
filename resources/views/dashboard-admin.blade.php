@@ -26,7 +26,10 @@
         <p>Penerima: <strong>{{ $jumlahPenerima }}</strong></p>
         <canvas id="penggunaChart" height="200"></canvas>
       </a>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
       <a href="{{ route('admin.makanan') }}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center space-x-4 mb-2">
           <div class="bg-green-100 text-green-600 p-3 rounded-full">
@@ -35,6 +38,7 @@
           <h3 class="text-lg font-semibold">Statistik Makanan</h3>
         </div>
         <div class="space-y-2">
+<<<<<<< HEAD
           <p class="text-gray-700">Tersedia: <strong>{{ $jumlahMakananTersedia }}</strong> item</p>
           <p class="text-gray-700">Didonasikan: <strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
           <p class="text-sm text-gray-500">Jumlah makanan yang tercatat pada platform.</p>
@@ -42,6 +46,13 @@
         <canvas id="makananChart" height="200"></canvas>
       </a>
 
+=======
+          <p>Tersedia: <strong>{{ $jumlahMakananTersedia }}</strong> item</p>
+          <p>Didonasikan: <strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
+        </div>
+        <canvas id="makananChart" height="200"></canvas>
+      </a>
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
       <a href="{{ route('admin.donasi') }}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center space-x-4 mb-2">
           <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
@@ -52,6 +63,7 @@
         <p class="text-xl font-bold text-purple-700">Total: {{ $totalDonasi }} Porsi</p>
         <canvas id="donasiChart" height="200"></canvas>
       </a>
+<<<<<<< HEAD
 
       <a href="{{ route('admin.artikel') }}" class="block h-full">
         <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-full flex flex-col">
@@ -120,6 +132,8 @@
           </div>
         </div>
       </a>
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     </div>
   </div>
 </section>
@@ -146,12 +160,19 @@
       }
     }
   });
+<<<<<<< HEAD
   var ctx2 = document.getElementById('makananChart').getContext('2d');
   var makananChart = new Chart(ctx2, {
+=======
+
+  var ctxMakanan = document.getElementById('makananChart').getContext('2d');
+  var makananChart = new Chart(ctxMakanan, {
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     type: 'bar',
     data: {
       labels: ['Tersedia', 'Didonasikan'],
       datasets: [{
+<<<<<<< HEAD
         label: 'Jumlah Makanan',
         data: [{{ $jumlahMakananTersedia ?? 0 }}, {{ $jumlahMakananDidonasikan ?? 0 }}],
         backgroundColor: ['#4caf50', '#ff9800'],
@@ -164,6 +185,26 @@
         y: {
           beginAtZero: true,
           precision: 0
+=======
+        data: [{{ $jumlahMakananTersedia }}, {{ $jumlahMakananDidonasikan }}],
+        backgroundColor: ['#22c55e', '#eab308'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
         }
       }
     }
@@ -195,6 +236,7 @@
       }
     }
   });
+<<<<<<< HEAD
   var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
   var totalArtikelChart = new Chart(ctxArtikel, {
     type: 'bar',
@@ -287,5 +329,7 @@
       }
     }
   });
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
 </script>
 @endsection

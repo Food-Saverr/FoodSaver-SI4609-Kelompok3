@@ -2,11 +2,18 @@
 
 @section('title', 'Statistik Pengguna - FoodSaver')
 
+<<<<<<< HEAD
 @section('title', 'Statistik Makanan - FoodSaver')
 
 @section('content')
 <section class="pt-28 md:pt-32 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
   <div class="container mx-auto px-4">
+=======
+@section('content')
+<section class="pt-28 md:pt-32 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
+  <div class="container mx-auto px-4">
+
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     <div class="mb-6">
       <a href="{{ route('admin.dashboard') }}"
          class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
@@ -34,7 +41,10 @@
         <p class="text-4xl font-bold text-blue-600 mb-2">{{ $jumlahDonatur }}</p>
         <p class="text-sm text-gray-500">Pengguna yang telah bergabung sebagai donatur makanan</p>
       </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
       <div class="bg-white rounded-2xl shadow-md p-6">
         <div class="flex items-center space-x-4 mb-4">
           <div class="bg-green-100 text-green-600 p-3 rounded-full">
@@ -46,6 +56,10 @@
         <p class="text-sm text-gray-500">Pengguna yang terdaftar sebagai penerima donasi</p>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <div class="bg-white rounded-2xl shadow-md p-6">
         <h4 class="text-lg font-semibold text-gray-800 mb-4">Pertumbuhan Donatur per Bulan</h4>
@@ -57,12 +71,17 @@
         <canvas id="penerimaChart" height="300"></canvas>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
     <div class="bg-white rounded-2xl shadow-md p-6 mb-8">
       <h4 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Pengguna</h4>
       <div class="flex justify-center">
         <div style="width: 250px; height: 250px;">
           <canvas id="distributionChart"></canvas>
         </div>
+<<<<<<< HEAD
     <div class="text-center mb-8">
       <h1 class="text-3xl font-bold text-purple-700 mb-2">Statistik Makanan</h1>
       <p class="text-gray-600">Pantau status makanan yang tersedia dan telah didonasikan.</p>
@@ -108,10 +127,13 @@
       <div class="bg-white p-6 rounded-xl shadow">
         <h4 class="text-lg font-semibold mb-4">Perbandingan Status Makanan</h4>
         <canvas id="statusMakananBarChart" height="300"></canvas>
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
       </div>
     </div>
   </div>
 </section>
+<<<<<<< HEAD
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -126,6 +148,22 @@
             datasets: [{
                 label: 'Jumlah Donatur Baru',
                 data: donaturData.map(item => item.total),
+=======
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById('donaturChart'), {
+        type: 'line',
+        data: {
+            labels: @json($donaturPerBulan->pluck('bulan')->map(function($bulan) {
+                $namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                return $namaBulan[$bulan - 1];
+            })),
+            datasets: [{
+                label: 'Jumlah Donatur Baru',
+                data: @json($donaturPerBulan->pluck('total')),
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
                 borderColor: '#3b82f6',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 fill: true,
@@ -146,10 +184,20 @@
     new Chart(document.getElementById('penerimaChart'), {
         type: 'line',
         data: {
+<<<<<<< HEAD
             labels: penerimaData.map(item => namaBulan[item.bulan - 1]),
             datasets: [{
                 label: 'Jumlah Penerima Baru',
                 data: penerimaData.map(item => item.total),
+=======
+            labels: @json($penerimaPerBulan->pluck('bulan')->map(function($bulan) {
+                $namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                return $namaBulan[$bulan - 1];
+            })),
+            datasets: [{
+                label: 'Jumlah Penerima Baru',
+                data: @json($penerimaPerBulan->pluck('total')),
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
                 borderColor: '#10b981',
                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
                 fill: true,
@@ -194,6 +242,7 @@
 </script>
 @endpush
 @endsection
+<<<<<<< HEAD
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -277,3 +326,5 @@
 <<<<<<< Updated upstream
 @endsection 
 @endsection 
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab

@@ -27,12 +27,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Dashboard untuk role Pengguna
     Route::get('/dashboard-pengguna', function () {
-        return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
+        return view('dashboard-pengguna');
     })->name('dashboard.pengguna');
 
     // Dashboard untuk role Donatur
     Route::get('/dashboard-donatur', function () {
-        return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
+        return view('dashboard-donatur');
     })->name('dashboard.donatur');
 
     // Dashboard dan fitur Admin
@@ -51,34 +51,6 @@ Route::middleware('auth')->group(function () {
         }
         return app()->make(AdminDashboardController::class)->index();
     })->name('dashboard.admin');
-
-    // Fitur logout
-    Route::post('/logout', function () {
-        Auth::logout();
-        return redirect('/');
-    })->name('logout');
-    // Admin Routes
-    Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
-        Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.statistik-pengguna');
-        Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
-        Route::get('/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
-        Route::get('/total-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('admin.artikel');
-    });
-
-    // Logout Route
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-});
-    // Admin Routes
-    Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
-        Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.statistik-pengguna');
-        Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
-        Route::get('/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
-        Route::get('/total-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('admin.artikel');
-    });
 
     // Logout Route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

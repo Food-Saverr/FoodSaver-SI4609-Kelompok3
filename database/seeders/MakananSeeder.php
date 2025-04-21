@@ -15,7 +15,10 @@ class MakananSeeder extends Seeder
      */
     public function run(): void
     {
+<<<<<<< HEAD
         // Mendapatkan ID user dengan role Donatur
+=======
+>>>>>>> 7bb7304eb8bf3ff2bd53c44e09cfb991043359ab
         $donaturId = User::where('Role_Pengguna', 'Donatur')->first()->id ?? 1;
 
         $makananData = [
