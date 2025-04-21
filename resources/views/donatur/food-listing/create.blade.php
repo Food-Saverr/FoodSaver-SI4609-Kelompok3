@@ -1,4 +1,4 @@
-@extends('layouts.appadmin')
+@extends('layouts.appdonatur')
 
 @section('title', 'Tambah Makanan Donasi')
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="max-w-4xl mx-auto bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow">
         <div class="mb-8">
-            <a href="{{ route('admin.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-3">
+            <a href="{{ route('donatur.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-3">
                 <i class="fas fa-arrow-left mr-2 transition-transform group-hover:-translate-x-1"></i>
                 Kembali ke Daftar Makanan
             </a>
@@ -34,7 +34,7 @@
         @endif
 
         <!-- Form -->
-        <form action="{{ route('admin.food-listing.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('donatur.food-listing.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             
             <!-- Two-Column Grid -->
@@ -216,7 +216,7 @@
             
             <div class="pt-6 border-t border-gray-200 mt-8">
                 <div class="flex flex-col sm:flex-row justify-end gap-3">
-                    <a href="{{ route('admin.food-listing.index') }}" class="py-2.5 px-6 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition animate-scale text-center">
+                    <a href="{{ route('donatur.food-listing.index') }}" class="py-2.5 px-6 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition animate-scale text-center">
                         <i class="fas fa-times mr-2"></i>Batal
                     </a>
                     <button type="submit" class="py-2.5 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">

@@ -1,4 +1,4 @@
-@extends('layouts.appadmin')
+@extends('layouts.appdonatur')
 
 @section('title', 'Detail Makanan: ' . $makanan->Nama_Makanan)
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="max-w-4xl mx-auto">
         <!-- Navigasi -->
-        <a href="{{ route('admin.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-4">
+        <a href="{{ route('donatur.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-4">
             <i class="fas fa-arrow-left mr-2 transition-transform group-hover:-translate-x-1"></i>
             Kembali ke Daftar Makanan
         </a>
@@ -32,21 +32,21 @@
                 </h1>
                 
                 <div class="flex space-x-2 mt-4 md:mt-0">
-                    @if(Auth::user()->Role_Pengguna === 'Admin' || 
-                        (Auth::user()->Role_Pengguna === 'Donatur' && Auth::id() === $makanan->ID_Pengguna))
-                        
-                        <form action="{{ route('admin.food-listing.destroy', $makanan->ID_Makanan) }}" 
-                              method="POST" 
-                              class="inline-block" 
-                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus makanan ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                    class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
-                                <i class="fas fa-trash mr-2"></i>Hapus
-                            </button>
-                        </form>
-                    @endif
+                    <a href="{{ route('donatur.food-listing.edit', $makanan->ID_Makanan) }}" 
+                       class="py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                        <i class="fas fa-edit mr-2"></i>Edit
+                    </a>
+                    <form action="{{ route('donatur.food-listing.destroy', $makanan->ID_Makanan) }}" 
+                          method="POST" 
+                          class="inline-block" 
+                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus makanan ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                                class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                            <i class="fas fa-trash mr-2"></i>Hapus
+                        </button>
+                    </form>
                 </div>
             </div>
             
@@ -67,46 +67,33 @@
                         
                         <!-- Status Badge -->
                         <div class="absolute top-4 right-4">
-                            @if($makanan->Status_Makanan == 'Tersedia')
+                            @php
+                                $displayStatus = $makanan->Status_Makanan;
+                                if ($makanan->Jumlah_Makanan == 0) {
+                                    $displayStatus = 'Habis';
+                                } elseif ($makanan->Jumlah_Makanan < 5) {
+                                    $displayStatus = 'Segera Habis';
+                                }
+                            @endphp
+                            @if($displayStatus == 'Tersedia')
                                 <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                                    <i class="fas fa-check-circle mr-1"></i>{{ $makanan->Status_Makanan }}
+                                    <i class="fas fa-check-circle mr-1"></i>{{ $displayStatus }}
                                 </span>
-                            @elseif($makanan->Status_Makanan == 'Segera Habis')
+                            @elseif($displayStatus == 'Segera Habis')
                                 <span class="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                                    <i class="fas fa-clock mr-1"></i>{{ $makanan->Status_Makanan }}
+                                    <i class="fas fa-clock mr-1"></i>{{ $displayStatus }}
                                 </span>
-                            @elseif($makanan->Status_Makanan == 'Habis')
+                            @elseif($displayStatus == 'Habis')
                                 <span class="px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-medium">
-                                    <i class="fas fa-times-circle mr-1"></i>{{ $makanan->Status_Makanan }}
+                                    <i class="fas fa-times-circle mr-1"></i>{{ $displayStatus }}
                                 </span>
                             @else
                                 <span class="px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
-                                    <i class="fas fa-info-circle mr-1"></i>{{ $makanan->Status_Makanan }}
+                                    <i class="fas fa-info-circle mr-1"></i>{{ $displayStatus }}
                                 </span>
                             @endif
                         </div>
                     </div> 
-                    
-                    <!-- Donatur -->
-                    <div class="mt-6 p-4 bg-orange-50 rounded-xl">
-                        <h3 class="text-lg font-semibold text-orange-800 mb-2">
-                            <i class="fas fa-user-circle mr-2"></i>Informasi Donatur
-                        </h3>
-                        <div class="flex items-center">
-                            <img 
-                                src="{{ optional($makanan->donatur)->Foto_Profil ? asset('storage/' . optional($makanan->donatur)->Foto_Profil) : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48' }}" 
-                                class="w-12 h-12 rounded-full border-2 border-orange-200" 
-                                alt="{{ optional($makanan->donatur)->Nama_Pengguna ?? 'Donatur' }}"
-                                onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'"
-                            >
-                            <div class="ml-3">
-                                <p class="font-medium">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->ID_Pengguna }}</p>
-                                <p class="text-sm text-gray-500">
-                                    {{ optional($makanan->donatur)->Role_Pengguna ?: 'Donatur' }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Detail Makanan -->
@@ -162,7 +149,6 @@
                                     $isToday = false;
                                 }
                             @endphp
-
                             <div class="flex items-start space-x-3">
                                 <div class="flex-shrink-0 mt-1">
                                     @if(is_null($expDate))
@@ -193,7 +179,7 @@
                                 </div>
                             </div>
                         </div>
-                                                
+                        
                         <!-- Lokasi -->
                         <div class="p-4 bg-green-50 rounded-xl">
                             <h3 class="text-sm font-medium text-green-500 mb-1">Lokasi</h3>
