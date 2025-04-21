@@ -9,10 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<<<<<<< HEAD
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-=======
->>>>>>> e0dfd381 (FS-22- Commit #1)
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -45,7 +42,6 @@
                 <a href="{{ route('admin.pengguna') }}" class="hover:text-orange-600">Pengguna</a>
                 <a href="{{ route('admin.makanan') }}" class="hover:text-orange-600">Makanan</a>
                 <a href="{{ route('admin.artikel') }}" class="hover:text-orange-600">Artikel</a>
-                <a href="{{ route('admin.forum') }}" class="hover:text-orange-600">Forum</a>
             </nav>
             <div class="md:hidden">
                 <button id="toggleMenu"><i class="fas fa-bars text-xl"></i></button>
