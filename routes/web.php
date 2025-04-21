@@ -57,6 +57,18 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/');
     })->name('logout');
+    // Admin Routes
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
+        Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.statistik-pengguna');
+        Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+        Route::get('/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
+        Route::get('/total-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('admin.artikel');
+    });
+
+    // Logout Route
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
     // Admin Routes
     Route::prefix('admin')->group(function () {

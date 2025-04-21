@@ -19,8 +19,6 @@ class Artikel extends Model
         'gambar',
         'status',
         'user_id',
-        'status',
-        'user_id',
         'created_at',
         'updated_at'
     ];

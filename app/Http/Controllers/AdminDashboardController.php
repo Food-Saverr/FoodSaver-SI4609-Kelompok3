@@ -61,6 +61,7 @@ class AdminDashboardController extends Controller
             'artikelLabels',
             'artikelData',
             'totalDonasi',
+            'totalDonasi'
         ));
     }
 
@@ -74,13 +75,13 @@ class AdminDashboardController extends Controller
             ->select(
 
         $penggunaBaru = Pengguna::select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
-            ->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw('MONTH(created_at)'))
-            ->orderBy('bulan')
-            ->get();
+            DB::raw('MONTH(created_at) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->orderBy('bulan')
+        ->get();
 
         return view('admin.statistik-pengguna', compact('jumlahDonatur', 'jumlahPenerima', 'penggunaBaru'));
     }
@@ -239,5 +240,4 @@ class AdminDashboardController extends Controller
             'artikelList'
         ));
     }
-
 }

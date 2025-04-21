@@ -93,6 +93,7 @@ return [
     'passwords' => [
         'users' => [
 
+
             'provider' => 'users',
             'provider' => 'penggunas',
             'table' => 'password_reset_tokens',

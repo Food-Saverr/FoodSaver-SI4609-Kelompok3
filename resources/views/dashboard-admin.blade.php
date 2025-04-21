@@ -146,7 +146,6 @@
       }
     }
   });
-
   var ctx2 = document.getElementById('makananChart').getContext('2d');
   var makananChart = new Chart(ctx2, {
     type: 'bar',
@@ -169,7 +168,6 @@
       }
     }
   });
-
   var ctxDonasi = document.getElementById('donasiChart').getContext('2d');
   var donasiChart = new Chart(ctxDonasi, {
     type: 'line',
@@ -197,7 +195,6 @@
       }
     }
   });
-
   var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
   var totalArtikelChart = new Chart(ctxArtikel, {
     type: 'bar',
@@ -246,7 +243,28 @@
       }
     }
   });
-
+  var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
+  var totalArtikelChart = new Chart(ctxArtikel, {
+    type: 'pie',
+    data: {
+      labels: ['Artikel Dipublikasikan'],
+      datasets: [{
+        label: 'Jumlah Artikel',
+        data: [{{ $totalArtikel }}],
+        backgroundColor: ['#3f51b5'],
+        borderColor: ['#fff'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
   var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
   var totalArtikelChart = new Chart(ctxArtikel, {
     type: 'pie',

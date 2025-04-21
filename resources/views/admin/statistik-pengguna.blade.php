@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('title', 'Statistik Pengguna - FoodSaver')
+
 @section('title', 'Statistik Makanan - FoodSaver')
 
 @section('content')
 <section class="pt-28 md:pt-32 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
   <div class="container mx-auto px-4">
-
     <div class="mb-6">
       <a href="{{ route('admin.dashboard') }}"
          class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
@@ -112,7 +112,6 @@
     </div>
   </div>
 </section>
-
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -275,4 +274,6 @@
     });
   });
 </script>
+<<<<<<< Updated upstream
+@endsection 
 @endsection 
