@@ -19,7 +19,7 @@ use App\Http\Controllers\AdminDonationController;
 Route::get('/', function () {
     return view('welcome'); // Landing Page
 })->name('landing');
-
+//
 // Grup untuk user yang belum login (guest)
 Route::middleware('guest')->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'showRegisterForm'])->name('registrasi.form');
