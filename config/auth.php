@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'penggunas',
         ],
     ],
 
@@ -60,7 +60,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'penggunas' => [
             'driver' => 'eloquent',
             'model' => App\Models\Pengguna::class,
         ],
@@ -92,7 +92,9 @@ return [
 
     'passwords' => [
         'users' => [
+
             'provider' => 'users',
+            'provider' => 'penggunas',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

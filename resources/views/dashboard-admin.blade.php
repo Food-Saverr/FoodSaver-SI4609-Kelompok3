@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.appadmin')
 
 @section('title', 'Dashboard Admin - FoodSaver')
 
@@ -69,7 +69,57 @@
           </div>
         </div>
       </a>
+      <a href="{{ url('/admin/statistik-makanan') }}" class="block h-full">
+        <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-full flex flex-col">
+          <div class="flex items-center space-x-4 mb-4">
+            <div class="bg-green-100 text-green-600 p-3 rounded-full">
+              <i class="fas fa-utensils text-xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Statistik Makanan</h3>
+          </div>
+          <div class="mb-4">
+            <p class="mb-2">Tersedia: <strong>{{ $jumlahMakananTersedia }}</strong> item</p>
+            <p>Didonasikan: <strong>{{ $jumlahMakananDidonasikan }}</strong> item</p>
+          </div>
+          <div class="mt-auto">
+            <canvas id="statistikMakananChart" height="180"></canvas>
+          </div>
+        </div>
+      </a>
 
+      <a href="{{ url('/admin/total-donasi') }}" class="block h-full">
+        <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-full flex flex-col">
+          <div class="flex items-center space-x-4 mb-4">
+            <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
+              <i class="fas fa-donate text-xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Total Donasi</h3>
+          </div>
+          <div class="mb-4">
+            <p class="text-xl font-bold text-purple-700">Rp {{ number_format($totalDonasi, 0, ',', '.') }}</p>
+          </div>
+          <div class="mt-auto">
+            <canvas id="totalDonasiChart" height="180"></canvas>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ url('/admin/total-artikel') }}" class="block h-full">
+        <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-full flex flex-col">
+          <div class="flex items-center space-x-4 mb-4">
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <i class="fas fa-newspaper text-xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Total Artikel Terpublikasi</h3>
+          </div>
+          <div class="mb-4">
+            <p class="text-xl font-bold text-blue-700">Jumlah Artikel: {{ $totalArtikel }}</p>
+          </div>
+          <div class="mt-auto">
+            <canvas id="totalArtikelChart" height="180"></canvas>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
@@ -192,6 +242,29 @@
             maxRotation: 45,
             minRotation: 45
           }
+        }
+      }
+    }
+  });
+
+  var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
+  var totalArtikelChart = new Chart(ctxArtikel, {
+    type: 'pie',
+    data: {
+      labels: ['Artikel Dipublikasikan'],
+      datasets: [{
+        label: 'Jumlah Artikel',
+        data: [{{ $totalArtikel }}],
+        backgroundColor: ['#3f51b5'],
+        borderColor: ['#fff'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
         }
       }
     }

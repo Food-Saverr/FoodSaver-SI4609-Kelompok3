@@ -9,15 +9,18 @@ use App\Http\Controllers\AdminDashboardController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
-    return view('welcome'); // Landing Page
+    return view('welcome');
 })->name('landing');
 
 // Grup untuk user yang belum login (guest)
 Route::middleware('guest')->group(function () {
+    // Registration Routes
     Route::get('/registrasi', [RegisterController::class, 'showRegisterForm'])->name('registrasi.form');
     Route::post('/registrasi', [RegisterController::class, 'register'])->name('registrasi');
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
-    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    
+    // Login Routes
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 });
 
 // Grup untuk user yang sudah login
@@ -54,4 +57,17 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/');
     })->name('logout');
+});
+    // Admin Routes
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
+        Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.statistik-pengguna');
+        Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+        Route::get('/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
+        Route::get('/total-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('admin.artikel');
+    });
+
+    // Logout Route
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

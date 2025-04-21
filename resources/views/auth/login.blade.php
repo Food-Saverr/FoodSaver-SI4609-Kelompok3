@@ -150,7 +150,7 @@
         @endif
 
         <!-- Form -->
-        <form action="{{ route('login') }}" method="POST" class="space-y-6">
+        <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">
             @csrf
             <div>
             <label for="Email_Pengguna" class="block text-gray-700 font-medium mb-1">Email</label>

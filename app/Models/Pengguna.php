@@ -26,6 +26,7 @@ class Pengguna extends Authenticatable
         'remember_token',
     ];
 
+    // Untuk password
     public function getAuthPassword()
     {
         return $this->Password_Pengguna;
@@ -34,5 +35,9 @@ class Pengguna extends Authenticatable
     public function makanan()
     {
         return $this->hasMany(Makanan::class, 'user_id', 'ID_Pengguna');
+
+    public function username()
+    {
+        return 'Email_Pengguna';
     }
 }
