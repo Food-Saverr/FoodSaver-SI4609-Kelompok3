@@ -1,35 +1,37 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Makanan - ' . $makanan->Nama_Makanan)
+@section('title', 'Detail Permintaan - ' . ($request->makanan->Nama_Makanan ?? 'Permintaan'))
 
 @section('content')
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="max-w-7xl mx-auto">
         <!-- Breadcrumb -->
-        <a href="{{ route('pengguna.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-6">
+        <a href="{{ route('pengguna.request.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-6">
             <i class="fas fa-arrow-left mr-2 transition-transform group-hover:-translate-x-1"></i>
-            Kembali ke Daftar Makanan
+            Kembali ke Riwayat Permintaan
         </a>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Main Content - Takes 9/12 of the space -->
             <div class="lg:col-span-9">
                 <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow">
-                    <h1 class="text-3xl font-extrabold title-font gradient-text mb-6">{{ $makanan->Nama_Makanan }}</h1>
+                    <h1 class="text-3xl font-extrabold title-font gradient-text mb-6">{{ $request->makanan->Nama_Makanan ?? 'Permintaan' }}</h1>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                         <!-- Food Image & Quick Info - 5 columns on md screens -->
                         <div class="md:col-span-5">
                             <!-- Food Image -->
                             <div class="relative rounded-2xl overflow-hidden bg-gray-100 shadow-md h-72 mb-5">
-                                <img src="{{ $makanan->Foto_Makanan ? asset('storage/' . $makanan->Foto_Makanan) : asset('images/food-placeholder.jpg') }}" alt="{{ $makanan->Nama_Makanan }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                                <img src="{{ $request->makanan->Foto_Makanan ? asset('storage/' . $request->makanan->Foto_Makanan) : asset('images/food-placeholder.jpg') }}" 
+                                     alt="{{ $request->makanan->Nama_Makanan ?? 'Makanan' }}" 
+                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                                 <!-- Status Badge -->
                                 <div class="absolute top-4 right-4">
                                     @php
-                                        $displayStatus = $makanan->Status_Makanan;
-                                        if ($makanan->Jumlah_Makanan == 0) {
+                                        $displayStatus = $request->makanan->Status_Makanan ?? 'Tidak Tersedia';
+                                        if ($request->makanan->Jumlah_Makanan == 0) {
                                             $displayStatus = 'Habis';
-                                        } elseif ($makanan->Jumlah_Makanan < 5) {
+                                        } elseif ($request->makanan->Jumlah_Makanan < 5) {
                                             $displayStatus = 'Segera Habis';
                                         }
                                     @endphp
@@ -60,14 +62,14 @@
                                         <i class="fas fa-boxes text-xl"></i>
                                     </div>
                                     <p class="text-xs text-blue-800 font-semibold mb-1">JUMLAH</p>
-                                    <p class="text-base font-bold text-gray-800">{{ $makanan->Jumlah_Makanan }} porsi</p>
+                                    <p class="text-base font-bold text-gray-800">{{ $request->makanan->Jumlah_Makanan ?? '-' }} porsi</p>
                                 </div>
                                 <div class="p-4 bg-purple-50 rounded-xl shadow-sm text-center">
                                     <div class="text-purple-500 mb-2">
                                         <i class="fas fa-clock text-xl"></i>
                                     </div>
                                     <p class="text-xs text-purple-800 font-semibold mb-1">DITAMBAHKAN</p>
-                                    <p class="text-base font-bold text-gray-800">{{ $makanan->created_at->format('d/m/Y') }}</p>
+                                    <p class="text-base font-bold text-gray-800">{{ $request->makanan->created_at ? $request->makanan->created_at->format('d/m/Y') : '-' }}</p>
                                 </div>
                             </div>
 
@@ -77,16 +79,19 @@
                                     <i class="fas fa-user-circle mr-2"></i>Informasi Donatur
                                 </h3>
                                 <div class="flex items-center">
-                                    <img src="{{ optional($makanan->donatur)->Foto_Profil ? asset('storage/' . optional($makanan->donatur)->Foto_Profil) : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(optional($makanan->donatur)->Email_Pengguna ?? 'default@example.com'))) . '?d=mp&s=48' }}" class="w-16 h-16 rounded-full border-2 border-orange-200" alt="{{ optional($makanan->donatur)->Nama_Pengguna ?? 'Donatur' }}" onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'">
+                                    <img src="{{ optional($request->makanan->donatur)->Foto_Profil ? asset('storage/' . optional($request->makanan->donatur)->Foto_Profil) : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(optional($request->makanan->donatur)->Email_Pengguna ?? 'default@example.com'))) . '?d=mp&s=48' }}" 
+                                         class="w-16 h-16 rounded-full border-2 border-orange-200" 
+                                         alt="{{ optional($request->makanan->donatur)->Nama_Pengguna ?? 'Donatur' }}" 
+                                         onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'">
                                     <div class="ml-4">
-                                        <p class="font-medium text-gray-800 text-lg">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->ID_Pengguna }}</p>
-                                        <p class="text-gray-500">{{ optional($makanan->donatur)->Role_Pengguna ?: 'Donatur' }}</p>
+                                        <p class="font-medium text-gray-800 text-lg">{{ optional($request->makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . ($request->makanan->ID_Pengguna ?? 'N/A') }}</p>
+                                        <p class="text-gray-500">{{ optional($request->makanan->donatur)->Role_Pengguna ?: 'Donatur' }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Food Details - 7 columns on md screens -->
+                        <!-- Request Details - 7 columns on md screens -->
                         <div class="md:col-span-7 h-full flex flex-col">
                             <!-- Detail Cards Grid -->
                             <div class="grid grid-cols-1 gap-5 h-full flex-grow">
@@ -98,7 +103,7 @@
                                         </div>
                                         <div>
                                             <h3 class="text-sm font-medium text-blue-500 mb-1">Kategori Makanan</h3>
-                                            <p class="font-semibold text-gray-800 text-lg">{{ $makanan->Kategori_Makanan ?: 'Tidak ada kategori' }}</p>
+                                            <p class="font-semibold text-gray-800 text-lg">{{ $request->makanan->Kategori_Makanan ?: 'Tidak ada kategori' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +112,7 @@
                                 <div class="p-5 bg-red-50 rounded-xl shadow-sm">
                                     @php
                                         try {
-                                            $expDate = \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa);
+                                            $expDate = \Carbon\Carbon::parse($request->makanan->Tanggal_Kedaluwarsa);
                                             $now = \Carbon\Carbon::now();
                                             $isPast = $expDate->isPast();
                                             $isToday = $expDate->isToday();
@@ -162,7 +167,7 @@
                                         </div>
                                         <div>
                                             <h3 class="text-sm font-medium text-green-500 mb-1">Lokasi Pengambilan</h3>
-                                            <p class="font-semibold text-gray-800 text-lg">{{ $makanan->Lokasi_Makanan ?: 'Tidak ditentukan' }}</p>
+                                            <p class="font-semibold text-gray-800 text-lg">{{ $request->makanan->Lokasi_Makanan ?: 'Tidak ditentukan' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +177,7 @@
                                     <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
                                         <i class="fas fa-info-circle mr-3 text-gray-500"></i>Deskripsi Makanan
                                     </h3>
-                                    <p class="text-gray-700 leading-relaxed flex-grow">{{ $makanan->Deskripsi_Makanan ?: 'Tidak ada deskripsi.' }}</p>
+                                    <p class="text-gray-700 leading-relaxed flex-grow">{{ $request->makanan->Deskripsi_Makanan ?: 'Tidak ada deskripsi.' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -180,97 +185,51 @@
                 </div>
             </div>
             
-            <!-- Request Card - Takes 3/12 of the space -->
+            <!-- Status Update Card - Takes 3/12 of the space -->
             <div class="lg:col-span-3">
                 <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow sticky top-28">
                     <div class="text-center mb-6">
-                        <div class="inline-block p-3 bg-orange-100 rounded-full mb-3">
-                            <i class="fas fa-hand-holding-heart text-orange-500 text-2xl"></i>
+                        <div class="inline-block p-3 bg-blue-100 rounded-full mb-3">
+                            <i class="fas fa-clipboard-check text-blue-500 text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold gradient-text">Ambil Makanan Ini</h3>
+                        <h3 class="text-xl font-bold gradient-text">Status Permintaan</h3>
                     </div>
-                    
-                    @php
-                        $makananHabis = $makanan->Jumlah_Makanan <= 0 || $makanan->Status_Makanan === 'Habis';
-                        $isExpired = isset($isPast) && $isPast;
-                    @endphp
 
-                    @if($makananHabis || $isExpired)
-                        <!-- Tampilan ketika makanan habis atau kedaluwarsa -->
-                        <div class="text-center bg-red-50 rounded-xl p-6 shadow-sm mb-6">
-                            <div class="mb-4 text-red-500">
-                                <i class="fas fa-exclamation-circle text-3xl"></i>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 mb-2">Makanan Tidak Tersedia</h4>
-                            <p class="text-gray-600 mb-4">
-                                @if($makananHabis)
-                                    Makanan ini sudah habis dan tidak dapat di-request.
-                                @elseif($isExpired)
-                                    Makanan ini sudah kedaluwarsa dan tidak dapat di-request.
-                                @endif
-                            </p>
-                            <a href="{{ route('pengguna.food-listing.index') }}" class="inline-block bg-gradient-to-r from-gray-500 to-gray-600 text-white py-2.5 px-6 rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transition animate-scale">
-                                Lihat Makanan Lain
-                            </a>
-                        </div>
-                    @elseif(auth()->check() && auth()->user()->Role_Pengguna === 'Pengguna')
-                        <!-- Form untuk request makanan -->
-                        <form action="{{ route('pengguna.request.store', $makanan->ID_Makanan) }}" method="POST" class="space-y-4">
-    @csrf
-    <div>
-        <label for="pesan" class="block text-gray-700 font-medium mb-2">Pesan (Opsional)</label>
-        <textarea name="pesan" id="pesan" rows="4" placeholder="Tambahkan pesan untuk donatur..." class="w-full rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all p-3 text-gray-700"></textarea>
-    </div>
-    <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
-        <i class="fas fa-paper-plane mr-2"></i>Request Makanan
-    </button>
-</form>
-                        
-                        <!-- Visual Enhancement Elements -->
-                        <div class="mt-6 pt-5 border-t border-gray-100">
-                            <div class="bg-yellow-50 rounded-xl p-4 shadow-sm">
-                                <div class="flex items-start">
-                                    <div class="p-2 bg-yellow-100 rounded-lg mr-3 flex-shrink-0">
-                                        <i class="fas fa-lightbulb text-yellow-500"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-800 mb-1">Info Penting</h4>
-                                        <p class="text-xs text-gray-600">Pastikan untuk mengambil makanan sebelum tanggal kedaluwarsa. Setelah request disetujui, silakan hubungi donatur untuk detailnya.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <!-- Tampilan untuk pengguna yang tidak login atau bukan tipe Pengguna -->
-                        <div class="text-center bg-gray-50 rounded-xl p-6 shadow-sm mb-6">
-                            <div class="mb-4 text-orange-500">
-                                <i class="fas fa-info-circle text-3xl"></i>
-                            </div>
-                            <p class="text-gray-600 mb-4">Hanya Penerima Makanan yang dapat mengambil makanan ini.</p>
-                            @guest
-                                <a href="{{ route('login.form') }}" class="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2.5 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition animate-scale">
-                                    Login sebagai Penerima
-                                </a>
+                    <!-- Current Status and Last Updated -->
+                    <div class="bg-gray-50 rounded-xl p-4 mb-6 shadow-sm">
+                        <h4 class="text-sm font-semibold text-gray-800 mb-2">Status Saat Ini</h4>
+                        <p class="text-gray-700 mb-2">
+                            @if($request->Status_Request == 'Pending')
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                                    <i class="fas fa-clock mr-1"></i>Pending
+                                </span>
+                            @elseif($request->Status_Request == 'Approve')
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                    <i class="fas fa-spinner mr-1"></i>On-Going
+                                </span>
+                            @elseif($request->Status_Request == 'Done')
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                    <i class="fas fa-check-circle mr-1"></i>Done
+                                </span>
                             @else
-                                <p class="text-sm text-gray-500 mt-3">Anda login sebagai {{ auth()->user()->Role_Pengguna }}.</p>
-                            @endguest
+                                <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+                                    <i class="fas fa-times-circle mr-1"></i>Reject
+                                </span>
+                            @endif
+                        </p>
+                        <p class="text-xs text-gray-600">
+                            <strong>Terakhir Diperbarui:</strong> 
+                            {{ $request->updated_at->format('d/m/Y H:i') }}
+                        </p>
+                    </div>
+
+                    <!-- Message for Pengguna -->
+                    <div class="text-center bg-gray-50 rounded-xl p-6 shadow-sm">
+                        <div class="mb-4 text-blue-500">
+                            <i class="fas fa-info-circle text-3xl"></i>
                         </div>
-                        
-                        <!-- FAQ for not eligible users -->
-                        <div class="mt-5">
-                            <h4 class="text-sm font-semibold text-gray-800 mb-3">Pertanyaan Umum</h4>
-                            <div class="space-y-3">
-                                <div class="bg-white rounded-lg p-4 shadow-sm">
-                                    <p class="text-xs font-medium text-gray-700 mb-1">Bagaimana cara menjadi penerima?</p>
-                                    <p class="text-xs text-gray-500">Daftar sebagai penerima di halaman registrasi dan lengkapi profil Anda.</p>
-                                </div>
-                                <div class="bg-white rounded-lg p-4 shadow-sm">
-                                    <p class="text-xs font-medium text-gray-700 mb-1">Apakah makanan ini aman?</p>
-                                    <p class="text-xs text-gray-500">Semua makanan diverifikasi dan memiliki informasi kedaluwarsa yang jelas.</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                        <p class="text-gray-600 mb-4">Harap menunggu, proses sedang dilakukan.</p>
+                    </div>
                 </div>
             </div>
         </div>

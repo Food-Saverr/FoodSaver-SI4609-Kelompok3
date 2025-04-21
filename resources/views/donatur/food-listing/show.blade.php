@@ -93,7 +93,14 @@
                                 </span>
                             @endif
                         </div>
-                    </div> 
+                    </div>
+                    <!-- Tombol Lihat Permintaan -->
+                    <div class="mt-4">
+                        <a href="{{ route('donatur.request.index', ['id_makanan' => $makanan->ID_Makanan]) }}" 
+                           class="block w-full text-center py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                            <i class="fas fa-list mr-2"></i>Lihat Permintaan
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Detail Makanan -->
