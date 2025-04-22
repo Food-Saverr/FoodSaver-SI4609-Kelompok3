@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -45,4 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/profile', function () {
         return view('profile.show');
     })->name('profile.show');
+
+    // Route untuk halaman edit profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route untuk update profil
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });

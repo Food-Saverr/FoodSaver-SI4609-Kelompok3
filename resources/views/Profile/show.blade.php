@@ -58,7 +58,7 @@
             Kembali ke Dashboard
         </a>
         <!-- isi route edit profile -->
-        <a href="" class="py-3 bg-orange-600 text-white text-lg font-semibold rounded-md hover:bg-orange-700 transition duration-300 text-center">
+        <a href="{{ route('profile.edit') }}" class="py-3 bg-orange-600 text-white text-lg font-semibold rounded-md hover:bg-orange-700 transition duration-300 text-center">
             Edit Profile
         </a>
     </div>
