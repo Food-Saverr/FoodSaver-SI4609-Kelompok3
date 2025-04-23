@@ -1,115 +1,148 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FoodSaver - Selamatkan Makanan, Selamatkan Dunia</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8fafc;
-      overflow-x: hidden;
-    }
-    .title-font {
-      font-family: 'Montserrat', sans-serif;
-    }
-    .navbar-scrolled {
-      backdrop-filter: blur(8px);
-      background-color: rgba(249, 115, 22, 0.95);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    .animate-fade-up {
-      opacity: 0;
-      animation: fadeUp 0.8s forwards ease-out;
-    }
-    .animate-fade-up-delay {
-      opacity: 0;
-      animation: fadeUp 0.8s forwards ease-out;
-      animation-delay: 0.3s;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-scale {
-      transition: all 0.3s ease-in-out;
-    }
-    .animate-scale:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.4);
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, #f97316, #ea580c);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .custom-shadow {
-      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 3px 20px -5px rgba(0, 0, 0, 0.1);
-    }
-    .hero-pattern {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .floating {
-      animation: float 6s ease-in-out infinite;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-      100% { transform: translateY(0px); }
-    }
-  </style>
-  <script>
-    window.addEventListener('scroll', function() {
-      const header = document.querySelector('header');
-      if (window.scrollY > 50) {
-        header.classList.add('navbar-scrolled');
-      } else {
-        header.classList.remove('navbar-scrolled');
-      }
-    });
-  </script>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 scroll-smooth">
+@extends('layouts.appdonatur')
 
-  <!-- Navbar -->
-  <header class="fixed top-0 w-full bg-gradient-to-r from-orange-500 to-orange-600 shadow z-50 transition-all duration-500 h-16 md:h-20">
-    <div class="container mx-auto h-full flex items-center justify-between px-4">
-      <img src="{{ asset('FoodSaver (3).png') }}" alt="FoodSaver Logo" class="h-10 md:h-12 w-auto" />
-      <nav class="hidden md:flex items-center space-x-6">
-        <a href="#features" class="text-white hover:text-orange-200 transition-colors">About</a>
-        <a href="#testimoni" class="text-white hover:text-orange-200 transition-colors">Testimoni</a>
-        <a href="#faq" class="text-white hover:text-orange-200 transition-colors">FAQ</a>
-        <a href="#kontak" class="text-white hover:text-orange-200 transition-colors">Kontak</a>
+@section('title', 'Dashboard - FoodSaver')
 
-        @guest
-          <a href="{{ route('login.form') }}" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">Login</a>
-        @endguest
-
-        @auth
-          <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-orange-100 transition animate-scale">Logout</button>
-          </form>
-        @endauth
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="pt-28 md:pt-36 pb-16 bg-orange-500 bg-opacity-90 text-white text-center relative z-10">
+@section('content')
+<section class="pt-28 pb-16 bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 title-font">Selamatkan Makanan,<br />Selamatkan Dunia</h1>
-      <p class="text-lg md:text-xl mb-6">Bergabunglah dengan FoodSaver untuk mengurangi limbah makanan dan berbagi kebaikan demi masa depan yang lebih hijau.</p>
-      <a href="#daftar" class="bg-white text-orange-600 px-6 py-3 rounded-full font-semibold hover:bg-orange-100 transition animate-scale inline-flex items-center gap-2">
-        <i class="fas fa-user-plus"></i> Gabung Sekarang
-      </a>
-    </div>
-  </section>
+        <!-- Flash Messages -->
+        @if(session('success'))
+        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg animate-fade-up-delay">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
+            </div>
+        </div>
+        @endif
 
-</body>
-</html>
+        @if(session('error'))
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg animate-fade-up-delay">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ session('error') }}</p>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold title-font gradient-text animate-fade-up">
+                Selamat Datang, {{ Auth::user()->Nama_Pengguna }}
+            </h1>
+            <p class="text-gray-500 max-w-2xl mx-auto mt-3 animate-fade-up-delay">
+                Bersama <span class="font-semibold text-orange-600">FoodSaver</span>, Anda membantu mengurangi limbah makanan dan mendukung komunitas. Lihat dampak Anda!
+            </p>
+        </div>
+
+        <!-- Statistik Ringkas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all animate-fade-up">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-orange-100 text-orange-600 p-3 rounded-full">
+                        <i class="fas fa-utensils text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Total Donasi</h3>
+                </div>
+                <p class="text-3xl font-bold text-orange-600">{{ $totalDonasi ?? 0 }}</p>
+                <p class="text-sm text-gray-500 mt-1">Makanan yang telah Anda donasikan</p>
+            </div>
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all animate-fade-up-delay">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-green-100 text-green-600 p-3 rounded-full">
+                        <i class="fas fa-leaf text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Limbah Dicegah</h3>
+                </div>
+                <p class="text-3xl font-bold text-green-600">{{ number_format($limbahDicegah ?? 0, 2) }} Kg</p>
+                <p class="text-sm text-gray-500 mt-1">Kontribusi Anda untuk lingkungan</p>
+            </div>
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all animate-fade-up-delay">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Penerima Terbantu</h3>
+                </div>
+                <p class="text-3xl font-bold text-blue-600">{{ $penerimaTerbantu ?? 0 }}</p>
+                <p class="text-sm text-gray-500 mt-1">Komunitas yang telah Anda dukung</p>
+            </div>
+        </div>
+
+        <!-- Recent Donations -->
+        <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800">Donasi Terbaru</h2>
+                <a href="{{ route('donatur.food-listing.index') }}" class="text-orange-500 hover:text-orange-700 text-sm font-medium flex items-center transition-colors group">
+                    Lihat Semua <i class="fas fa-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+            @if($recentMakanans->isEmpty())
+                <div class="text-center py-8">
+                    <i class="fas fa-cookie-bite text-5xl text-gray-300 mb-3"></i>
+                    <p class="text-lg font-medium text-gray-600">Belum ada donasi makanan</p>
+                    <p class="text-sm text-gray-500">Mulai donasi sekarang untuk membuat perubahan!</p>
+                    <a href="{{ route('donatur.food-listing.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
+                        <i class="fas fa-plus mr-2"></i>Tambah Donasi
+                    </a>
+                </div>
+            @else
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach($recentMakanans as $makanan)
+                        <div class="bg-white rounded-xl p-4 custom-shadow hover:shadow-lg transition-all">
+                            <div class="relative h-40 w-full rounded-lg overflow-hidden mb-3 bg-gray-100">
+                                <img src="{{ $makanan->Foto_Makanan ? asset('storage/' . $makanan->Foto_Makanan) : 'https://via.placeholder.com/400x320' }}" 
+                                     alt="{{ $makanan->Nama_Makanan }}" 
+                                     class="w-full h-full object-cover transition-transform hover:scale-105"
+                                     onerror="this.src='https://via.placeholder.com/400x320'">
+                                <span class="absolute top-2 right-2 px-3 py-1 bg-{{ $makanan->Status_Makanan == 'Tersedia' ? 'green' : ($makanan->Status_Makanan == 'Segera Habis' ? 'yellow' : 'red') }}-100 text-{{ $makanan->Status_Makanan == 'Tersedia' ? 'green' : ($makanan->Status_Makanan == 'Segera Habis' ? 'yellow' : 'red') }}-800 rounded-full text-xs font-medium">
+                                    {{ $makanan->Status_Makanan }}
+                                </span>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-800 truncate">{{ $makanan->Nama_Makanan }}</h3>
+                            <p class="text-sm text-gray-500 mt-1">Jumlah: {{ $makanan->Jumlah_Makanan }} porsi</p>
+                            <p class="text-sm text-gray-500 mt-1">Kedaluwarsa: 
+                                @php
+                                    try {
+                                        $expDate = \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa);
+                                        echo $expDate->format('d M Y');
+                                    } catch (\Exception $e) {
+                                        echo 'Tidak Valid';
+                                    }
+                                @endphp
+                            </p>
+                            <div class="mt-3 flex gap-2">
+                                <a href="{{ route('donatur.food-listing.show', $makanan->ID_Makanan) }}" 
+                                   class="flex-1 bg-blue-100 text-blue-600 py-1.5 rounded-lg text-sm text-center hover:bg-blue-200 transition animate-scale">
+                                    <i class="fas fa-eye mr-1"></i> Lihat
+                                </a>
+                                <a href="{{ route('donatur.food-listing.edit', $makanan->ID_Makanan) }}" 
+                                   class="flex-1 bg-orange-100 text-orange-600 py-1.5 rounded-lg text-sm text-center hover:bg-orange-200 transition animate-scale">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <!-- Call to Action -->
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-8 text-center custom-shadow animate-fade-up">
+            <h2 class="text-2xl font-bold mb-3">Punya Makanan untuk Didonasikan?</h2>
+            <p class="text-sm mb-4 max-w-xl mx-auto">Setiap porsi yang Anda donasikan membantu mengurangi limbah makanan dan mendukung mereka yang membutuhkan. Ayo buat perubahan sekarang!</p>
+            <a href="{{ route('donatur.food-listing.create') }}" 
+               class="bg-white text-orange-600 px-6 py-3 rounded-xl font-semibold hover:bg-orange-100 transition animate-scale inline-flex items-center gap-2 shadow-lg">
+                <i class="fas fa-donate"></i> Donasi Sekarang
+            </a>
+        </div>
+    </div>
+</section>
+@endsection

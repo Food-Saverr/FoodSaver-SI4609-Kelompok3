@@ -86,13 +86,13 @@
         <div class="mb-12">
             <h2 class="text-2xl font-bold mb-6 title-font">Tindakan Cepat</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <a href="{{ route('admin.food-listing.create') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                <a href="{{ route('admin.food-listing.index') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
                     <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
                         <i class="fas fa-plus text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold">Tambah Makanan</h3>
-                        <p class="text-sm text-gray-500">Tambahkan donasi makanan baru</p>
+                        <h3 class="text-lg font-semibold">Pantau Makanan</h3>
+                        <p class="text-sm text-gray-500">Monitoring donasi makanan baru</p>
                     </div>
                 </a>
                 

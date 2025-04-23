@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminMakananController;
+use App\Http\Controllers\DonaturMakananController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\DonaturDashboardController;
 use App\Http\Controllers\FoodListingController;
 
 // Landing Page (bisa diakses semua)
@@ -29,9 +31,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard.pengguna');
 
     // Dashboard untuk role Donatur
-    Route::get('/dashboard-donatur', function () {
-        return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
-    })->name('dashboard.donatur');
+    Route::get('/dashboard-donatur', [DonaturDashboardController::class, 'index'])->name('dashboard.donatur');
 
     // Dashboard untuk role Admin
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
@@ -44,28 +44,41 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// --- Rute untuk Fitur Makanan Admin ---
+// Routes for Admin Features
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    // Menampilkan daftar makanan (index)
+    // Food Listing: List all foods
     Route::get('/food-listing', [AdminMakananController::class, 'index'])->name('admin.food-listing.index');
 
-    // Menampilkan form tambah makanan (create)
-    Route::get('/food-listing/create', [AdminMakananController::class, 'create'])->name('admin.food-listing.create');
-
-    // Menyimpan data makanan baru dari form
-    Route::post('/food-listing', [AdminMakananController::class, 'store'])->name('admin.food-listing.store');
-    
-    // Menampilkan detail makanan (show)
+    // Food Listing: Show food details
     Route::get('/food-listing/{makanan}', [AdminMakananController::class, 'show'])->name('admin.food-listing.show');
-    
-    // Menampilkan form edit makanan (edit)
-    Route::get('/food-listing/{makanan}/edit', [AdminMakananController::class, 'edit'])->name('admin.food-listing.edit');
-    
-    // Mengupdate data makanan
-    Route::put('/food-listing/{makanan}', [AdminMakananController::class, 'update'])->name('admin.food-listing.update');
-    
-    // Menghapus data makanan
+
+    // Food Listing: Delete food
     Route::delete('/food-listing/{makanan}', [AdminMakananController::class, 'destroy'])->name('admin.food-listing.destroy');
+});
+
+// Routes for Donatur Features
+Route::middleware(['auth'])->prefix('donatur')->group(function () {
+
+    // Food Listing: List all foods
+    Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
+
+    // Food Listing: Show form to create new food
+    Route::get('/food-listing/create', [DonaturMakananController::class, 'create'])->name('donatur.food-listing.create');
+
+    // Food Listing: Store new food
+    Route::post('/food-listing', [DonaturMakananController::class, 'store'])->name('donatur.food-listing.store');
+
+    // Food Listing: Show food details
+    Route::get('/food-listing/{makanan}', [DonaturMakananController::class, 'show'])->name('donatur.food-listing.show');
+
+    // Food Listing: Show form to edit food
+    Route::get('/food-listing/{makanan}/edit', [DonaturMakananController::class, 'edit'])->name('donatur.food-listing.edit');
+
+    // Food Listing: Update food
+    Route::put('/food-listing/{makanan}', [DonaturMakananController::class, 'update'])->name('donatur.food-listing.update');
+
+    // Food Listing: Delete food
+    Route::delete('/food-listing/{makanan}', [DonaturMakananController::class, 'destroy'])->name('donatur.food-listing.destroy');
 });
 
 // --- Rute untuk Fitur Makanan Pengguna ---

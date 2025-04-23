@@ -1,13 +1,18 @@
-@extends('layouts.appadmin')
+@extends('layouts.appdonatur')
 
 @section('title', 'Daftar Makanan Donasi')
 
 @section('content')
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow">
-        <div class="mb-8">
-            <h1 class="text-3xl font-extrabold title-font gradient-text mb-2">Daftar Makanan Donasi</h1>
-            <p class="text-gray-500">Kelola daftar makanan yang siap untuk didonasikan</p>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold title-font gradient-text mb-2">Daftar Makanan Donasi</h1>
+                <p class="text-gray-500">Kelola daftar makanan yang Anda donasikan</p>
+            </div>
+            <a href="{{ route('donatur.food-listing.create') }}" class="mt-4 md:mt-0 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2.5 px-6 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
+                <i class="fas fa-plus mr-2"></i>Tambah Makanan
+            </a>
         </div>
 
         <!-- Flash Messages -->
@@ -48,7 +53,6 @@
                         <th class="py-3 px-4 text-left">Status</th>
                         <th class="py-3 px-4 text-left">Kedaluwarsa</th>
                         <th class="py-3 px-4 text-left">Jumlah</th>
-                        <th class="py-3 px-4 text-left">Donatur</th>
                         <th class="py-3 px-4 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -56,23 +60,39 @@
                     @forelse($makanans as $makanan)
                     <tr class="hover:bg-orange-50 transition duration-150">
                         <td class="py-3 px-4">
-                            <img src="{{ $makanan->Foto_Makanan ? asset('storage/' . $makanan->Foto_Makanan) : asset('images/food-placeholder.jpg') }}" 
+                            <img src="{{ asset('storage/' . $makanan->Foto_Makanan) }}" 
                                  alt="{{ $makanan->Nama_Makanan }}" 
-                                 class="w-16 h-16 object-cover rounded-lg border border-gray-200">
+                                 class="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                                 onerror="this.src='/api/placeholder/60/60'">
                         </td>
                         <td class="py-3 px-4 font-medium">{{ $makanan->Nama_Makanan }}</td>
                         <td class="py-3 px-4">{{ $makanan->Kategori_Makanan ?: 'Tidak ada kategori' }}</td>
                         <td class="py-3 px-4">
                             @php
-                                $displayStatus = $makanan->Jumlah_Makanan == 0 ? 'Habis' : ($makanan->Jumlah_Makanan < 5 ? 'Segera Habis' : 'Tersedia');
+                                $displayStatus = $makanan->Status_Makanan;
+                                if ($makanan->Jumlah_Makanan == 0) {
+                                    $displayStatus = 'Habis';
+                                } elseif ($makanan->Jumlah_Makanan < 5) {
+                                    $displayStatus = 'Segera Habis';
+                                }
                             @endphp
-                            <span class="px-3 py-1 rounded-full text-xs font-medium
-                                         {{ $displayStatus == 'Tersedia' ? 'bg-green-100 text-green-800' : 
-                                            ($displayStatus == 'Segera Habis' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                <i class="fas {{ $displayStatus == 'Tersedia' ? 'fa-check-circle' : 
-                                                 ($displayStatus == 'Segera Habis' ? 'fa-clock' : 'fa-times-circle') }} mr-1"></i>
-                                {{ $displayStatus }}
-                            </span>
+                            @if($displayStatus == 'Tersedia')
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                    <i class="fas fa-check-circle mr-1"></i>{{ $displayStatus }}
+                                </span>
+                            @elseif($displayStatus == 'Segera Habis')
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                                    <i class="fas fa-clock mr-1"></i>{{ $displayStatus }}
+                                </span>
+                            @elseif($displayStatus == 'Habis')
+                                <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                                    <i class="fas fa-times-circle mr-1"></i>{{ $displayStatus }}
+                                </span>
+                            @else
+                                <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
+                                    <i class="fas fa-info-circle mr-1"></i>{{ $displayStatus }}
+                                </span>
+                            @endif
                         </td>
                         <td class="py-3 px-4">
                             @php
@@ -122,16 +142,17 @@
                         <td class="py-3 px-4">
                             {{ $makanan->Jumlah_Makanan ? $makanan->Jumlah_Makanan . ' porsi' : 'Habis' }}
                         </td>
-                        <td class="py-3 px-4">
-                            {{ $makanan->donatur->Nama_Pengguna ?? 'Pengguna ' . $makanan->ID_Pengguna }}
-                        </td>
                         <td class="py-3 px-4 text-center">
                             <div class="flex justify-center space-x-2">
-                                <a href="{{ route('admin.food-listing.show', $makanan->ID_Makanan) }}" 
+                                <a href="{{ route('donatur.food-listing.show', $makanan->ID_Makanan) }}" 
                                    class="text-blue-500 hover:text-blue-700 transition px-2 py-1 rounded-lg hover:bg-blue-50">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <form action="{{ route('admin.food-listing.destroy', $makanan->ID_Makanan) }}" 
+                                <a href="{{ route('donatur.food-listing.edit', $makanan->ID_Makanan) }}" 
+                                   class="text-yellow-500 hover:text-yellow-700 transition px-2 py-1 rounded-lg hover:bg-yellow-50">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('donatur.food-listing.destroy', $makanan->ID_Makanan) }}" 
                                       method="POST" 
                                       class="inline-block" 
                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus makanan ini?')">
@@ -147,11 +168,11 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="py-8 text-center text-gray-500">
+                        <td colspan="7" class="py-8 text-center text-gray-500">
                             <div class="flex flex-col items-center justify-center">
                                 <i class="fas fa-cookie-bite text-5xl text-gray-300 mb-3"></i>
                                 <p class="text-lg font-medium">Belum ada data makanan</p>
-                                <p class="text-sm text-gray-400">Silakan tunggu donasi dari Donatur</p>
+                                <p class="text-sm text-gray-400">Silakan tambahkan makanan untuk donasi</p>
                             </div>
                         </td>
                     </tr>
