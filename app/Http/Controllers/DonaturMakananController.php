@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Makanan;
+use App\Models\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
+class DonaturMakananController extends Controller
+{
+    public function index()
+    {
+        Makanan::where('ID_Pengguna', Auth::id())->update([
+            'Status_Makanan' => DB::raw("
+                CASE
+                    WHEN Jumlah_Makanan = 0 THEN 'Habis'
+                    WHEN Jumlah_Makanan BETWEEN 1 AND 4 THEN 'Segera Habis'
+                    WHEN Jumlah_Makanan >= 5 THEN 'Tersedia'
+                    ELSE Status_Makanan
+                END
+            ")
+        ]);
+
+        $makanans = Makanan::where('ID_Pengguna', Auth::id())
+                           ->with('donatur')
+                           ->orderBy('created_at', 'desc')
+                           ->paginate(10);
+
+        return view('donatur.food-listing.index', compact('makanans'));
+    }
+
+    public function create()
+    {
+        return view('donatur.food-listing.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'Nama_Makanan' => 'required|string|max:255',
+            'Deskripsi_Makanan' => 'nullable|string',
+            'Jumlah_Makanan' => 'required|integer|min:0',
+            'Kategori_Makanan' => 'nullable|string|max:100',
+            'Foto_Makanan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'Status_Makanan' => 'nullable|string|in:Tersedia,Segera Habis,Habis',
+            'Tanggal_Kedaluwarsa' => 'required|date|after_or_equal:today',
+            'Lokasi_Makanan' => 'nullable|string|max:255',
+        ], [
+            'Nama_Makanan.required' => 'Nama makanan harus diisi.',
+            'Jumlah_Makanan.required' => 'Jumlah makanan harus diisi.',
+            'Jumlah_Makanan.integer' => 'Jumlah makanan harus berupa angka bulat.',
+            'Jumlah_Makanan.min' => 'Jumlah makanan harus minimal 0.',
+            'Foto_Makanan.required' => 'Foto makanan harus diunggah.',
+            'Foto_Makanan.image' => 'File harus berupa gambar.',
+            'Foto_Makanan.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+            'Foto_Makanan.max' => 'Ukuran gambar maksimal 2MB.',
+            'Tanggal_Kedaluwarsa.required' => 'Tanggal kedaluwarsa harus diisi.',
+            'Tanggal_Kedaluwarsa.after_or_equal' => 'Tanggal kedaluwarsa harus hari ini atau setelahnya.',
+        ]);
+
+        $validatedData['Status_Makanan'] = match (true) {
+            $validatedData['Jumlah_Makanan'] == 0 => 'Habis',
+            $validatedData['Jumlah_Makanan'] < 5 => 'Segera Habis',
+            default => 'Tersedia',
+        };
+
+        $fotoPath = $request->file('Foto_Makanan')->store('makanan-fotos', 'public');
+
+        $dataToSave = $validatedData;
+        $dataToSave['Foto_Makanan'] = $fotoPath;
+        $dataToSave['ID_Pengguna'] = Auth::id();
+
+        try {
+            Makanan::create($dataToSave);
+            return redirect()->route('donatur.food-listing.index')
+                           ->with('success', 'Data makanan berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            Storage::disk('public')->delete($fotoPath);
+            return redirect()->back()
+                           ->with('error', 'Gagal menambahkan data makanan. Silakan coba lagi.')
+                           ->withInput();
+        }
+    }
+
+    public function show(Makanan $makanan)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat makanan ini.');
+        }
+        $makanan->load('donatur', 'requests.pengguna');
+        return view('donatur.food-listing.show', compact('makanan'));
+    }
+
+    public function edit(Makanan $makanan)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit makanan ini.');
+        }
+        return view('donatur.food-listing.edit', compact('makanan'));
+    }
+
+    public function update(Request $request, Makanan $makanan)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk memperbarui makanan ini.');
+        }
+
+        $validatedData = $request->validate([
+            'Nama_Makanan' => 'required|string|max:255',
+            'Deskripsi_Makanan' => 'nullable|string',
+            'Jumlah_Makanan' => 'required|integer|min:0',
+            'Kategori_Makanan' => 'nullable|string|max:100',
+            'Foto_Makanan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'Status_Makanan' => 'nullable|string|in:Tersedia,Segera Habis,Habis',
+            'Tanggal_Kedaluwarsa' => 'required|date',
+            'Lokasi_Makanan' => 'nullable|string|max:255',
+        ], [
+            'Nama_Makanan.required' => 'Nama makanan harus diisi.',
+            'Jumlah_Makanan.required' => 'Jumlah makanan harus diisi.',
+            'Jumlah_Makanan.integer' => 'Jumlah makanan harus berupa angka bulat.',
+            'Jumlah_Makanan.min' => 'Jumlah makanan harus minimal 0.',
+            'Foto_Makanan.image' => 'File harus berupa gambar.',
+            'Foto_Makanan.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+            'Foto_Makanan.max' => 'Ukuran gambar maksimal 2MB.',
+            'Tanggal_Kedaluwarsa.required' => 'Tanggal kedaluwarsa harus diisi.',
+        ]);
+
+        $validatedData['Status_Makanan'] = match (true) {
+            $validatedData['Jumlah_Makanan'] == 0 => 'Habis',
+            $validatedData['Jumlah_Makanan'] < 5 => 'Segera Habis',
+            default => 'Tersedia',
+        };
+
+        if ($request->hasFile('Foto_Makanan')) {
+            if ($makanan->Foto_Makanan && Storage::disk('public')->exists($makanan->Foto_Makanan)) {
+                Storage::disk('public')->delete($makanan->Foto_Makanan);
+            }
+            $validatedData['Foto_Makanan'] = $request->file('Foto_Makanan')->store('makanan-fotos', 'public');
+        }
+
+        try {
+            $makanan->update($validatedData);
+            return redirect()->route('donatur.food-listing.index')
+                           ->with('success', 'Data makanan berhasil diperbarui!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                           ->with('error', 'Gagal memperbarui data makanan. Silakan coba lagi.')
+                           ->withInput();
+        }
+    }
+
+    public function destroy(Makanan $makanan)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus makanan ini.');
+        }
+
+        try {
+            if ($makanan->Foto_Makanan && Storage::disk('public')->exists($makanan->Foto_Makanan)) {
+                Storage::disk('public')->delete($makanan->Foto_Makanan);
+            }
+            $makanan->delete();
+            return redirect()->route('donatur.food-listing.index')
+                           ->with('success', 'Data makanan berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect()->route('donatur.food-listing.index')
+                           ->with('error', 'Gagal menghapus data makanan. Silakan coba lagi.');
+        }
+    }
+
+    public function approveRequest(Request $request, Makanan $makanan, Requests $foodRequest)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengelola permintaan ini.');
+        }
+
+        try {
+            $foodRequest->update(['Status_Request' => 'Approved']);
+            return redirect()->back()->with('success', 'Permintaan berhasil disetujui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menyetujui permintaan. Silakan coba lagi.');
+        }
+    }
+
+    public function rejectRequest(Request $request, Makanan $makanan, Requests $foodRequest)
+    {
+        if ($makanan->ID_Pengguna !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengelola permintaan ini.');
+        }
+
+        try {
+            $foodRequest->update(['Status_Request' => 'Rejected']);
+            return redirect()->back()->with('success', 'Permintaan berhasil ditolak.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menolak permintaan. Silakan coba lagi.');
+        }
+    }
+}
