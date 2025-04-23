@@ -17,7 +17,6 @@ class DonaturDashboardController extends Controller
 
         // Stats for dashboard
         $totalDonasi = Makanan::where('ID_Pengguna', Auth::id())->count();
-        $limbahDicegah = Makanan::where('ID_Pengguna', Auth::id())->sum('Jumlah_Makanan') * 0.5; // Assume 0.5 kg per portion
         $penerimaTerbantu = Makanan::where('ID_Pengguna', Auth::id())
                                    ->where('Status_Makanan', 'Tersedia')
                                    ->count(); // Proxy: count of available listings
