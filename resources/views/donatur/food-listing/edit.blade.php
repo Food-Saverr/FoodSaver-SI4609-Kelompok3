@@ -1,4 +1,4 @@
-@extends('layouts.appadmin')
+@extends('layouts.appdonatur')
 
 @section('title', 'Edit Makanan: ' . $makanan->Nama_Makanan)
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="max-w-4xl mx-auto bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow">
         <div class="mb-8">
-            <a href="{{ route('admin.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-3">
+            <a href="{{ route('donatur.food-listing.index') }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-3">
                 <i class="fas fa-arrow-left mr-2 transition-transform group-hover:-translate-x-1"></i>
                 Kembali ke Daftar Makanan
             </a>
@@ -34,7 +34,7 @@
         @endif
 
         <!-- Form -->
-        <form action="{{ route('admin.food-listing.update', $makanan->ID_Makanan) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('donatur.food-listing.update', $makanan->ID_Makanan) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
             
@@ -73,15 +73,12 @@
                                 class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             >
                                 <option value="">-- Pilih Kategori --</option>
-                                <option value="Makanan Pokok" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Pokok' ? 'selected' : '' }}>Makanan Pokok</option>
+                                <option value="Makanan Berat" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Berat' ? 'selected' : '' }}>Makanan Berat</option>
+                                <option value="Makanan Ringan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Ringan' ? 'selected' : '' }}>Makanan Ringan</option>
+                                <option value="Makanan Penutup" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Penutup' ? 'selected' : '' }}>Makanan Penutup</option>
+                                <option value="Minuman" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
                                 <option value="Sayuran" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Sayuran' ? 'selected' : '' }}>Sayuran</option>
                                 <option value="Buah-buahan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Buah-buahan' ? 'selected' : '' }}>Buah-buahan</option>
-                                <option value="Protein Hewani" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Protein Hewani' ? 'selected' : '' }}>Protein Hewani</option>
-                                <option value="Protein Nabati" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Protein Nabati' ? 'selected' : '' }}>Protein Nabati</option>
-                                <option value="Makanan Ringan" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Ringan' ? 'selected' : '' }}>Makanan Ringan</option>
-                                <option value="Makanan Siap Saji" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Makanan Siap Saji' ? 'selected' : '' }}>Makanan Siap Saji</option>
-                                <option value="Minuman" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
-                                <option value="Lainnya" {{ old('Kategori_Makanan', $makanan->Kategori_Makanan) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                     </div>
@@ -190,7 +187,7 @@
                             placeholder="Masukkan jumlah (misal: 10)"
                             value="{{ old('Jumlah_Makanan', $makanan->Jumlah_Makanan) }}"
                             class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
-                            min="1"
+                            min="0"
                             required
                         />
                     </div>
@@ -224,7 +221,7 @@
             
             <div class="pt-6 border-t border-gray-200 mt-8">
                 <div class="flex flex-col sm:flex-row justify-end gap-3">
-                    <a href="{{ route('admin.food-listing.index') }}" class="py-2.5 px-6 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition animate-scale text-center">
+                    <a href="{{ route('donatur.food-listing.index') }}" class="py-2.5 px-6 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition animate-scale text-center">
                         <i class="fas fa-times mr-2"></i>Batal
                     </a>
                     <button type="submit" class="py-2.5 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">

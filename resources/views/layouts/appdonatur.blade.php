@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo $__env->yieldContent('title', 'FoodSaver - Selamatkan Makanan, Selamatkan Dunia'); ?></title>
+    <title>@yield('title', 'FoodSaver - Selamatkan Makanan, Selamatkan Dunia')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
@@ -113,7 +113,7 @@
             flex-shrink: 0;
         }
     </style>
-    <?php echo $__env->yieldContent('styles'); ?>
+    @yield('styles')
 </head>
 <body class="text-gray-800">
     <!-- Navbar -->
@@ -124,10 +124,10 @@
             </div>
             
             <nav class="hidden md:flex space-x-10 text-sm font-semibold">
-                <a href="<?php echo e(route('dashboard.pengguna')); ?>" class="navbar-link hover:text-orange-600 <?php echo e(request()->routeIs('dashboard.pengguna') ? 'active gradient-text' : 'text-gray-700'); ?>">
+                <a href="{{ route('dashboard.donatur') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('dashboard.donatur') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-home mr-2"></i>Home
                 </a>
-                <a href="<?php echo e(route('pengguna.food-listing.index')); ?>" class="navbar-link hover:text-orange-600 <?php echo e(request()->routeIs('pengguna.food-listing.index') ? 'active gradient-text' : 'text-gray-700'); ?>">
+                <a href="{{ route('donatur.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('donatur.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Food Listing
                 </a>
                 <a href="#" class="navbar-link disabled">
@@ -139,22 +139,22 @@
             </nav>
             
             <div class="flex items-center space-x-6">
-                <?php if(auth()->guard()->guest()): ?>
-                    <a href="<?php echo e(route('login.form')); ?>" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-700 transition animate-scale">
+                @guest
+                    <a href="{{ route('login.form') }}" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-700 transition animate-scale">
                         Login
                     </a>
-                <?php endif; ?>
+                @endguest
 
-                <?php if(auth()->guard()->check()): ?>
+                @auth
                     <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
                         <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
                             <img 
-                                src="<?php echo e(Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->Email_Pengguna))) . '?d=mp&s=32'); ?>" 
+                                src="{{ Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->Email_Pengguna))) . '?d=mp&s=32' }}" 
                                 class="w-9 h-9 rounded-full border-2 border-orange-200 group-hover:border-orange-400 transition" 
-                                alt="<?php echo e(Auth::user()->Nama_Pengguna); ?>"
+                                alt="{{ Auth::user()->Nama_Pengguna }}"
                                 onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=32'"
                             >
-                            <span class="ml-2 hidden lg:block font-medium group-hover:gradient-text"><?php echo e(Auth::user()->Nama_Pengguna); ?></span>
+                            <span class="ml-2 hidden lg:block font-medium group-hover:gradient-text">{{ Auth::user()->Nama_Pengguna }}</span>
                             <i class="fas fa-chevron-down ml-2 text-xs group-hover:gradient-text transition"></i>
                         </button>
                         
@@ -173,15 +173,15 @@
                                 <i class="fas fa-cog mr-3 text-orange-500"></i>Pengaturan
                             </a>
                             <hr class="my-2 border-gray-100">
-                            <form action="<?php echo e(route('logout')); ?>" method="POST">
-                                <?php echo csrf_field(); ?>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
                                 <button type="submit" class="flex items-center w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">
                                     <i class="fas fa-sign-out-alt mr-3"></i>Logout
                                 </button>
                             </form>
                         </div>
                     </div>
-                <?php endif; ?>
+                @endauth
                 
                 <!-- Mobile menu button -->
                 <button class="md:hidden text-gray-700 hover:text-orange-600 focus:outline-none" x-data="{ open: false }" @click="open = !open; document.getElementById('mobileMenu').classList.toggle('hidden')">
@@ -193,10 +193,10 @@
         <!-- Mobile Navigation Menu -->
         <div class="md:hidden hidden" id="mobileMenu">
             <div class="px-4 pt-3 pb-4 space-y-2 bg-white border-t border-gray-100 shadow-sm">
-                <a href="<?php echo e(route('dashboard.pengguna')); ?>" class="flex items-center px-4 py-3 rounded-lg text-base font-medium <?php echo e(request()->routeIs('dashboard.pengguna') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'); ?> transition duration-150">
+                <a href="{{ route('dashboard.donatur') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('dashboard.donatur') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">
                     <i class="fas fa-home mr-3"></i>Home
                 </a>
-                <a href="<?php echo e(route('pengguna.food-listing.index')); ?>" class="flex items-center px-4 py-3 rounded-lg text-base font-medium <?php echo e(request()->routeIs('pengguna.food-listing.index') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'); ?> transition duration-150">
+                <a href="{{ route('donatur.food-listing.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('donatur.food-listing.index') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">
                     <i class="fas fa-utensils mr-3"></i>Food Listing
                 </a>
                 <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
@@ -205,29 +205,29 @@
                 <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                     <i class="fas fa-newspaper mr-3"></i>Artikel
                 </a>
-                <?php if(auth()->guard()->guest()): ?>
-                    <a href="<?php echo e(route('login.form')); ?>" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
+                @guest
+                    <a href="{{ route('login.form') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
                         <i class="fas fa-sign-in-alt mr-3"></i>Login
                     </a>
-                <?php endif; ?>
-                <?php if(auth()->guard()->check()): ?>
+                @endguest
+                @auth
                     <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                         <i class="fas fa-user-circle mr-3"></i>Profil
                     </a>
-                    <form action="<?php echo e(route('logout')); ?>" method="POST" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">
-                        <?php echo csrf_field(); ?>
+                    <form action="{{ route('logout') }}" method="POST" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">
+                        @csrf
                         <button type="submit" class="flex items-center w-full">
                             <i class="fas fa-sign-out-alt mr-3"></i>Logout
                         </button>
                     </form>
-                <?php endif; ?>
+                @endauth
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main>
-        <?php echo $__env->yieldContent('content'); ?>
+        @yield('content')
     </main>
 
     <!-- Footer -->
@@ -257,6 +257,6 @@
         });
     </script>
     
-    <?php echo $__env->yieldContent('scripts'); ?>
+    @yield('scripts')
 </body>
-</html><?php /**PATH C:\Users\ahmad\Documents\Project\FoodSaver-SI4609-Kelompok3\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html>
