@@ -26,6 +26,7 @@ Route::middleware('guest')->group(function () {
 // Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
     // Dashboard untuk role Pengguna
+    Route::get('/dashboard-pengguna', function () {
         return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
     })->name('dashboard.pengguna');
 
@@ -50,7 +51,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Food Listing: Show food details
     Route::get('/food-listing/{makanan}', [AdminMakananController::class, 'show'])->name('admin.food-listing.show');
-    
 
     // Food Listing: Delete food
     Route::delete('/food-listing/{makanan}', [AdminMakananController::class, 'destroy'])->name('admin.food-listing.destroy');
@@ -79,14 +79,10 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
 
     // Food Listing: Delete food
     Route::delete('/food-listing/{makanan}', [DonaturMakananController::class, 'destroy'])->name('donatur.food-listing.destroy');
-
-    Route::post('/food-listing/{makanan}/requests/{foodRequest}/approve', [DonaturMakananController::class, 'approveRequest'])->name('donatur.food-listing.approve-request');
-    Route::post('/food-listing/{makanan}/requests/{foodRequest}/reject', [DonaturMakananController::class, 'rejectRequest'])->name('donatur.food-listing.reject-request');
 });
 
-// Routes for Penerima (Pengguna) Features
+// --- Rute untuk Fitur Makanan Pengguna ---
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
     Route::get('/food-listing/{makanan}', [FoodListingController::class, 'show'])->name('pengguna.food-listing.show');
-    Route::post('/food-listing/{makanan}/request', [FoodListingController::class, 'storeRequest'])->name('pengguna.food-listing.store-request');
 });
