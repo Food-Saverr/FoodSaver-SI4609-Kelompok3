@@ -23,7 +23,6 @@ Route::middleware('guest')->group(function () {
 // Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
     // Dashboard untuk role Pengguna
-    Route::get('/dashboard-pengguna', function () {
         return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
     })->name('dashboard.pengguna');
 
@@ -57,12 +56,42 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Menampilkan detail makanan (show)
     Route::get('/food-listing/{makanan}', [AdminMakananController::class, 'show'])->name('admin.food-listing.show');
     
-    // Menampilkan form edit makanan (edit)
-    Route::get('/food-listing/{makanan}/edit', [AdminMakananController::class, 'edit'])->name('admin.food-listing.edit');
-    
-    // Mengupdate data makanan
-    Route::put('/food-listing/{makanan}', [AdminMakananController::class, 'update'])->name('admin.food-listing.update');
-    
-    // Menghapus data makanan
+
+    // Food Listing: Delete food
     Route::delete('/food-listing/{makanan}', [AdminMakananController::class, 'destroy'])->name('admin.food-listing.destroy');
+});
+
+// Routes for Donatur Features
+Route::middleware(['auth'])->prefix('donatur')->group(function () {
+
+    // Food Listing: List all foods
+    Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
+
+    // Food Listing: Show form to create new food
+    Route::get('/food-listing/create', [DonaturMakananController::class, 'create'])->name('donatur.food-listing.create');
+
+    // Food Listing: Store new food
+    Route::post('/food-listing', [DonaturMakananController::class, 'store'])->name('donatur.food-listing.store');
+
+    // Food Listing: Show food details
+    Route::get('/food-listing/{makanan}', [DonaturMakananController::class, 'show'])->name('donatur.food-listing.show');
+
+    // Food Listing: Show form to edit food
+    Route::get('/food-listing/{makanan}/edit', [DonaturMakananController::class, 'edit'])->name('donatur.food-listing.edit');
+
+    // Food Listing: Update food
+    Route::put('/food-listing/{makanan}', [DonaturMakananController::class, 'update'])->name('donatur.food-listing.update');
+
+    // Food Listing: Delete food
+    Route::delete('/food-listing/{makanan}', [DonaturMakananController::class, 'destroy'])->name('donatur.food-listing.destroy');
+
+    Route::post('/food-listing/{makanan}/requests/{foodRequest}/approve', [DonaturMakananController::class, 'approveRequest'])->name('donatur.food-listing.approve-request');
+    Route::post('/food-listing/{makanan}/requests/{foodRequest}/reject', [DonaturMakananController::class, 'rejectRequest'])->name('donatur.food-listing.reject-request');
+});
+
+// Routes for Penerima (Pengguna) Features
+Route::middleware(['auth'])->prefix('pengguna')->group(function () {
+    Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
+    Route::get('/food-listing/{makanan}', [FoodListingController::class, 'show'])->name('pengguna.food-listing.show');
+    Route::post('/food-listing/{makanan}/request', [FoodListingController::class, 'storeRequest'])->name('pengguna.food-listing.store-request');
 });
