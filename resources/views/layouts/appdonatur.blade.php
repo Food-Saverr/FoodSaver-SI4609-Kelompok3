@@ -166,7 +166,7 @@
                              x-transition:leave-start="opacity-100 scale-y-100" 
                              x-transition:leave-end="opacity-0 scale-y-0"
                              class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl py-3 z-20 custom-shadow dropdown-menu">
-                            <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 disabled">
+                            <a href="{{ route('profile.show') }}" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 disabled">
                                 <i class="fas fa-user-circle mr-3 text-orange-500"></i>Profil
                             </a>
                             <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 disabled">
@@ -211,7 +211,7 @@
                     </a>
                 @endguest
                 @auth
-                    <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
+                    <a href="{{ route('profile.show') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                         <i class="fas fa-user-circle mr-3"></i>Profil
                     </a>
                     <form action="{{ route('logout') }}" method="POST" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">

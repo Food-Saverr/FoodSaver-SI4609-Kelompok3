@@ -31,7 +31,6 @@ class Pengguna extends Authenticatable
         return $this->hasMany(Makanan::class, 'ID_Pengguna', 'ID_Pengguna');
     }
 
-
     public function getAuthIdentifierName()
 {
     return 'ID_Pengguna';

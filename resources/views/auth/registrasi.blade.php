@@ -262,12 +262,6 @@
                 <label for="terms" class="ml-2 block text-xs text-gray-600">
                     Saya menyetujui <a href="#" class="text-orange-500 hover:underline">syarat dan ketentuan</a> serta <a href="#" class="text-orange-500 hover:underline">kebijakan privasi</a>
                 </label>
-            </div>
-                <div class="flex items-center mt-4">
-                    <input type="checkbox" id="terms" name="terms" class="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-400" required />
-                    <label for="terms" class="ml-2 block text-xs text-gray-600">
-                        Saya menyetujui <a href="#" class="text-orange-500 hover:underline">syarat dan ketentuan</a> serta <a href="#" class="text-orange-500 hover:underline">kebijakan privasi</a>
-                    </label>
                 </div>
 
                 <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3.5 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200 mt-4">

@@ -5,11 +5,20 @@
 @section('content')
 <div class="container mx-auto px-4 py-8 pt-28">
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow">
+        <!-- Button Riwayat Permintaan -->
+        <div class="flex justify-start mb-4">
+            <a href="{{ route('pengguna.request.index') }}"
+               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-1 rounded-lg font-medium transition animate-scale shadow-md flex items-center text-sm">
+                <i class="fas fa-history mr-2"></i>Riwayat Permintaan
+            </a>
+        </div>
         <!-- Header -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl font-extrabold title-font gradient-text mb-2 animate-fade-up">
-                Daftar Makanan Donasi
-            </h1>
+            <div class="flex items-center justify-center gap-4 flex-wrap">
+                <h1 class="text-3xl font-extrabold title-font gradient-text mb-2 animate-fade-up">
+                    Daftar Makanan Donasi
+                </h1>
+            </div>
             <p class="text-gray-500 max-w-2xl mx-auto animate-fade-up-delay">
                 Temukan berbagai makanan untuk diambil oleh Penerima Makanan. Bantu kurangi pemborosan makanan bersama <span class="font-semibold text-orange-600">FoodSaver</span>.
             </p>
