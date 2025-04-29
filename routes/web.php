@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\PenggunaController;
-use App\Http\Controllers\DonaturController;
+
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -23,21 +22,33 @@ Route::middleware('guest')->group(function () {
 
 // Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
-
     // Dashboard untuk role Pengguna
-    Route::get('/dashboard-pengguna', [PenggunaController::class, 'index'])->name('dashboard.pengguna');
+    Route::get('/dashboard-pengguna', function () {
+        return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
+    })->name('dashboard.pengguna');
 
     // Dashboard untuk role Donatur
-    Route::get('/dashboard-donatur', [DonaturController::class, 'index'])->name('dashboard.donatur');
+    Route::get('/dashboard-donatur', function () {
+        return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
+    })->name('dashboard.donatur');
 
-    // Admin Routes hanya untuk role admin
-    Route::middleware('auth')->group(function () {
-        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/admin/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
-        Route::get('/admin/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.pengguna');
-        Route::get('/admin/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
-        Route::get('/admin/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
+    // Dashboard dan fitur Admin
+    Route::prefix('admin')->middleware('auth')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.pengguna');
+        Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+        Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('admin.donasi');
+        Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('admin.artikel');
+        Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('admin.statistikForum');
     });
+
+    // Alternative URL for admin dashboard
+    Route::get('/dashboard-admin', function () {
+        if (auth()->user()->Role_Pengguna !== 'Admin') {
+            return redirect('/')->with('error', 'Unauthorized access.');
+        }
+        return app()->make(AdminDashboardController::class)->index();
+    })->name('dashboard.admin');
 
     // Fitur logout
     Route::post('/logout', function () {

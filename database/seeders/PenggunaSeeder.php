@@ -10,7 +10,8 @@ class PenggunaSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('penggunas')->insert([
+        DB::table('penggunas')->updateOrInsert(
+            ['Email_Pengguna' => 'admin@example.com'],
             [
                 'Nama_Pengguna' => 'Admin Utama',
                 'Email_Pengguna' => 'admin@example.com',
@@ -19,7 +20,11 @@ class PenggunaSeeder extends Seeder
                 'Role_Pengguna' => 'Admin',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
+        );
+    
+        DB::table('penggunas')->updateOrInsert(
+            ['Email_Pengguna' => 'pengguna@example.com'],
             [
                 'Nama_Pengguna' => 'Pengguna Biasa',
                 'Email_Pengguna' => 'pengguna@example.com',
@@ -29,6 +34,7 @@ class PenggunaSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
-        ]);
+        );
+        
     }
 }

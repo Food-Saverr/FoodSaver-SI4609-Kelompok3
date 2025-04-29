@@ -38,13 +38,13 @@ class LoginController extends Controller
             } elseif ($user->Role_Pengguna === 'Admin') {
                 return redirect()->route('dashboard.admin');
             }
-            // Jika role tidak dikenal, arahkan ke landing page atau halaman default
-            return redirect()->route('landing');
         }
 
-        return redirect()->back()->withErrors([
-            'Email_Pengguna' => 'Email atau Password salah.',
-        ])->withInput();
+        return redirect()->back()
+            ->withErrors([
+                'Email_Pengguna' => 'Email atau Password salah.',
+            ])
+            ->withInput($request->except('Password_Pengguna'));
     }
 
     // Fitur logout

@@ -9,18 +9,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('penggunas', function (Blueprint $table) {
-            $table->id(); // ← ini WAJIB supaya bisa jadi foreign key
+            $table->id('ID_Pengguna');
             $table->string('Nama_Pengguna');
             $table->string('Email_Pengguna')->unique();
             $table->string('Password_Pengguna');
-            $table->string('Alamat_Pengguna')->nullable();
-            $table->string('Role_Pengguna')->default('User');
+            $table->text('Alamat_Pengguna');
+            $table->enum('Role_Pengguna', ['Admin', 'Donatur', 'Pengguna'])->default('Pengguna');
+            $table->rememberToken();
             $table->timestamps();
         });
-        
     }
-    
-    public function down(): void
+
+    public function down()
     {
         Schema::dropIfExists('penggunas');
     }

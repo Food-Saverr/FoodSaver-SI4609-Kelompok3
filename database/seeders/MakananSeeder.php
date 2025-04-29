@@ -1,0 +1,60 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\Makanan;
+use App\Models\Pengguna;
+use Carbon\Carbon;
+
+class MakananSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Mendapatkan ID user dengan role Donatur
+        $donaturId = Pengguna::where('Role_Pengguna', 'Donatur')->first()->ID_Pengguna ?? 1;
+
+        $makananData = [
+            [
+                'Nama_Makanan' => 'Nasi Goreng',
+                'Jumlah_Tersedia' => 5,
+                'Jumlah_Didonasi' => 0,
+                'user_id' => $donaturId,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'Nama_Makanan' => 'Mie Ayam',
+                'Jumlah_Tersedia' => 3,
+                'Jumlah_Didonasi' => 0,
+                'user_id' => $donaturId,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'Nama_Makanan' => 'Soto Ayam',
+                'Jumlah_Tersedia' => 0,
+                'Jumlah_Didonasi' => 4,
+                'user_id' => $donaturId,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'Nama_Makanan' => 'Gado-gado',
+                'Jumlah_Tersedia' => 0,
+                'Jumlah_Didonasi' => 2,
+                'user_id' => $donaturId,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ];
+
+        foreach ($makananData as $makanan) {
+            Makanan::create($makanan);
+        }
+    }
+} 

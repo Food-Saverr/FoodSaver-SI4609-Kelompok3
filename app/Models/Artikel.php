@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Makanan extends Model
+class Artikel extends Model
 {
     use HasFactory;
 
-    protected $table = 'makanan';
+    protected $table = 'artikels';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'Nama_Makanan',
-        'Jumlah_Tersedia',
-        'Jumlah_Didonasi',
+        'judul',
+        'konten',
+        'gambar',
         'status',
         'user_id'
     ];
 
-    public function pengguna()
+    public function user()
     {
         return $this->belongsTo(Pengguna::class, 'user_id', 'ID_Pengguna');
     }
-}
+} 
