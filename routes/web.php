@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\DonaturController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -34,20 +37,21 @@ Route::get('/', function () {
 
 // Grup untuk user yang sudah login
 Route::middleware('auth')->group(function () {
+
     // Dashboard untuk role Pengguna
-    Route::get('/dashboard-pengguna', function () {
-        return view('dashboard-pengguna'); // file: resources/views/dashboard-pengguna.blade.php
-    })->name('dashboard.pengguna');
+    Route::get('/dashboard-pengguna', [PenggunaController::class, 'index'])->name('dashboard.pengguna');
 
     // Dashboard untuk role Donatur
-    Route::get('/dashboard-donatur', function () {
-        return view('dashboard-donatur'); // file: resources/views/dashboard-donatur.blade.php
-    })->name('dashboard.donatur');
+    Route::get('/dashboard-donatur', [DonaturController::class, 'index'])->name('dashboard.donatur');
 
-    // Dashboard untuk role Admin
-    Route::get('/dashboard-admin', function () {
-        return view('dashboard-admin'); // file: resources/views/dashboard-admin.blade.php
-    })->name('dashboard.admin');
+    // Admin Routes hanya untuk role admin
+    Route::middleware('auth')->group(function () {
+        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/pengguna', [AdminDashboardController::class, 'pengguna'])->name('admin.pengguna');
+        Route::get('/admin/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('admin.pengguna');
+        Route::get('/admin/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('admin.makanan');
+        Route::get('/admin/total-donasi', [AdminDashboardController::class, 'detailDonasi'])->name('admin.total-donasi');
+    });
 
     // Fitur logout
     Route::post('/logout', function () {

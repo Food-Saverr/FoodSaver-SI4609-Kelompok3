@@ -10,11 +10,8 @@ class Pengguna extends Authenticatable
     use HasFactory;
 
     protected $table = 'penggunas';
-
     protected $primaryKey = 'ID_Pengguna';
-
     public $incrementing = true;
-
     protected $keyType = 'int';
 
     protected $fillable = [
@@ -29,6 +26,7 @@ class Pengguna extends Authenticatable
         'Password_Pengguna',
     ];
 
+
     public function getAuthIdentifierName()
 {
     return 'ID_Pengguna';
@@ -37,6 +35,5 @@ class Pengguna extends Authenticatable
     public function getAuthPassword()
 {
     return $this->Password_Pengguna;
-
 }
 }
