@@ -26,8 +26,14 @@ class Pengguna extends Authenticatable
         'Password_Pengguna',
     ];
 
+
+    public function getAuthIdentifierName()
+{
+    return 'ID_Pengguna';
+}
+
     public function getAuthPassword()
-    {
-        return $this->Password_Pengguna;
-    }
+{
+    return $this->Password_Pengguna;
+}
 }

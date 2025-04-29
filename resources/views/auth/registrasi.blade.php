@@ -141,23 +141,54 @@
         </div>
 
         <!-- Error Message -->
-        @if($errors->any())
-            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg animate-fade-up-delay">
+        @if ($errors->any())
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg animate-fade-up-delay">
             <div class="flex">
                 <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
+                    <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
                 </div>
                 <div class="ml-3">
-                <p class="text-sm font-medium">Mohon periksa kembali detail pendaftaran Anda</p>
-                <ul class="mt-1 text-sm list-disc list-inside">
-                    @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                    <p class="text-sm font-medium">Mohon periksa kembali detail pendaftaran Anda</p>
+                    <ul class="mt-1 text-sm list-disc list-inside">
+    
+                        {{-- Nama --}}
+                        @error('Nama_Pengguna')
+                            <li>Nama wajib diisi dan maksimal 255 karakter.</li>
+                        @enderror
+    
+                        {{-- Email --}}
+                        @error('Email_Pengguna')
+                            <li>Email tidak valid atau sudah terdaftar.</li>
+                        @enderror
+    
+                        {{-- Password --}}
+                        @error('Password_Pengguna')
+                            @php
+                                $pesan = $message;
+                                if (Str::contains($pesan, 'required')) $pesan = 'Password wajib diisi.';
+                                elseif (Str::contains($pesan, 'min')) $pesan = 'Password minimal 8 karakter.';
+                                elseif (Str::contains($pesan, 'max')) $pesan = 'Password maksimal 12 karakter.';
+                                elseif (Str::contains($pesan, 'regex')) $pesan = 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol.';
+                            @endphp
+                            <li>{{ $pesan }}</li>
+                        @enderror
+    
+                        {{-- Alamat --}}
+                        @error('Alamat_Pengguna')
+                            <li>Alamat wajib diisi.</li>
+                        @enderror
+    
+                        {{-- Role --}}
+                        @error('Role_Pengguna')
+                            <li>Role harus dipilih dari opsi yang tersedia.</li>
+                        @enderror
+    
+                    </ul>
                 </div>
             </div>
-            </div>
+        </div>
         @endif
+    
 
         <!-- Form -->
         <form action="{{ route('registrasi') }}" method="POST" class="space-y-5">
@@ -221,6 +252,25 @@
                     Password harus terdiri dari minimal 8 karakter dengan huruf dan angka
                 </p>
             </div>
+            
+            <div>
+                <label for="Role_Pengguna" class="block text-gray-700 font-medium mb-1">Daftar sebagai</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                        <i class="fas fa-user-tag"></i>
+                    </span>
+                    <select
+                        name="Role_Pengguna"
+                        id="Role_Pengguna"
+                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                        required
+                    >
+                        <option value="" disabled selected>Pilih peran Anda</option>
+                        <option value="Pengguna">Pengguna</option>
+                        <option value="Donatur">Donatur</option>
+                    </select>
+                </div>
+            </div>            
 
             <div>
                 <label for="Alamat_Pengguna" class="block text-gray-700 font-medium mb-1">Alamat</label>
@@ -240,7 +290,7 @@
             </div>
 
             <div class="flex items-center mt-4">
-                <input type="checkbox" id="terms" name="terms" class="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-400" required />
+                <input type="checkbox" dusk="terms-checkbox" id="terms" name="terms" class="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-400" required />
                 <label for="terms" class="ml-2 block text-xs text-gray-600">
                     Saya menyetujui <a href="#" class="text-orange-500 hover:underline">syarat dan ketentuan</a> serta <a href="#" class="text-orange-500 hover:underline">kebijakan privasi</a>
                 </label>
