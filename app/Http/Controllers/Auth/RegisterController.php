@@ -19,8 +19,11 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'Nama_Pengguna'    => 'required|string|max:255',
             'Email_Pengguna'   => 'required|email|unique:penggunas,Email_Pengguna',
-            'Password_Pengguna'=> [
-                'required', 'string', 'min:8', 'max:12',
+            'Password_Pengguna' => [
+                'required',
+                'string',
+                'min:8',
+                'max:12',
                 'regex:/[a-z]/',
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
@@ -44,9 +47,8 @@ class RegisterController extends Controller
             'Alamat_Pengguna'  => $request->Alamat_Pengguna,
             'Role_Pengguna'    => $request->Role_Pengguna,
         ]);
-    
+
         // Redirect ke halaman login dengan flash message
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silahkan login.');
     }
 }
-

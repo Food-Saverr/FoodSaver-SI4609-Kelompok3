@@ -9,18 +9,29 @@ class Makanan extends Model
 {
     use HasFactory;
 
-    protected $table = 'makanan';
+    protected $table = 'makanans';
+    protected $primaryKey = 'ID_Makanan';
 
     protected $fillable = [
-        'nama',
-        'deskripsi',
-        'jumlah',
-        'status', 
-        'user_id',
+        'Nama_Makanan',
+        'Deskripsi_Makanan',
+        'Kategori_Makanan',
+        'Foto_Makanan',
+        'Status_Makanan',
+        'Tanggal_Kedaluwarsa',
+        'Lokasi_Makanan',
+        'Jumlah_Makanan',
+        'ID_Pengguna',
     ];
 
-    public function user()
+    // Relasi ke pengguna (bisa Donatur atau Admin tergantung rolenya)
+    public function pengguna()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Pengguna::class, 'ID_Pengguna', 'ID_Pengguna');
+    }
+
+    public function donatur()
+    {
+        return $this->belongsTo(Pengguna::class, 'ID_Pengguna', 'ID_Pengguna');
     }
 }
