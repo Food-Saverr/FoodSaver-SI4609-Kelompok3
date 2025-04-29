@@ -9,6 +9,7 @@ use App\Http\Controllers\DonaturMakananController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DonaturDashboardController;
 use App\Http\Controllers\FoodListingController;
+use App\Http\Controllers\ProfileController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -41,8 +42,22 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/');
     })->name('logout');
-});
 
+    // Route untuk profil
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); // Satu route untuk tampilan profil
+
+    // Route untuk halaman edit profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    
+    // Route untuk update password
+    Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+
+    // Route untuk update profil
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Route untuk menghapus akun
+    Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
+});
 
 // Routes for Admin Features
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -58,7 +73,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 // Routes for Donatur Features
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
-
     // Food Listing: List all foods
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
 
