@@ -29,25 +29,23 @@ class RegisterController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[\W]/'
             ],
-            'Role_Pengguna'    => 'required|in:Pengguna,Donatur',
             'Alamat_Pengguna'  => 'required|string',
-        ], [
-            'Role_Pengguna.required' => 'Peran harus dipilih.',
-            'Role_Pengguna.in' => 'Peran harus Penerima Makanan atau Donatur Makanan.',
+            'Role_Pengguna'    => 'required|in:Pengguna,Donatur,Admin',
         ]);
-
+        
         if ($validator->fails()) {
             return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
+                            ->withErrors($validator)
+                            ->withInput();
         }
-
+        
+    
         $pengguna = Pengguna::create([
             'Nama_Pengguna'    => $request->Nama_Pengguna,
             'Email_Pengguna'   => $request->Email_Pengguna,
-            'Password_Pengguna' => Hash::make($request->Password_Pengguna),
-            'Role_Pengguna'    => $request->Role_Pengguna,
+            'Password_Pengguna'=> Hash::make($request->Password_Pengguna),
             'Alamat_Pengguna'  => $request->Alamat_Pengguna,
+            'Role_Pengguna'    => $request->Role_Pengguna,
         ]);
 
         // Redirect ke halaman login dengan flash message
