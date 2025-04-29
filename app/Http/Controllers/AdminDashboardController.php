@@ -73,8 +73,7 @@ class AdminDashboardController extends Controller
     {
         $jumlahDonatur = Pengguna::where('Role_Pengguna', 'Donatur')->count();
         $jumlahPenerima = Pengguna::where('Role_Pengguna', 'Pengguna')->count();
-
-        // Mendapatkan data donatur dan penerima per bulan
+        
         $donaturPerBulan = DB::table('penggunas')
             ->select(
                 DB::raw('MONTH(created_at) as bulan'),
