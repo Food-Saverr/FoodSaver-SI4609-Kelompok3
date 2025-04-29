@@ -14,10 +14,12 @@ return new class extends Migration
         
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('donasi_count');
-        });
+        if (Schema::hasTable('users') && Schema::hasColumn('users', 'donasi_count')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('donasi_count');
+            });
+        }
     }
 };
