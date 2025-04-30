@@ -208,7 +208,7 @@
             @if(empty($availableMakanans) || $availableMakanans->isEmpty())
                 <div class="text-center py-12">
                     <i class="fas fa-cookie-bite text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-xl font-semibold text-gray-600">Belum Ada Makanan yang Tersedia</p>
+                    <p class="text-xl font-semibold text-gray-600">Belum Ada Makanan Tersedia</p>
                     <p class="text-sm text-gray-500 mt-2 max-w-md mx-auto">Jelajahi artikel kami untuk tips mengurangi limbah makanan atau bergabung di forum komunitas!</p>
                     <div class="flex justify-center space-x-4 mt-6">
                         <a href="" 
