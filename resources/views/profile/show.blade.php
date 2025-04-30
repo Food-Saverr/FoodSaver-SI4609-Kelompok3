@@ -8,8 +8,15 @@
 
     <!-- Menampilkan Pesan Sukses -->
     @if(session('success'))
-        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-md">
-            <strong>{{ session('success') }}</strong>
+        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg animate-fade-up-delay">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
+            </div>
         </div>
     @endif
 

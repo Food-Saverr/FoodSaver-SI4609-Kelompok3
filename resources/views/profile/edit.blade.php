@@ -8,21 +8,37 @@
 
     <!-- Menampilkan pesan kesalahan jika ada -->
     @if($errors->any())
-        <div class="bg-red-500 text-white p-4 mb-4">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg animate-fade-up-delay">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">Mohon periksa kembali detail pendaftaran Anda</p>
+                    <ul class="mt-1 text-sm list-disc list-inside">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
     @endif
 
     <!-- Pesan sukses jika profil berhasil diperbarui -->
     @if(session('success'))
-        <div class="mb-4 text-green-500">
-            {{ session('success') }}
+        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg animate-fade-up-delay">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
+            </div>
         </div>
     @endif
+
 
     <form action="{{ route('profile.update') }}" method="POST">
         @csrf
