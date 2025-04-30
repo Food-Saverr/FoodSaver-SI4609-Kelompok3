@@ -25,17 +25,6 @@
             </div>
         @endif
 
-        <!-- Foto Profil -->
-        <div class="flex justify-center mb-6 mt-6">
-            @if(Auth::user()->foto)
-                <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Foto Profil" class="w-32 h-32 rounded-full object-cover border-4 border-orange-500 shadow-xl">
-            @else
-                <div class="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-orange-500 border-4 border-orange-500 shadow-xl">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-            @endif
-        </div>
-
         <!-- Informasi Pengguna -->
         <div class="space-y-6">
             <!-- Nama Lengkap -->
