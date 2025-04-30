@@ -208,7 +208,7 @@
                     @endif
                 @endforeach
             </div>
-            <!-- Pagination -->  
+            <!-- Pagination -->   
             <div class="mt-6">
                 {{ $makanans->links('pagination::tailwind') }}
             </div>
