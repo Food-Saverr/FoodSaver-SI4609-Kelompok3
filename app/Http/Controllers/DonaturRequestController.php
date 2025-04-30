@@ -13,7 +13,7 @@ class DonaturRequestController extends Controller
 
     public function index(Request $request, $id_makanan)
     {
-        $makanan = Makanan::where('ID_Makanan', $id_makanan)
+        $makanan  = Makanan::where('ID_Makanan', $id_makanan)
             ->where('ID_Pengguna', Auth::id())
             ->firstOrFail();
 
