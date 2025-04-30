@@ -21,6 +21,7 @@ return array(
     'App\\Http\\Controllers\\DonaturRequestController' => $baseDir . '/app/Http/Controllers/DonaturRequestController.php',
     'App\\Http\\Controllers\\FoodListingController' => $baseDir . '/app/Http/Controllers/FoodListingController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',
+    'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
     'App\\Http\\Controllers\\RequestController' => $baseDir . '/app/Http/Controllers/RequestController.php',
     'App\\Models\\Donation' => $baseDir . '/app/Models/Donation.php',
     'App\\Models\\Makanan' => $baseDir . '/app/Models/Makanan.php',
