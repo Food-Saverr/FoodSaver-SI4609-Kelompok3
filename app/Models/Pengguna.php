@@ -26,6 +26,10 @@ class Pengguna extends Authenticatable
         'Password_Pengguna',
     ];
 
+    public function makanans()
+    {
+        return $this->hasMany(Makanan::class, 'ID_Pengguna', 'ID_Pengguna');
+    }
 
     public function getAuthIdentifierName()
 {
