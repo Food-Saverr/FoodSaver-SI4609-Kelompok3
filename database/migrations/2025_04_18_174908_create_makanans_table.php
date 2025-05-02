@@ -18,6 +18,7 @@ class CreateMakanansTable extends Migration
             $table->dateTime('Tanggal_Kedaluwarsa')->nullable();
             $table->string('Lokasi_Makanan')->nullable();
             $table->integer('Jumlah_Makanan')->nullable();
+            $table->integer('Jumlah_Didonasi')->nullable();
 
             $table->unsignedBigInteger('ID_Pengguna')->nullable(); // Bisa Donatur / Admin
 

@@ -16,72 +16,100 @@
         </div>
         
         <!-- Quick Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 animate-fade-up-delay">
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                        <i class="fas fa-users text-xl"></i>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 animate-fade-up animate-scale">
+
+            <a href="{{ route('DashboardAdmin.pengguna') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full">
+                        <i class="fas fa-users text-2xl"></i>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Total Pengguna</p>
-                        <h3 class="text-2xl font-bold">{{ $jumlahDonatur + $jumlahPenerima }}</h3>
-                    </div>
+                    <h3 class="text-xl font-semibold">Statistik Pengguna</h3>
                 </div>
-                <div class="flex justify-between text-sm text-gray-500">
-                    <span>Donatur: <strong class="text-gray-700">{{ $jumlahDonatur }}</strong></span>
-                    <span>Penerima: <strong class="text-gray-700">{{ $jumlahPenerima }}</strong></span>
-                </div>
-            </div>
-            
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="bg-green-100 text-green-600 p-3 rounded-full">
-                        <i class="fas fa-utensils text-xl"></i>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-3">
+                        <p class="text-gray-700 text-lg">Donatur: <strong class="text-blue-600">{{ $jumlahDonatur }}</strong></p>
+                        <p class="text-gray-700 text-lg">Penerima: <strong class="text-blue-600">{{ $jumlahPenerima }}</strong></p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Makanan Tersedia</p>
-                        <h3 class="text-2xl font-bold">{{ $jumlahMakananTersedia }}</h3>
+                    <div class="w-40 h-40">
+                        <canvas id="penggunaChart"></canvas>
                     </div>
                 </div>
-                <div class="flex justify-between text-sm text-gray-500">
-                    <span>Minggu ini: <strong class="text-gray-700">+12</strong></span>
-                    <span><a href="{{ route('admin.food-listing.index') }}" class="text-orange-500 hover:underline">Lihat semua</a></span>
-                </div>
-            </div>
-            
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="bg-orange-100 text-orange-600 p-3 rounded-full">
-                        <i class="fas fa-handshake text-xl"></i>
+            </a>
+
+            <a href="{{ route('DashboardAdmin.makanan') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-green-100 text-green-600 p-4 rounded-full">
+                        <i class="fas fa-box-open text-2xl"></i>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Donasi Selesai</p>
-                        <h3 class="text-2xl font-bold">{{ $jumlahMakananDidonasikan }}</h3>
-                    </div>
+                    <h3 class="text-xl font-semibold">Statistik Makanan</h3>
                 </div>
-                <div class="flex justify-between text-sm text-gray-500">
-                    <span>Hari ini: <strong class="text-gray-700">+3</strong></span>
-                    <span>Minggu ini: <strong class="text-gray-700">+21</strong></span>
-                </div>
-            </div>
-            
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
-                        <i class="fas fa-comments text-xl"></i>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-3">
+                        <p class="text-gray-700 text-lg">Tersedia: <strong class="text-green-600">{{ $jumlahMakananTersedia }}</strong> item</p>
+                        <p class="text-gray-700 text-lg">Didonasikan: <strong class="text-green-600">{{ $jumlahMakananDidonasikan }}</strong> item</p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Diskusi Forum</p>
-                        <h3 class="text-2xl font-bold">24</h3>
+                    <div class="w-40 h-40">
+                        <canvas id="makananChart"></canvas>
                     </div>
                 </div>
-                <div class="flex justify-between text-sm text-gray-500">
-                    <span>Minggu ini: <strong class="text-gray-700">+5</strong></span>
-                    <span><a href="#" class="text-orange-500 hover:underline">Lihat semua</a></span>
+            </a>
+
+            <a href="{{ route('DashboardAdmin.donasi') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-purple-100 text-purple-600 p-4 rounded-full">
+                        <i class="fas fa-donate text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold">Statistik Donasi</h3>
                 </div>
-            </div>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-3">
+                        <p class="text-gray-700 text-lg">Total: <strong class="text-purple-600">{{ $totalDonasi }}</strong> Porsi</p>
+                    </div>
+                    <div class="w-40 h-40">
+                        <canvas id="donasiChart"></canvas>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{{ route('DashboardAdmin.artikel') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full">
+                        <i class="fas fa-newspaper text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold">Total Artikel Terpublikasi</h3>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-3">
+                        <p class="text-gray-700 text-lg">Jumlah Artikel: <strong class="text-blue-600">{{ $totalArtikel }}</strong></p>
+                    </div>
+                    <div class="w-40 h-40">
+                        <canvas id="totalArtikelChart"></canvas>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{{ route('DashboardAdmin.statistikForum') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-purple-100 text-purple-600 p-4 rounded-full">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8a9 9 0 110-18 9 9 0 010 18zm3-7h2a2 2 0 002-2V7a2 2 0 00-2-2h-5a2 2 0 00-2 2v2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold">Statistik Forum</h3>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-3">
+                        <p class="text-gray-700 text-lg">Total Forum Dibuat: <strong class="text-purple-600">{{ $totalForum }}</strong></p>
+                        <p class="text-gray-700 text-lg">Diskusi Aktif: <strong class="text-purple-600">{{ $diskusiAktif }}</strong></p>
+                    </div>
+                    <div class="w-40 h-40">
+                        <canvas id="forumPieChart"></canvas>
+                    </div>
+                </div>
+            </a>
+
         </div>
-        
+
         <!-- Quick Actions -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold mb-6 title-font">Tindakan Cepat</h2>
@@ -192,4 +220,195 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('scripts')
+<script>
+  var ctxPengguna = document.getElementById('penggunaChart').getContext('2d');
+  var penggunaChart = new Chart(ctxPengguna, {
+    type: 'pie',
+    data: {
+      labels: ['Donatur', 'Penerima'],
+      datasets: [{
+        data: [{{ $jumlahDonatur }}, {{ $jumlahPenerima }}],
+        backgroundColor: ['#3b82f6', '#10b981'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { 
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+
+  var ctx2 = document.getElementById('makananChart').getContext('2d');
+  var makananChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: ['Tersedia', 'Didonasikan'],
+      datasets: [{
+        label: 'Jumlah Makanan',
+        data: [{{ $jumlahMakananTersedia ?? 0 }}, {{ $jumlahMakananDidonasikan ?? 0 }}],
+        backgroundColor: ['#4caf50', '#ff9800'],
+        borderColor: ['#fff', '#fff'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: { 
+          beginAtZero: true, 
+          precision: 0,
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+
+  var ctxDonasi = document.getElementById('donasiChart').getContext('2d');
+  var donasiChart = new Chart(ctxDonasi, {
+    type: 'line',
+    data: {
+      labels: ['Total Donasi'],
+      datasets: [{
+        data: [{{ $totalDonasi }}],
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { 
+          beginAtZero: true,
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+
+  var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
+  var totalArtikelChart = new Chart(ctxArtikel, {
+    type: 'bar',
+    data: {
+      labels: {!! json_encode($artikelLabels) !!},
+      datasets: [{
+        label: 'Jumlah Artikel per Minggu',
+        data: {!! json_encode($artikelData) !!},
+        backgroundColor: 'rgba(63, 81, 181, 0.2)',
+        borderColor: '#3f51b5',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Artikel Masuk per Minggu',
+          font: { size: 16 }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { 
+            stepSize: 1,
+            font: {
+              size: 14
+            }
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { 
+            maxRotation: 45, 
+            minRotation: 45,
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+
+  var ctxForum = document.getElementById('forumPieChart').getContext('2d');
+  var forumChart = new Chart(ctxForum, {
+    type: 'pie',
+    data: {
+      labels: ['Total Forum Dibuat', 'Diskusi Aktif'],
+      datasets: [{
+        data: [{{ $totalForum }}, {{ $diskusiAktif }}],
+        backgroundColor: ['#6b46c1', '#d53f8c'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { 
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            font: {
+              size: 14
+            }
+          }
+        }
+      },
+      cutout: '60%'
+    }
+  });
+</script>
 @endsection

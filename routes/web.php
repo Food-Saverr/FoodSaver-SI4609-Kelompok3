@@ -73,6 +73,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::delete('/donasi-keuangan/{donation}', [AdminDonationController::class, 'destroy'])->name('admin.donation.destroy');
 
     Route::put('/donasi-keuangan/{donation}', [AdminDonationController::class, 'updateStatus'])->name('admin.donation.update-status');
+
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/statistik-pengguna', [AdminDashboardController::class, 'statistikPengguna'])->name('DashboardAdmin.pengguna');
+    Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('DashboardAdmin.makanan');
+    Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('DashboardAdmin.donasi');
+    Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
+    Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
