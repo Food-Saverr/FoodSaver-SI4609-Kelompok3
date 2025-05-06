@@ -33,6 +33,14 @@
         </div>
         @endif
 
+        <!-- Pesan error khusus untuk foto makanan -->
+        @if($errors->has('Foto_Makanan'))
+        <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            {{ $errors->first('Foto_Makanan') }}
+        </div>
+        @endif
+
         <!-- Form -->
         <form action="{{ route('donatur.food-listing.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
@@ -147,6 +155,13 @@
                                 </label>
                             </div>
                         </div>
+                        <!-- Pesan error inline untuk foto makanan -->
+                        @if($errors->has('Foto_Makanan'))
+                        <span class="text-red-600 text-sm mt-2 block">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $errors->first('Foto_Makanan') }}
+                        </span>
+                        @endif
                     </div>
                     
                     <!-- Lokasi Makanan -->
