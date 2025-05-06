@@ -16,15 +16,15 @@ class DonaturDashboardController extends Controller
         }
 
         // Stats for dashboard
-        $totalDonasi = Makanan::where('ID_Pengguna', Auth::id())->count();
-        $limbahDicegah = Makanan::where('ID_Pengguna', Auth::id())->sum('Jumlah_Makanan') * 0.5; // Assume 0.5 kg per portion
-        $penerimaTerbantu = Makanan::where('ID_Pengguna', Auth::id())
-                                   ->where('Status_Makanan', 'Tersedia')
-                                   ->count(); // Proxy: count of available listings
-        $recentMakanans = Makanan::where('ID_Pengguna', Auth::id())
-                                ->orderBy('created_at', 'desc')
-                                ->take(3)
-                                ->get();
+        $totalDonasi = Makanan::where('id_user', Auth::id())->count();
+        $limbahDicegah = Makanan::where('id_user', Auth::id())->sum('Jumlah_Makanan') * 0.5; // Assume 0.5 kg per portion
+        $penerimaTerbantu = Makanan::where('id_user', Auth::id())
+            ->where('Status_Makanan', 'Tersedia')
+            ->count(); // Proxy: count of available listings
+        $recentMakanans = Makanan::where('id_user', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
 
         return view('dashboard-donatur', compact('totalDonasi', 'limbahDicegah', 'penerimaTerbantu', 'recentMakanans'));
     }

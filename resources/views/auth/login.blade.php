@@ -196,7 +196,7 @@
             </label>
             </div>
 
-            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3.5 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
+            <button type="submit"  dusk="submit-login" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3.5 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
             <i class="fas fa-sign-in-alt mr-2"></i>
             Masuk Sekarang
             </button>

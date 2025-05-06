@@ -20,9 +20,11 @@ class RequestController extends Controller
         $makanan = Makanan::findOrFail($id_makanan);
 
         // Check if the Makanan is available and not expired
-        if ($makanan->Jumlah_Makanan <= 0 || 
-            $makanan->Status_Makanan === 'Habis' || 
-            \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa)->isPast()) {
+        if (
+            $makanan->Jumlah_Makanan <= 0 ||
+            $makanan->Status_Makanan === 'Habis' ||
+            \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa)->isPast()
+        ) {
             return redirect()->route('pengguna.food-listing.show', $id_makanan)
                 ->with('error', 'Makanan tidak tersedia atau sudah kedaluwarsa.');
         }
@@ -30,7 +32,7 @@ class RequestController extends Controller
         // Create the request
         RequestModel::create([
             'ID_Makanan' => $id_makanan,
-            'ID_Pengguna' => Auth::id(),
+            'id_user' => Auth::id(),
             'Pesan' => $request->pesan,
             'Status_Request' => 'Pending',
         ]);
@@ -42,7 +44,7 @@ class RequestController extends Controller
     public function history(Request $request)
     {
         $status = $request->query('status', 'All');
-        $query = RequestModel::where('ID_Pengguna', Auth::id())->with('makanan');
+        $query = RequestModel::where('id_user', Auth::id())->with('makanan');
 
         if ($status !== 'All' && in_array($status, ['Pending', 'Approve', 'Done', 'Rejected'])) {
             $query->where('Status_Request', $status);
@@ -55,7 +57,7 @@ class RequestController extends Controller
 
     public function show($id_request)
     {
-        $request = RequestModel::where('ID_Pengguna', Auth::id())
+        $request = RequestModel::where('id_user', Auth::id())
             ->where('ID_Request', $id_request)
             ->with(['makanan', 'makanan.donatur'])
             ->firstOrFail();
@@ -65,7 +67,7 @@ class RequestController extends Controller
 
     public function cancel(Request $request, $id_request)
     {
-        $requestModel = RequestModel::where('ID_Pengguna', Auth::id())
+        $requestModel = RequestModel::where('id_user', Auth::id())
             ->where('ID_Request', $id_request)
             ->firstOrFail();
 
@@ -91,8 +93,10 @@ class RequestController extends Controller
             ->firstOrFail();
 
         // Validate that only Admin or related Donatur can update
-        if (Auth::user()->Role_Pengguna !== 'Admin' && 
-            !(Auth::user()->Role_Pengguna === 'Donatur' && $requestModel->makanan->ID_Pengguna === Auth::id())) {
+        if (
+            Auth::user()->Role_Pengguna !== 'Admin' &&
+            !(Auth::user()->Role_Pengguna === 'Donatur' && $requestModel->makanan->id_user === Auth::id())
+        ) {
             return redirect()->route('pengguna.request.show', $id_request)
                 ->with('error', 'Anda tidak memiliki izin untuk memperbarui status permintaan ini.');
         }

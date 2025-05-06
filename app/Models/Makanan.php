@@ -21,17 +21,17 @@ class Makanan extends Model
         'Tanggal_Kedaluwarsa',
         'Lokasi_Makanan',
         'Jumlah_Makanan',
-        'ID_Pengguna',
+        'id_user',
     ];
 
     // Relasi ke pengguna (bisa Donatur atau Admin tergantung rolenya)
     public function pengguna()
     {
-        return $this->belongsTo(Pengguna::class, 'ID_Pengguna', 'ID_Pengguna');
+        return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
     }
 
     public function donatur()
     {
-        return $this->belongsTo(Pengguna::class, 'ID_Pengguna', 'ID_Pengguna');
+        return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
     }
 }

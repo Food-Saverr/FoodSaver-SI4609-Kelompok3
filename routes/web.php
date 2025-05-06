@@ -21,8 +21,19 @@ use App\Http\Controllers\ProfileController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
-    return view('welcome'); // Landing Page
-})->name('landing');
+    if (Auth::check()) {
+        $role = Auth::user()->Role_Pengguna;
+
+        return match ($role) {
+            'Admin'    => redirect()->route('dashboard.admin'),
+            'Donatur'  => redirect()->route('dashboard.donatur'),
+            'Pengguna' => redirect()->route('dashboard.pengguna'),
+            default    => redirect()->route('/'),
+        };
+    }
+
+    return view('welcome');
+})->name('/');
 
 Route::middleware('guest')->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'showRegisterForm'])->name('registrasi.form');
@@ -40,10 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-donatur', [DonaturDashboardController::class, 'index'])->name('dashboard.donatur');
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
 
-    Route::post('/logout', function () {
-        Auth::logout();
-        return redirect('/');
-    })->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Route untuk profil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); // Satu route untuk tampilan profil

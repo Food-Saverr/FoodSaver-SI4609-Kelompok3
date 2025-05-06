@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Pengguna; 
-use App\Models\Makanan; 
+use App\Models\Pengguna;
+use App\Models\Makanan;
 use App\Models\Artikel;
 use App\Models\Forum;
 
@@ -37,35 +37,35 @@ class AdminDashboardController extends Controller
             ->get();
 
         // Format data untuk chart
-        $artikelLabels = $artikelPerMinggu->pluck('start_of_week')->map(function($date) {
+        $artikelLabels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
             return date('d M Y', strtotime($date));
         });
         $artikelData = $artikelPerMinggu->pluck('total_artikel');
 
-        $totalForum = Forum::count(); 
+        $totalForum = Forum::count();
         $diskusiAktif = Forum::where('is_active', true)->count();
-    
+
         $forumPerBulan = Forum::statistikPerBulan();
         $bulanLabels = [];
         $forumData = [];
-        
+
         foreach ($forumPerBulan as $data) {
-            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F'); 
+            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F');
             $forumData[] = $data->total_forum;
-        }    
+        }
 
         return view('dashboard-admin', compact(
             'jumlahDonatur',
             'jumlahPenerima',
-            'jumlahMakananTersedia', 
+            'jumlahMakananTersedia',
             'jumlahMakananDidonasikan',
             'totalDonasi',
             'totalArtikel',
             'artikelLabels',
             'artikelData',
-            'totalForum', 
-            'diskusiAktif', 
-            'bulanLabels', 
+            'totalForum',
+            'diskusiAktif',
+            'bulanLabels',
             'forumData'
         ));
     }
@@ -74,7 +74,7 @@ class AdminDashboardController extends Controller
     {
         $jumlahDonatur = Pengguna::where('Role_Pengguna', 'Donatur')->count();
         $jumlahPenerima = Pengguna::where('Role_Pengguna', 'Pengguna')->count();
-        
+
         $donaturPerBulan = DB::table('penggunas')
             ->select(
                 DB::raw('MONTH(created_at) as bulan'),
@@ -96,7 +96,7 @@ class AdminDashboardController extends Controller
             ->get();
 
         return view('DashboardAdmin.statistik-pengguna', compact(
-            'jumlahDonatur', 
+            'jumlahDonatur',
             'jumlahPenerima',
             'donaturPerBulan',
             'penerimaPerBulan'
@@ -143,13 +143,13 @@ class AdminDashboardController extends Controller
             ->orderBy('yearweek')
             ->get();
 
-        $labels = $artikelPerMinggu->pluck('start_of_week')->map(function($date) {
+        $labels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
             return date('d M Y', strtotime($date));
         });
         $data = $artikelPerMinggu->pluck('total_artikel');
 
         return view('DashboardAdmin.artikel', compact(
-            'totalArtikel', 
+            'totalArtikel',
             'artikelList',
             'labels',
             'data'
@@ -157,19 +157,19 @@ class AdminDashboardController extends Controller
     }
     public function statistikForum()
     {
-        $totalForum = Forum::count(); 
+        $totalForum = Forum::count();
         $diskusiAktif = Forum::where('is_active', true)->count();
 
         $forumPerBulan = Forum::statistikPerBulan();
-    
+
         $bulanLabels = [];
         $forumData = [];
-    
+
         foreach ($forumPerBulan as $data) {
-            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F'); 
+            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F');
             $forumData[] = $data->total_forum;
         }
-    
+
         return view('DashboardAdmin.statistikforum', compact(
             'totalForum',
             'diskusiAktif',
@@ -177,13 +177,13 @@ class AdminDashboardController extends Controller
             'forumData'
         ));
     }
-    
+
     public function statistikDonasi()
     {
         $totalDonasi = DB::table('makanans')
             ->where('Status_Makanan', 'Habis')
             ->sum('Jumlah_Makanan');
-        
+
         $donasiPerBulan = DB::table('makanans')
             ->select(
                 DB::raw('MONTH(created_at) as bulan'),
@@ -194,13 +194,13 @@ class AdminDashboardController extends Controller
             ->get();
 
         $topDonatur = DB::table('makanans')
-            ->join('penggunas', 'makanans.ID_Pengguna', '=', 'penggunas.ID_Pengguna')
+            ->join('penggunas', 'makanans.id_user', '=', 'penggunas.id_user')
             ->select(
                 'penggunas.Nama_Pengguna',
                 'makanans.Nama_Makanan',
                 DB::raw('SUM(CASE WHEN makanans.Status_Makanan = "Habis" THEN makanans.Jumlah_Makanan ELSE 0 END) as total_donasi')
             )
-            ->groupBy('penggunas.ID_Pengguna', 'penggunas.Nama_Pengguna', 'makanans.Nama_Makanan')
+            ->groupBy('penggunas.id_user', 'penggunas.Nama_Pengguna', 'makanans.Nama_Makanan')
             ->orderBy('total_donasi', 'desc')
             ->limit(5)
             ->get();

@@ -20,11 +20,11 @@ class CreateMakanansTable extends Migration
             $table->integer('Jumlah_Makanan')->nullable();
             $table->integer('Jumlah_Didonasi')->nullable();
 
-            $table->unsignedBigInteger('ID_Pengguna')->nullable(); // Bisa Donatur / Admin
+            $table->unsignedBigInteger('id_user')->nullable(); // Bisa Donatur / Admin
 
             $table->timestamps();
 
-            $table->foreign('ID_Pengguna')->references('ID_Pengguna')->on('penggunas')->onDelete('set null');
+            $table->foreign('id_user')->references('id_user')->on('penggunas')->onDelete('set null');
         });
     }
 
