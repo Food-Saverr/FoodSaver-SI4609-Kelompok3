@@ -22,6 +22,6 @@ class Artikel extends Model
 
     public function user()
     {
-        return $this->belongsTo(Pengguna::class, 'user_id', 'ID_Pengguna');
+        return $this->belongsTo(Pengguna::class, 'user_id', 'id_user');
     }
-} 
+}

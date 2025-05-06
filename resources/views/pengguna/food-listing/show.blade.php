@@ -79,7 +79,7 @@
                                 <div class="flex items-center">
                                     <img src="{{ optional($makanan->donatur)->Foto_Profil ? asset('storage/' . optional($makanan->donatur)->Foto_Profil) : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(optional($makanan->donatur)->Email_Pengguna ?? 'default@example.com'))) . '?d=mp&s=48' }}" class="w-16 h-16 rounded-full border-2 border-orange-200" alt="{{ optional($makanan->donatur)->Nama_Pengguna ?? 'Donatur' }}" onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'">
                                     <div class="ml-4">
-                                        <p class="font-medium text-gray-800 text-lg">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->ID_Pengguna }}</p>
+                                        <p class="font-medium text-gray-800 text-lg">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->id_user }}</p>
                                         <p class="text-gray-500">{{ optional($makanan->donatur)->Role_Pengguna ?: 'Donatur' }}</p>
                                     </div>
                                 </div>

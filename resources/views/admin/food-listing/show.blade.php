@@ -33,7 +33,7 @@
                 
                 <div class="flex space-x-2 mt-4 md:mt-0">
                     @if(Auth::user()->Role_Pengguna === 'Admin' || 
-                        (Auth::user()->Role_Pengguna === 'Donatur' && Auth::id() === $makanan->ID_Pengguna))
+                        (Auth::user()->Role_Pengguna === 'Donatur' && Auth::id() === $makanan->id_user))
                         
                         <form action="{{ route('admin.food-listing.destroy', $makanan->ID_Makanan) }}" 
                               method="POST" 
@@ -100,7 +100,7 @@
                                 onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'"
                             >
                             <div class="ml-3">
-                                <p class="font-medium">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->ID_Pengguna }}</p>
+                                <p class="font-medium">{{ optional($makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . $makanan->id_user }}</p>
                                 <p class="text-sm text-gray-500">
                                     {{ optional($makanan->donatur)->Role_Pengguna ?: 'Donatur' }}
                                 </p>

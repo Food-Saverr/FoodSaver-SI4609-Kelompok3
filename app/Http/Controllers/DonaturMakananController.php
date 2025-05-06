@@ -13,7 +13,7 @@ class DonaturMakananController extends Controller
     public function index()
     {
         // Update Status_Makanan based on Jumlah_Makanan
-        Makanan::where('ID_Pengguna', Auth::id())->update([
+        Makanan::where('id_user', Auth::id())->update([
             'Status_Makanan' => DB::raw("
                 CASE
                     WHEN Jumlah_Makanan = 0 THEN 'Habis'
@@ -24,9 +24,9 @@ class DonaturMakananController extends Controller
             ")
         ]);
 
-        $makanans = Makanan::where('ID_Pengguna', Auth::id())
-                           ->orderBy('created_at', 'desc')
-                           ->paginate(10);
+        $makanans = Makanan::where('id_user', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('donatur.food-listing.index', compact('makanans'));
     }
@@ -71,23 +71,23 @@ class DonaturMakananController extends Controller
 
         $dataToSave = $validatedData;
         $dataToSave['Foto_Makanan'] = $fotoPath;
-        $dataToSave['ID_Pengguna'] = Auth::id();
+        $dataToSave['id_user'] = Auth::id();
 
         try {
             Makanan::create($dataToSave);
             return redirect()->route('donatur.food-listing.index')
-                           ->with('success', 'Data makanan berhasil ditambahkan!');
+                ->with('success', 'Data makanan berhasil ditambahkan!');
         } catch (\Exception $e) {
             Storage::disk('public')->delete($fotoPath);
             return redirect()->back()
-                           ->with('error', 'Gagal menambahkan data makanan. Silakan coba lagi.')
-                           ->withInput();
+                ->with('error', 'Gagal menambahkan data makanan. Silakan coba lagi.')
+                ->withInput();
         }
     }
 
     public function show(Makanan $makanan)
     {
-        if ($makanan->ID_Pengguna !== Auth::id()) {
+        if ($makanan->id_user !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk melihat makanan ini.');
         }
         return view('donatur.food-listing.show', compact('makanan'));
@@ -95,7 +95,7 @@ class DonaturMakananController extends Controller
 
     public function edit(Makanan $makanan)
     {
-        if ($makanan->ID_Pengguna !== Auth::id()) {
+        if ($makanan->id_user !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk mengedit makanan ini.');
         }
         return view('donatur.food-listing.edit', compact('makanan'));
@@ -103,7 +103,7 @@ class DonaturMakananController extends Controller
 
     public function update(Request $request, Makanan $makanan)
     {
-        if ($makanan->ID_Pengguna !== Auth::id()) {
+        if ($makanan->id_user !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk memperbarui makanan ini.');
         }
 
@@ -144,17 +144,17 @@ class DonaturMakananController extends Controller
         try {
             $makanan->update($validatedData);
             return redirect()->route('donatur.food-listing.index')
-                           ->with('success', 'Data makanan berhasil diperbarui!');
+                ->with('success', 'Data makanan berhasil diperbarui!');
         } catch (\Exception $e) {
             return redirect()->back()
-                           ->with('error', 'Gagal memperbarui data makanan. Silakan coba lagi.')
-                           ->withInput();
+                ->with('error', 'Gagal memperbarui data makanan. Silakan coba lagi.')
+                ->withInput();
         }
     }
 
     public function destroy(Makanan $makanan)
     {
-        if ($makanan->ID_Pengguna !== Auth::id()) {
+        if ($makanan->id_user !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk menghapus makanan ini.');
         }
 
@@ -164,10 +164,10 @@ class DonaturMakananController extends Controller
             }
             $makanan->delete();
             return redirect()->route('donatur.food-listing.index')
-                           ->with('success', 'Data makanan berhasil dihapus!');
+                ->with('success', 'Data makanan berhasil dihapus!');
         } catch (\Exception $e) {
             return redirect()->route('donatur.food-listing.index')
-                           ->with('error', 'Gagal menghapus data makanan. Silakan coba lagi.');
+                ->with('error', 'Gagal menghapus data makanan. Silakan coba lagi.');
         }
     }
 }

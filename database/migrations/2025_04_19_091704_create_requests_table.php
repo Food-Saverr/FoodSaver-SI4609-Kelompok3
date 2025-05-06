@@ -11,13 +11,13 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id('ID_Request');
             $table->unsignedBigInteger('ID_Makanan');
-            $table->unsignedBigInteger('ID_Pengguna');
+            $table->unsignedBigInteger('id_user');
             $table->text('Pesan')->nullable();
             $table->enum('Status_Request', ['Pending', 'Approved', 'Rejected', 'Done'])->default('Pending');
             $table->timestamps();
 
             $table->foreign('ID_Makanan')->references('ID_Makanan')->on('makanans')->onDelete('cascade');
-            $table->foreign('ID_Pengguna')->references('ID_Pengguna')->on('penggunas')->onDelete('cascade');
+            $table->foreign('id_user')->references('id_user')->on('penggunas')->onDelete('cascade');
         });
     }
 

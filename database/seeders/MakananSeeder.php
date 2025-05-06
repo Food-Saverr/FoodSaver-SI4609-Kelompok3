@@ -16,14 +16,14 @@ class MakananSeeder extends Seeder
     public function run(): void
     {
         // Mendapatkan ID user dengan role Donatur
-        $donaturId = Pengguna::where('Role_Pengguna', 'Donatur')->first()->ID_Pengguna ?? 1;
+        $donaturId = Pengguna::where('Role_Pengguna', 'Donatur')->first()->id_user ?? 1;
 
         $makananData = [
             [
                 'Nama_Makanan' => 'Nasi Goreng',
                 'Jumlah_Makanan' => 5,
                 'Status_Makanan' => 'Tersedia',
-                'ID_Pengguna' => $donaturId,
+                'id_user' => $donaturId,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -31,7 +31,7 @@ class MakananSeeder extends Seeder
                 'Nama_Makanan' => 'Mie Ayam',
                 'Jumlah_Makanan' => 3,
                 'Status_Makanan' => 'Tersedia',
-                'ID_Pengguna' => $donaturId,
+                'id_user' => $donaturId,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -39,7 +39,7 @@ class MakananSeeder extends Seeder
                 'Nama_Makanan' => 'Soto Ayam',
                 'Jumlah_Makanan' => 0,
                 'Status_Makanan' => 'Habis',
-                'ID_Pengguna' => $donaturId,
+                'id_user' => $donaturId,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -47,7 +47,7 @@ class MakananSeeder extends Seeder
                 'Nama_Makanan' => 'Gado-gado',
                 'Jumlah_Makanan' => 0,
                 'Status_Makanan' => 'Habis',
-                'ID_Pengguna' => $donaturId,
+                'id_user' => $donaturId,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -57,4 +57,4 @@ class MakananSeeder extends Seeder
             Makanan::create($makanan);
         }
     }
-} 
+}

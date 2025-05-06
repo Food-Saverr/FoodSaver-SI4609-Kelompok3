@@ -19,14 +19,14 @@ class ArtikelSeeder extends Seeder
                 'judul' => 'Tips Mengurangi Limbah Makanan',
                 'konten' => 'Berikut adalah beberapa tips untuk mengurangi limbah makanan di rumah Anda...',
                 'status' => 'dipublikasikan',
-                'user_id' => $admin->ID_Pengguna
+                'user_id' => $admin->id_user
             ]);
 
             Artikel::create([
                 'judul' => 'Manfaat Berbagi Makanan',
                 'konten' => 'Berbagi makanan tidak hanya membantu sesama tetapi juga memberikan manfaat bagi lingkungan...',
                 'status' => 'dipublikasikan',
-                'user_id' => $admin->ID_Pengguna
+                'user_id' => $admin->id_user
             ]);
 
             // Artikel draft
@@ -34,8 +34,8 @@ class ArtikelSeeder extends Seeder
                 'judul' => 'Cara Menyimpan Makanan dengan Benar',
                 'konten' => 'Draft artikel tentang cara menyimpan makanan...',
                 'status' => 'draft',
-                'user_id' => $admin->ID_Pengguna
+                'user_id' => $admin->id_user
             ]);
         }
     }
-} 
+}

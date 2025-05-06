@@ -11,7 +11,7 @@ class DonationController extends Controller
 {
     public function index()
     {
-        $donations = Donation::where('ID_Pengguna', Auth::id())
+        $donations = Donation::where('id_user', Auth::id())
             ->latest()
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class DonationController extends Controller
         ]);
 
         $donation = Donation::create([
-            'ID_Pengguna' => Auth::user()->ID_Pengguna,
+            'id_user' => Auth::user()->id_user,
             'full_name' => $request->full_name,
             'phone' => $request->phone,
             'nominal' => $request->nominal,
@@ -48,7 +48,7 @@ class DonationController extends Controller
 
     public function show(Donation $donation)
     {
-        if ($donation->ID_Pengguna !== Auth::user()->ID_Pengguna) {
+        if ($donation->id_user !== Auth::user()->id_user) {
             abort(403, 'Unauthorized access');
         }
 

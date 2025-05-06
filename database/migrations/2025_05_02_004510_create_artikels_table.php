@@ -14,7 +14,7 @@ return new class extends Migration
             $table->text('konten');
             $table->string('Gambar_Artikel')->nullable();
             $table->enum('status', ['dipublikasikan', 'draft'])->default('draft');
-            $table->foreignId('user_id')->constrained('penggunas', 'ID_Pengguna')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('penggunas', 'id_user')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,4 +23,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('artikels');
     }
-}; 
+};

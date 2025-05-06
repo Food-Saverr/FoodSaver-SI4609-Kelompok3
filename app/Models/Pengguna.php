@@ -10,7 +10,7 @@ class Pengguna extends Authenticatable
     use HasFactory;
 
     protected $table = 'penggunas';
-    protected $primaryKey = 'ID_Pengguna';
+    protected $primaryKey = 'id_user';
     public $incrementing = true;
     protected $keyType = 'int';
 
@@ -28,16 +28,16 @@ class Pengguna extends Authenticatable
 
     public function makanans()
     {
-        return $this->hasMany(Makanan::class, 'ID_Pengguna', 'ID_Pengguna');
+        return $this->hasMany(Makanan::class, 'id_user', 'id_user');
     }
 
     public function getAuthIdentifierName()
-{
-    return 'ID_Pengguna';
-}
+    {
+        return 'id_user';
+    }
 
     public function getAuthPassword()
-{
-    return $this->Password_Pengguna;
-}
+    {
+        return $this->Password_Pengguna;
+    }
 }
