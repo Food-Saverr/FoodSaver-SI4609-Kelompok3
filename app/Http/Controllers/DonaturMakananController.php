@@ -6,7 +6,8 @@ use App\Models\Makanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB; // Added this import
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DonaturMakananController extends Controller
 {
@@ -38,6 +39,9 @@ class DonaturMakananController extends Controller
 
     public function store(Request $request)
     {
+        // Debug: Log incoming request data
+        Log::info('Store method called', ['request' => $request->all(), 'files' => $request->hasFile('Foto_Makanan')]);
+
         $validatedData = $request->validate([
             'Nama_Makanan' => 'required|string|max:255',
             'Deskripsi_Makanan' => 'nullable|string',
@@ -60,6 +64,9 @@ class DonaturMakananController extends Controller
             'Tanggal_Kedaluwarsa.after_or_equal' => 'Tanggal kedaluwarsa harus hari ini atau setelahnya.',
         ]);
 
+        // Debug: Log validation passed
+        Log::info('Validation passed', ['validatedData' => $validatedData]);
+
         // Set Status_Makanan based on Jumlah_Makanan
         $validatedData['Status_Makanan'] = match (true) {
             $validatedData['Jumlah_Makanan'] == 0 => 'Habis',
@@ -75,10 +82,12 @@ class DonaturMakananController extends Controller
 
         try {
             Makanan::create($dataToSave);
+            Log::info('Food listing created successfully', ['data' => $dataToSave]);
             return redirect()->route('donatur.food-listing.index')
                            ->with('success', 'Data makanan berhasil ditambahkan!');
         } catch (\Exception $e) {
             Storage::disk('public')->delete($fotoPath);
+            Log::error('Failed to create food listing', ['error' => $e->getMessage(), 'data' => $dataToSave]);
             return redirect()->back()
                            ->with('error', 'Gagal menambahkan data makanan. Silakan coba lagi.')
                            ->withInput();
@@ -107,6 +116,9 @@ class DonaturMakananController extends Controller
             abort(403, 'Anda tidak memiliki akses untuk memperbarui makanan ini.');
         }
 
+        // Debug: Log incoming request data
+        Log::info('Update method called', ['request' => $request->all(), 'files' => $request->hasFile('Foto_Makanan')]);
+
         $validatedData = $request->validate([
             'Nama_Makanan' => 'required|string|max:255',
             'Deskripsi_Makanan' => 'nullable|string',
@@ -127,6 +139,9 @@ class DonaturMakananController extends Controller
             'Tanggal_Kedaluwarsa.required' => 'Tanggal kedaluwarsa harus diisi.',
         ]);
 
+        // Debug: Log validation passed
+        Log::info('Update validation passed', ['validatedData' => $validatedData]);
+
         // Set Status_Makanan based on Jumlah_Makanan
         $validatedData['Status_Makanan'] = match (true) {
             $validatedData['Jumlah_Makanan'] == 0 => 'Habis',
@@ -143,9 +158,11 @@ class DonaturMakananController extends Controller
 
         try {
             $makanan->update($validatedData);
+            Log::info('Food listing updated successfully', ['data' => $validatedData]);
             return redirect()->route('donatur.food-listing.index')
                            ->with('success', 'Data makanan berhasil diperbarui!');
         } catch (\Exception $e) {
+            Log::error('Failed to update food listing', ['error' => $e->getMessage(), 'data' => $validatedData]);
             return redirect()->back()
                            ->with('error', 'Gagal memperbarui data makanan. Silakan coba lagi.')
                            ->withInput();
@@ -163,9 +180,11 @@ class DonaturMakananController extends Controller
                 Storage::disk('public')->delete($makanan->Foto_Makanan);
             }
             $makanan->delete();
+            Log::info('Food listing deleted successfully', ['id' => $makanan->id]);
             return redirect()->route('donatur.food-listing.index')
                            ->with('success', 'Data makanan berhasil dihapus!');
         } catch (\Exception $e) {
+            Log::error('Failed to delete food listing', ['error' => $e->getMessage(), 'id' => $makanan->id]);
             return redirect()->route('donatur.food-listing.index')
                            ->with('error', 'Gagal menghapus data makanan. Silakan coba lagi.');
         }

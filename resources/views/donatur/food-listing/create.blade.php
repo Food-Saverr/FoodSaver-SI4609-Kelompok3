@@ -14,7 +14,7 @@
             <p class="text-gray-500">Lengkapi informasi makanan yang akan didonasikan</p>
         </div>
 
-        <!-- Error Messages -->
+        <!-- General Error Messages -->
         @if($errors->any())
         <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg animate-fade-up-delay">
             <div class="flex">
@@ -33,16 +33,8 @@
         </div>
         @endif
 
-        <!-- Pesan error khusus untuk foto makanan -->
-        @if($errors->has('Foto_Makanan'))
-        <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            {{ $errors->first('Foto_Makanan') }}
-        </div>
-        @endif
-
         <!-- Form -->
-        <form action="{{ route('donatur.food-listing.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('donatur.food-listing.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="food-form">
             @csrf
             
             <!-- Two-Column Grid -->
@@ -62,9 +54,15 @@
                                 id="Nama_Makanan"
                                 placeholder="Masukkan nama makanan"
                                 value="{{ old('Nama_Makanan') }}"
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Nama_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                                 required
                             />
+                            @if($errors->has('Nama_Makanan'))
+                            <span class="text-red-600 text-sm mt-2 block">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $errors->first('Nama_Makanan') }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                     
@@ -78,7 +76,7 @@
                             <select
                                 name="Kategori_Makanan"
                                 id="Kategori_Makanan"
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Kategori_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             >
                                 <option value="">-- Pilih Kategori --</option>
                                 <option value="Makanan Berat" {{ old('Kategori_Makanan') == 'Makanan Berat' ? 'selected' : '' }}>Makanan Berat</option>
@@ -88,6 +86,12 @@
                                 <option value="Sayuran" {{ old('Kategori_Makanan') == 'Sayuran' ? 'selected' : '' }}>Sayuran</option>
                                 <option value="Buah-buahan" {{ old('Kategori_Makanan') == 'Buah-buahan' ? 'selected' : '' }}>Buah-buahan</option>
                             </select>
+                            @if($errors->has('Kategori_Makanan'))
+                            <span class="text-red-600 text-sm mt-2 block">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $errors->first('Kategori_Makanan') }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                     
@@ -101,13 +105,19 @@
                             <select
                                 name="Status_Makanan"
                                 id="Status_Makanan"
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Status_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                                 required
                             >
                                 <option value="Tersedia" {{ old('Status_Makanan') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
                                 <option value="Segera Habis" {{ old('Status_Makanan') == 'Segera Habis' ? 'selected' : '' }}>Segera Habis</option>
                                 <option value="Habis" {{ old('Status_Makanan') == 'Habis' ? 'selected' : '' }}>Habis</option>
                             </select>
+                            @if($errors->has('Status_Makanan'))
+                            <span class="text-red-600 text-sm mt-2 block">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $errors->first('Status_Makanan') }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                     
@@ -124,9 +134,15 @@
                                 id="Tanggal_Kedaluwarsa"
                                 value="{{ old('Tanggal_Kedaluwarsa') }}"
                                 min="{{ date('Y-m-d') }}"
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Tanggal_Kedaluwarsa') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                                 required
                             />
+                            @if($errors->has('Tanggal_Kedaluwarsa'))
+                            <span class="text-red-600 text-sm mt-2 block">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $errors->first('Tanggal_Kedaluwarsa') }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -138,26 +154,25 @@
                         <label for="Foto_Makanan" class="block text-gray-700 font-medium mb-1">Foto Makanan <span class="text-red-500">*</span></label>
                         <div class="mt-2">
                             <div class="flex items-center justify-center w-full">
-                                <label for="Foto_Makanan" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-white/60 hover:bg-gray-50 transition-all relative overflow-hidden group">
+                                <label for="Foto_Makanan" class="flex flex-col items-center justify-center w-full h-64 border-2 {{ $errors->has('Foto_Makanan') ? 'border-red-500' : 'border-gray-300' }} border-dashed rounded-xl cursor-pointer bg-white/60 hover:bg-gray-50 transition-all relative overflow-hidden group">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6 z-10">
                                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3 group-hover:text-orange-500 transition-colors"></i>
                                         <p class="mb-2 text-sm text-gray-500 text-center">
                                             <span class="font-semibold">Klik untuk upload</span> atau drag and drop
                                         </p>
                                         <p class="text-xs text-gray-500">
-                                            JPG, PNG, atau GIF (Maks. 2MB)
+ IU                                           JPG, PNG, atau GIF (Maks. 2MB)
                                         </p>
                                     </div>
                                     <div id="image-preview" class="absolute inset-0 hidden items-center justify-center">
                                         <img id="preview-image" class="h-full object-contain" alt="Preview">
                                     </div>
-                                    <input id="Foto_Makanan" name="Foto_Makanan" type="file" class="hidden" accept="image/jpeg,image/png,image/gif" required />
+                                    <input id="Foto_Makanan" name="Foto_Makanan" type="file" class="hidden" accept="image/jpeg,image/png,image/gif" />
                                 </label>
                             </div>
                         </div>
-                        <!-- Pesan error inline untuk foto makanan -->
                         @if($errors->has('Foto_Makanan'))
-                        <span class="text-red-600 text-sm mt-2 block">
+                        <span class="text-red-600 text-sm mt-2 block font-medium">
                             <i class="fas fa-exclamation-circle mr-1"></i>
                             {{ $errors->first('Foto_Makanan') }}
                         </span>
@@ -177,12 +192,19 @@
                                 id="Lokasi_Makanan"
                                 placeholder="Masukkan alamat atau lokasi makanan"
                                 value="{{ old('Lokasi_Makanan') }}"
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Lokasi_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             />
+                            @if($errors->has('Lokasi_Makanan'))
+                            <span class="text-red-600 text-sm mt-2 block">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $errors->first('Lokasi_Makanan') }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
+            
             <!-- Jumlah Makanan -->
             <div class="space-y-6">
                 <div>
@@ -197,16 +219,23 @@
                             id="Jumlah_Makanan"
                             placeholder="Masukkan jumlah (misal: 10)"
                             value="{{ old('Jumlah_Makanan') }}"
-                            class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                            class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Jumlah_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             min="0"
                             required
                         />
+                        @if($errors->has('Jumlah_Makanan'))
+                        <span class="text-red-600 text-sm mt-2 block">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $errors->first('Jumlah_Makanan') }}
+                        </span>
+                        @endif
                     </div>
                     <p class="text-xs text-gray-500 mt-1">
                         Masukkan jumlah dalam porsi atau unit (contoh: 10).
                     </p>
                 </div>
             </div>
+            
             <!-- Deskripsi Makanan (Full Width) -->
             <div class="space-y-6">
                 <div>
@@ -220,8 +249,14 @@
                             id="Deskripsi_Makanan"
                             rows="5"
                             placeholder="Jelaskan tentang makanan yang didonasikan..."
-                            class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
+                            class="w-full pl-12 pr-4 py-3 rounded-xl border {{ $errors->has('Deskripsi_Makanan') ? 'border-red-500' : 'border-gray-200' }} bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                         >{{ old('Deskripsi_Makanan') }}</textarea>
+                        @if($errors->has('Deskripsi_Makanan'))
+                        <span class="text-red-600 text-sm mt-2 block">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $errors->first('Deskripsi_Makanan') }}
+                        </span>
+                        @endif
                     </div>
                     <p class="text-xs text-gray-500 mt-1">
                         Jelaskan detail tentang makanan, seperti jumlah, kondisi, bahan, cara penyimpanan, dsb.
@@ -246,25 +281,41 @@
 
 @section('scripts')
 <script>
-    document.getElementById('Foto_Makanan').addEventListener('change', function(e) {
-        const imagePreview = document.getElementById('image-preview');
-        const previewImage = document.getElementById('preview-image');
-        
+    // Image Preview Handling
+    const fileInput = document.getElementById('Foto_Makanan');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImage = document.getElementById('preview-image');
+
+    fileInput.addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
             const file = e.target.files[0];
             const reader = new FileReader();
-            
             reader.onload = function(e) {
                 previewImage.src = e.target.result;
                 imagePreview.classList.remove('hidden');
                 imagePreview.classList.add('flex');
-            }
-            
+            };
             reader.readAsDataURL(file);
         } else {
             imagePreview.classList.add('hidden');
             imagePreview.classList.remove('flex');
+            previewImage.src = '';
         }
+    });
+
+    // Form Submission Debugging
+    const form = document.getElementById('food-form');
+    form.addEventListener('submit', function(e) {
+        console.log('Form submitting...');
+        console.log('Foto_Makanan selected:', fileInput.files.length > 0 ? fileInput.files[0].name : 'No file selected');
+    });
+
+    // Reset image preview on form reset
+    form.addEventListener('reset', function() {
+        imagePreview.classList.add('hidden');
+        imagePreview.classList.remove('flex');
+        previewImage.src = '';
+        fileInput.value = '';
     });
 </script>
 @endsection
