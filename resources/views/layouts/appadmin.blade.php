@@ -122,7 +122,7 @@
     <header class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-white shadow-sm">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center">
-                <div class="text-2xl font-bold gradient-text title-font">FoodSaver Admin</div>
+                <img src="/FoodSaver.png" alt="FoodSaver Logo" class="h-10 md:h-12 w-auto" />
             </div>
             
             <nav class="hidden md:flex space-x-10 text-sm font-semibold">
