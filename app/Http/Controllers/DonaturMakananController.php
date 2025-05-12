@@ -51,6 +51,8 @@ class DonaturMakananController extends Controller
             'Status_Makanan' => 'nullable|string|in:Tersedia,Segera Habis,Habis',
             'Tanggal_Kedaluwarsa' => 'required|date|after_or_equal:today',
             'Lokasi_Makanan' => 'nullable|string|max:255',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ], [
             'Nama_Makanan.required' => 'Nama makanan harus diisi.',
             'Jumlah_Makanan.required' => 'Jumlah makanan harus diisi.',
@@ -62,6 +64,10 @@ class DonaturMakananController extends Controller
             'Foto_Makanan.max' => 'Ukuran gambar maksimal 2MB.',
             'Tanggal_Kedaluwarsa.required' => 'Tanggal kedaluwarsa harus diisi.',
             'Tanggal_Kedaluwarsa.after_or_equal' => 'Tanggal kedaluwarsa harus hari ini atau setelahnya.',
+            'latitude.required' => 'Latitude harus diisi.',
+            'latitude.numeric' => 'Latitude harus berupa angka.',
+            'longitude.required' => 'Longitude harus diisi.',
+            'longitude.numeric' => 'Longitude harus berupa angka.',
         ]);
 
         // Debug: Log validation passed
@@ -79,6 +85,8 @@ class DonaturMakananController extends Controller
         $dataToSave = $validatedData;
         $dataToSave['Foto_Makanan'] = $fotoPath;
         $dataToSave['id_user'] = Auth::id();
+        $dataToSave['latitude'] = $request->latitude;
+        $dataToSave['longitude'] = $request->longitude;
 
         try {
             Makanan::create($dataToSave);

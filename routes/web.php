@@ -18,6 +18,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MapController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -114,9 +115,7 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::delete('/request/{id_request}/cancel', [RequestController::class, 'cancel'])->name('pengguna.request.cancel');
     // Rute untuk memperbarui status permintaan
     Route::patch('/request/{id_request}', [RequestController::class, 'update'])->name('pengguna.request.update');
-});
-// --- Routes buat Fitur Donasi keuangan -- Pengguna
-Route::middleware(['auth'])->prefix('pengguna')->group(function () {
+
     // Dashboard donation
     Route::get('/donation/create', [DonationController::class, 'create'])->name('pengguna.donation.create')->middleware('auth');
     Route::post('/donation', [DonationController::class, 'store'])->name('pengguna.donation.store');
@@ -131,6 +130,10 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/donasi-keuangan', [DonationController::class, 'index'])->name('pengguna.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonationController::class, 'show'])->name('pengguna.donation.show');
 
+    // Map routes
+    Route::get('/maps', [MapController::class, 'index'])->name('pengguna.maps.index');
+    Route::get('/maps/nearby', [MapController::class, 'nearby'])->name('pengguna.maps.nearby');
+    Route::post('/maps/{makanan}/location', [MapController::class, 'updateLocation'])->name('maps.update-location');
 });
 
 // --- Routes buat Fitur Donasi keuangan -- Donatur
