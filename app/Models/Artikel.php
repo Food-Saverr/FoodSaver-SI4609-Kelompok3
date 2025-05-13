@@ -1,5 +1,7 @@
 <?php
 
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,18 +12,19 @@ class Artikel extends Model
     use HasFactory;
 
     protected $table = 'artikels';
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'judul',
+        'slug',
+        'excerpt',
         'konten',
-        'gambar',
-        'status',
-        'user_id'
+        'kategori',
+        'image_path',
     ];
 
-    public function user()
+    public function likedBy()
     {
-        return $this->belongsTo(Pengguna::class, 'user_id', 'id_user');
+        return $this->belongsToMany(User::class, 'artikel_user_like')
+                    ->withTimestamps();
     }
 }

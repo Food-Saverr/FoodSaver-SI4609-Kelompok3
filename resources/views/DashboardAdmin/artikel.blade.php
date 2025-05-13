@@ -7,7 +7,7 @@
     <div class="container mx-auto px-4">
         <div class="mb-6">
             <a href="{{ route('admin.dashboard') }}"
-               class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
+                class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
                 <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
             </a>
         </div>

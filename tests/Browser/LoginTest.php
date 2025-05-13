@@ -89,4 +89,19 @@ class LoginTest extends DuskTestCase
                     ->assertPathIs('/login');
         });
     }
+
+    /**
+     * TC.Login.006: Password kosong
+     */
+    public function test_TC_Login_006_invalidEmail()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->visit('/login')
+                    ->type('Email_Pengguna', 'loginexample')
+                    ->type('Password_Pengguna', 'invalidEmail!')
+                    ->click('@submit-login')
+                    ->assertPathIs('/login');
+        });
+    }
 }
