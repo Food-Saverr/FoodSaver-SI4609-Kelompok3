@@ -18,6 +18,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ManageUserController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -88,6 +89,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('DashboardAdmin.donasi');
     Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
+
+    //route untuk manage user admin
+    Route::get('/manage-user', [ManageUserController::class, 'index'])->name('DashboardAdmin.manageUser');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
