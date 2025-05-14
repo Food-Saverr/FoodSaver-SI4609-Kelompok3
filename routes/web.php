@@ -89,9 +89,10 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing/{makanan}/edit', [DonaturMakananController::class, 'edit'])->name('donatur.food-listing.edit');
     Route::put('/food-listing/{makanan}', [DonaturMakananController::class, 'update'])->name('donatur.food-listing.update');
     Route::delete('/food-listing/{makanan}', [DonaturMakananController::class, 'destroy'])->name('donatur.food-listing.destroy');
-    Route::get('/donatur/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
-    Route::get('/donatur/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
-    Route::patch('/donatur/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
+    Route::get('/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
+    Route::get('/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
+    Route::patch('/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
+    Route::post('/request/{id_request}', [DonaturRequestController::class, 'update']);
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
@@ -106,6 +107,10 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::delete('/request/{id_request}/cancel', [RequestController::class, 'cancel'])->name('pengguna.request.cancel');
     // Rute untuk memperbarui status permintaan
     Route::patch('/request/{id_request}', [RequestController::class, 'update'])->name('pengguna.request.update');
+    // Rute untuk mengatur pengambilan
+    Route::post('/request/{id_request}/pickup', [RequestController::class, 'updatePickup'])->name('pengguna.request.update-pickup');
+    Route::post('/request/{id_request}/pickup/edit', [RequestController::class, 'editPickup'])->name('pengguna.request.edit-pickup');
+    Route::post('/request/{id_request}/pickup/cancel', [RequestController::class, 'cancelPickup'])->name('pengguna.request.cancel-pickup');
 });
 // --- Routes buat Fitur Donasi keuangan -- Pengguna
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {

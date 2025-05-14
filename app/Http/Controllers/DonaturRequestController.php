@@ -45,33 +45,30 @@ class DonaturRequestController extends Controller
         return view('donatur.request.show', compact('request'));
     }
 
-    public function update(Request $request, $id_request)
+    public function update(Request $request, $id)
     {
-        $requestModel = RequestModel::where('ID_Request', $id_request)
-            ->with('makanan')
-            ->firstOrFail();
-
-        // Pastikan donatur memiliki makanan ini
-        if (Auth::user()->Role_Pengguna !== 'Admin' && 
-            $requestModel->makanan->ID_Pengguna !== Auth::id()) {
-            return redirect()->route('donatur.request.index', ['id_makanan' => $requestModel->makanan->ID_Makanan])
-                ->with('error', 'Anda tidak memiliki izin untuk memperbarui status permintaan ini.');
+        $requestData = RequestModel::findOrFail($id);
+        
+        if ($request->has('status_request')) {
+            $requestData->Status_Request = $request->status_request;
         }
-
-        // Validasi input
-        $request->validate([
-            'status_request' => 'required|in:Pending,Approved,Done,Rejected',
-        ]);
-
-        // Update status
-        $requestModel->update([
-            'Status_Request' => $request->status_request,
-        ]);
-
-        // Redirect kembali ke index dengan status filter yang sama
-        return redirect()->route('donatur.request.index', [
-            'id_makanan' => $requestModel->makanan->ID_Makanan,
-            'status' => $request->query('status', 'All')
-        ])->with('success', 'Status permintaan berhasil diperbarui.');
+        
+        if ($request->has('status_pengambilan')) {
+            $requestData->Status_Pengambilan = $request->status_pengambilan;
+            
+            // Jika status pengambilan diubah menjadi Siap_Diambil
+            if ($request->status_pengambilan === 'Siap_Diambil') {
+                // Pastikan jadwal pengambilan sudah diatur
+                if (!$requestData->Waktu_Pengambilan) {
+                    return redirect()->route('donatur.request.show', $requestData->ID_Request)
+                        ->with('error', 'Jadwal pengambilan belum diatur oleh penerima.');
+                }
+            }
+        }
+        
+        $requestData->save();
+        
+        return redirect()->route('donatur.request.index', ['id_makanan' => $requestData->ID_Makanan])
+            ->with('success', 'Status permintaan berhasil diperbarui');
     }
 }
