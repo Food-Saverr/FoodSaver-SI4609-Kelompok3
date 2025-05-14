@@ -5,7 +5,7 @@
 <div class="container-fluid" style="margin-top: 80px;">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="text-3xl font-extrabold title-font gradient-text mb-2 text-center">
-            Reminder Makanan Kedaluwarsa
+            Reminder Makanan Kadaluwarsa
         </h1>
     </div>
 
