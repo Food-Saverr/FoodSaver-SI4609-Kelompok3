@@ -18,6 +18,8 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExpiredReminderController;
+
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -88,6 +90,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('DashboardAdmin.donasi');
     Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
+
+    Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexAdmin'])->name('admin.expired-reminders.index');
+
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
@@ -100,6 +105,8 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donatur/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
     Route::get('/donatur/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
     Route::patch('/donatur/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
+    //Route untuk expired reminder
+    Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexDonatur'])->name('donatur.expired-reminders.index');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
@@ -114,6 +121,8 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::delete('/request/{id_request}/cancel', [RequestController::class, 'cancel'])->name('pengguna.request.cancel');
     // Rute untuk memperbarui status permintaan
     Route::patch('/request/{id_request}', [RequestController::class, 'update'])->name('pengguna.request.update');
+
+
 });
 // --- Routes buat Fitur Donasi keuangan -- Pengguna
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
@@ -149,3 +158,7 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donasi-keuangan/{donation}', [DonaturDonationController::class, 'show'])->name('donatur.donation.show');
 
 });
+
+
+// Route untuk API
+Route::get('/send-expired-reminders', [ExpiredReminderController::class, 'sendExpiredReminders'])->name('ExpiredReminder.send');

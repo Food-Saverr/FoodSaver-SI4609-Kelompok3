@@ -135,12 +135,16 @@
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-users mr-2"></i>Pengguna
                 </a>
+                <a href="{{ route('admin.expired-reminders.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.expired-reminders.index') ? 'active gradient-text' : 'text-gray-700' }}">
+                    <i class="fas fa-exclamation-circle mr-2"></i>Expired Reminders
+                </a>
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
+
             </nav>
             
             <div class="flex items-center space-x-6">

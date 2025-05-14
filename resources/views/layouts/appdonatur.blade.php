@@ -130,6 +130,9 @@
                 <a href="{{ route('donatur.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('donatur.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Food Listing
                 </a>
+                <a href="{{ route('donatur.expired-reminders.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('donatur.expired-reminders.index') ? 'active gradient-text' : 'text-gray-700' }}">
+                    <i class="fas fa-exclamation-circle mr-2"></i>Expired Reminder
+                </a>
                 <a href="#" class="navbar-link disabled">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>

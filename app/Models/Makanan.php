@@ -34,4 +34,17 @@ class Makanan extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
     }
+         // Mengecek apakah makanan hampir kedaluwarsa (misal H-2)
+    public function isAlmostExpired()
+    {
+        $expirationDate = Carbon::parse($this->Tanggal_Kedaluwarsa);
+        return $expirationDate->diffInDays(Carbon::now()) <= 2 && !$this->notified;
+    }
+
+    // Menandai makanan sebagai telah diberi notifikasi
+    public function markAsNotified()
+    {
+        $this->notified = true;
+        $this->save();
+    }
 }
