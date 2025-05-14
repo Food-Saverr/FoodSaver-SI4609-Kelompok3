@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Donation extends Model
 {
     protected $fillable = [
-        'id_user',
+        'user_id',
         'full_name',
         'phone',
         'nominal',
@@ -18,6 +18,6 @@ class Donation extends Model
 
     public function pengguna()
     {
-        return $this->belongsTo(Pengguna::class, 'id_user');
+        return $this->belongsTo(Pengguna::class, 'user_id');
     }
 }

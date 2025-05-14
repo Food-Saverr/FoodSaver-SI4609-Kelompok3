@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+// Ini fiturnya kenapa dibuat tanpa konfirmasi ke anggota lain? Jadi penyebab conflict pembuatan fitur artikel!
 use Illuminate\Database\Seeder;
 use App\Models\Artikel;
 use App\Models\Pengguna;
@@ -18,15 +19,15 @@ class ArtikelSeeder extends Seeder
             Artikel::create([
                 'judul' => 'Tips Mengurangi Limbah Makanan',
                 'konten' => 'Berikut adalah beberapa tips untuk mengurangi limbah makanan di rumah Anda...',
-                'status' => 'dipublikasikan',
-                'user_id' => $admin->id_user
+                // 'status' => 'dipublikasikan',
+                'user_id' => $admin->user_id
             ]);
 
             Artikel::create([
                 'judul' => 'Manfaat Berbagi Makanan',
                 'konten' => 'Berbagi makanan tidak hanya membantu sesama tetapi juga memberikan manfaat bagi lingkungan...',
-                'status' => 'dipublikasikan',
-                'user_id' => $admin->id_user
+                // 'status' => 'dipublikasikan',
+                'user_id' => $admin->user_id
             ]);
 
             // Artikel draft
@@ -34,7 +35,7 @@ class ArtikelSeeder extends Seeder
                 'judul' => 'Cara Menyimpan Makanan dengan Benar',
                 'konten' => 'Draft artikel tentang cara menyimpan makanan...',
                 'status' => 'draft',
-                'user_id' => $admin->id_user
+                'user_id' => $admin->user_id
             ]);
         }
     }

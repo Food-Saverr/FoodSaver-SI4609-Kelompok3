@@ -32,7 +32,7 @@ class RequestController extends Controller
         // Create the request
         RequestModel::create([
             'ID_Makanan' => $id_makanan,
-            'id_user' => Auth::id(),
+            'user_id' => Auth::id(),
             'Pesan' => $request->pesan,
             'Status_Request' => 'Pending',
         ]);
@@ -44,7 +44,7 @@ class RequestController extends Controller
     public function history(Request $request)
     {
         $status = $request->query('status', 'All');
-        $query = RequestModel::where('id_user', Auth::id())->with('makanan');
+        $query = RequestModel::where('user_id', Auth::id())->with('makanan');
 
         if ($status !== 'All' && in_array($status, ['Pending', 'Approve', 'Done', 'Rejected'])) {
             $query->where('Status_Request', $status);
@@ -57,7 +57,7 @@ class RequestController extends Controller
 
     public function show($id_request)
     {
-        $request = RequestModel::where('id_user', Auth::id())
+        $request = RequestModel::where('user_id', Auth::id())
             ->where('ID_Request', $id_request)
             ->with(['makanan', 'makanan.donatur'])
             ->firstOrFail();
@@ -67,7 +67,7 @@ class RequestController extends Controller
 
     public function cancel(Request $request, $id_request)
     {
-        $requestModel = RequestModel::where('id_user', Auth::id())
+        $requestModel = RequestModel::where('user_id', Auth::id())
             ->where('ID_Request', $id_request)
             ->firstOrFail();
 
@@ -95,7 +95,7 @@ class RequestController extends Controller
         // Validate that only Admin or related Donatur can update
         if (
             Auth::user()->Role_Pengguna !== 'Admin' &&
-            !(Auth::user()->Role_Pengguna === 'Donatur' && $requestModel->makanan->id_user === Auth::id())
+            !(Auth::user()->Role_Pengguna === 'Donatur' && $requestModel->makanan->user_id === Auth::id())
         ) {
             return redirect()->route('pengguna.request.show', $id_request)
                 ->with('error', 'Anda tidak memiliki izin untuk memperbarui status permintaan ini.');

@@ -10,11 +10,14 @@ class CreateArtikelsTable extends Migration
     {
         Schema::create('artikels', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');
+            $table->foreignId('user_id')
+                ->constrained('penggunas')
+                ->cascadeOnDelete();
+            $table->string('title');
             $table->string('slug')->unique();
-            $table->string('excerpt', 255)->nullable();
-            $table->longText('konten');
-            $table->string('kategori', 100)->nullable();
+            $table->string('category')->nullable();
+            $table->text('excerpt')->nullable();
+            $table->longText('body');
             $table->string('image_path')->nullable();
             $table->timestamps();
         });

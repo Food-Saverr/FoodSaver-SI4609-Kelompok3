@@ -4,211 +4,119 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Pengguna;
-use App\Models\Makanan;
 use App\Models\Artikel;
-use App\Models\Forum;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
-class AdminDashboardController extends Controller
+class AdminArtikelController extends Controller
 {
+    /**
+     * Tampilkan statistik & daftar artikel
+     */
     public function index()
     {
-        $jumlahDonatur = Pengguna::where('Role_Pengguna', 'Donatur')->count();
-        $jumlahPenerima = Pengguna::where('Role_Pengguna', 'Pengguna')->count();
+        // Total seluruh artikel
+        $totalArtikel = Artikel::count();
 
-        $jumlahMakananTersedia = DB::table('makanans')->sum('Jumlah_Makanan');
-        $jumlahMakananDidonasikan = DB::table('makanans')
-            ->where('Status_Makanan', 'Habis')
-            ->sum('Jumlah_Makanan');
-
-        $totalDonasi = DB::table('makanans')->sum('Jumlah_Makanan');
-        $totalArtikel = Artikel::where('status', 'dipublikasikan')->count();
-
-        // Mendapatkan statistik artikel per minggu untuk chart
+        // Ambil statistik: jumlah artikel per minggu
         $artikelPerMinggu = DB::table('artikels')
             ->select(
                 DB::raw('YEARWEEK(created_at) as yearweek'),
-                DB::raw('DATE(DATE_ADD(created_at, INTERVAL(1-DAYOFWEEK(created_at)) DAY)) as start_of_week'),
+                DB::raw("DATE(DATE_ADD(created_at, INTERVAL(1-DAYOFWEEK(created_at)) DAY)) as start_of_week"),
                 DB::raw('COUNT(*) as total_artikel')
             )
-            ->where('status', 'dipublikasikan')
             ->groupBy('yearweek', 'start_of_week')
             ->orderBy('yearweek')
             ->get();
 
-        // Format data untuk chart
-        $artikelLabels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
-            return date('d M Y', strtotime($date));
+        $labels = $artikelPerMinggu->pluck('start_of_week')->map(function ($d) {
+            return Carbon::parse($d)->format('d M Y');
         });
-        $artikelData = $artikelPerMinggu->pluck('total_artikel');
 
-        $totalForum = Forum::count();
-        $diskusiAktif = Forum::where('is_active', true)->count();
-
-        $forumPerBulan = Forum::statistikPerBulan();
-        $bulanLabels = [];
-        $forumData = [];
-
-        foreach ($forumPerBulan as $data) {
-            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F');
-            $forumData[] = $data->total_forum;
-        }
-
-        return view('dashboard-admin', compact(
-            'jumlahDonatur',
-            'jumlahPenerima',
-            'jumlahMakananTersedia',
-            'jumlahMakananDidonasikan',
-            'totalDonasi',
-            'totalArtikel',
-            'artikelLabels',
-            'artikelData',
-            'totalForum',
-            'diskusiAktif',
-            'bulanLabels',
-            'forumData'
-        ));
-    }
-
-    public function statistikPengguna()
-    {
-        $jumlahDonatur = Pengguna::where('Role_Pengguna', 'Donatur')->count();
-        $jumlahPenerima = Pengguna::where('Role_Pengguna', 'Pengguna')->count();
-
-        $donaturPerBulan = DB::table('penggunas')
-            ->select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
-            ->where('Role_Pengguna', 'Donatur')
-            ->groupBy(DB::raw('MONTH(created_at)'))
-            ->orderBy('bulan')
-            ->get();
-
-        $penerimaPerBulan = DB::table('penggunas')
-            ->select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
-            ->where('Role_Pengguna', 'Pengguna')
-            ->groupBy(DB::raw('MONTH(created_at)'))
-            ->orderBy('bulan')
-            ->get();
-
-        return view('DashboardAdmin.statistik-pengguna', compact(
-            'jumlahDonatur',
-            'jumlahPenerima',
-            'donaturPerBulan',
-            'penerimaPerBulan'
-        ));
-    }
-
-    public function statistikMakanan()
-    {
-        $jumlahMakananTersedia = DB::table('makanans')->sum('Jumlah_Makanan');
-        $jumlahMakananDidonasikan = DB::table('makanans')
-            ->where('Status_Makanan', 'Habis')
-            ->sum('Jumlah_Makanan');
-
-        $makananPerBulan = DB::table('makanans')
-            ->select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('SUM(CASE WHEN Status_Makanan != "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_tersedia'),
-                DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_didonasi')
-            )
-            ->groupBy('bulan')
-            ->orderBy('bulan')
-            ->get();
-
-        return view('DashboardAdmin.makanan', compact(
-            'jumlahMakananTersedia',
-            'jumlahMakananDidonasikan',
-            'makananPerBulan'
-        ));
-    }
-
-    public function showTotalArtikel()
-    {
-        $totalArtikel = Artikel::where('status', 'dipublikasikan')->count();
-        $artikelList = Artikel::where('status', 'dipublikasikan')->latest()->get();
-
-        $artikelPerMinggu = DB::table('artikels')
-            ->select(
-                DB::raw('YEARWEEK(created_at) as yearweek'),
-                DB::raw('DATE(DATE_ADD(created_at, INTERVAL(1-DAYOFWEEK(created_at)) DAY)) as start_of_week'),
-                DB::raw('COUNT(*) as total_artikel')
-            )
-            ->where('status', 'dipublikasikan')
-            ->groupBy('yearweek', 'start_of_week')
-            ->orderBy('yearweek')
-            ->get();
-
-        $labels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
-            return date('d M Y', strtotime($date));
-        });
         $data = $artikelPerMinggu->pluck('total_artikel');
+
+        // Daftar artikel terbaru, paginasi 10 per halaman
+        $artikelList = Artikel::latest()->paginate(10);
 
         return view('DashboardAdmin.artikel', compact(
             'totalArtikel',
-            'artikelList',
             'labels',
-            'data'
+            'data',
+            'artikelList'
         ));
     }
-    public function statistikForum()
+
+    /**
+     * Form tambah artikel baru
+     */
+    public function create()
     {
-        $totalForum = Forum::count();
-        $diskusiAktif = Forum::where('is_active', true)->count();
+        return view('DashboardAdmin.artikel-create');
+    }
 
-        $forumPerBulan = Forum::statistikPerBulan();
+    /**
+     * Simpan artikel baru
+     */
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'judul'   => 'required|string|max:255',
+            'isi'     => 'required|string',
+            'gambar'  => 'nullable|image|max:2048',
+        ]);
 
-        $bulanLabels = [];
-        $forumData = [];
-
-        foreach ($forumPerBulan as $data) {
-            $bulanLabels[] = \Carbon\Carbon::create()->month($data->bulan)->format('F');
-            $forumData[] = $data->total_forum;
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')
+                                  ->store('artikels','public');
         }
 
-        return view('DashboardAdmin.statistikforum', compact(
-            'totalForum',
-            'diskusiAktif',
-            'bulanLabels',
-            'forumData'
-        ));
+        Artikel::create(array_merge($data, [
+            'user_id' => auth()->id(),
+        ]));
+
+        return redirect()->route('admin.artikel.index')
+                         ->with('success', 'Artikel berhasil dibuat.');
     }
 
-    public function statistikDonasi()
+    /**
+     * Form edit artikel
+     */
+    public function edit(Artikel $artikel)
     {
-        $totalDonasi = DB::table('makanans')
-            ->where('Status_Makanan', 'Habis')
-            ->sum('Jumlah_Makanan');
+        return view('DashboardAdmin.artikel-edit', compact('artikel'));
+    }
 
-        $donasiPerBulan = DB::table('makanans')
-            ->select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_donasi')
-            )
-            ->groupBy('bulan')
-            ->orderBy('bulan')
-            ->get();
+    /**
+     * Update artikel
+     */
+    public function update(Request $request, Artikel $artikel)
+    {
+        $data = $request->validate([
+            'judul'   => 'required|string|max:255',
+            'isi'     => 'required|string',
+            'gambar'  => 'nullable|image|max:2048',
+        ]);
 
-        $topDonatur = DB::table('makanans')
-            ->join('penggunas', 'makanans.id_user', '=', 'penggunas.id_user')
-            ->select(
-                'penggunas.Nama_Pengguna',
-                'makanans.Nama_Makanan',
-                DB::raw('SUM(CASE WHEN makanans.Status_Makanan = "Habis" THEN makanans.Jumlah_Makanan ELSE 0 END) as total_donasi')
-            )
-            ->groupBy('penggunas.id_user', 'penggunas.Nama_Pengguna', 'makanans.Nama_Makanan')
-            ->orderBy('total_donasi', 'desc')
-            ->limit(5)
-            ->get();
+        if ($request->hasFile('gambar')) {
+            \Storage::disk('public')->delete($artikel->gambar);
+            $data['gambar'] = $request->file('gambar')
+                                     ->store('artikels','public');
+        }
 
-        return view('DashboardAdmin.donasi', compact(
-            'totalDonasi',
-            'donasiPerBulan',
-            'topDonatur'
-        ));
+        $artikel->update($data);
+
+        return redirect()->route('admin.artikel.index')
+                         ->with('success', 'Artikel berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus artikel
+     */
+    public function destroy(Artikel $artikel)
+    {
+        \Storage::disk('public')->delete($artikel->gambar);
+        $artikel->delete();
+
+        return back()->with('success', 'Artikel berhasil dihapus.');
     }
 }

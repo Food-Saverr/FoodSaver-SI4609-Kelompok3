@@ -16,12 +16,12 @@ class DonaturDashboardController extends Controller
         }
 
         // Stats for dashboard
-        $totalDonasi = Makanan::where('id_user', Auth::id())->count();
-        $limbahDicegah = Makanan::where('id_user', Auth::id())->sum('Jumlah_Makanan') * 0.5; // Assume 0.5 kg per portion
-        $penerimaTerbantu = Makanan::where('id_user', Auth::id())
+        $totalDonasi = Makanan::where('user_id', Auth::id())->count();
+        $limbahDicegah = Makanan::where('user_id', Auth::id())->sum('Jumlah_Makanan') * 0.5; // Assume 0.5 kg per portion
+        $penerimaTerbantu = Makanan::where('user_id', Auth::id())
             ->where('Status_Makanan', 'Tersedia')
             ->count(); // Proxy: count of available listings
-        $recentMakanans = Makanan::where('id_user', Auth::id())
+        $recentMakanans = Makanan::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();

@@ -18,6 +18,8 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ArtikelController as AdminArtikelController;
+use App\Http\Controllers\ArtikelController as PublicArtikelController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -148,4 +150,21 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donasi-keuangan', [DonaturDonationController::class, 'index'])->name('donatur.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonaturDonationController::class, 'show'])->name('donatur.donation.show');
 
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // CRUD Artikel di Admin Dashboard
+    Route::get('/artikel',                    [AdminArtikelController::class, 'index'])->   name('artikel.index');
+    Route::get('/artikel/create',             [AdminArtikelController::class, 'create'])->  name('artikel.create');
+    Route::post('/artikel',                   [AdminArtikelController::class, 'store'])->   name('artikel.store');
+    Route::get('/artikel/{artikel}/edit',     [AdminArtikelController::class, 'edit'])->    name('artikel.edit');
+    Route::put('/artikel/{artikel}',          [AdminArtikelController::class, 'update'])->  name('artikel.update');
+    Route::delete('/artikel/{artikel}',       [AdminArtikelController::class, 'destroy'])-> name('artikel.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Halaman list & detail artikel untuk Pengguna & Donatur
+    // Boleh diakses siapa saja yang sudah login, dan view-nya berbeda di controller
+    Route::get('/artikel',          [PublicArtikelController::class, 'index'])-> name('artikel.index');
+    Route::get('/artikel/{slug}',   [PublicArtikelController::class, 'show'])->  name('artikel.show');
 });

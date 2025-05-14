@@ -14,7 +14,7 @@ class DonaturMakananController extends Controller
     public function index()
     {
         // Update Status_Makanan based on Jumlah_Makanan
-        Makanan::where('id_user', Auth::id())->update([
+        Makanan::where('user_id', Auth::id())->update([
             'Status_Makanan' => DB::raw("
                 CASE
                     WHEN Jumlah_Makanan = 0 THEN 'Habis'
@@ -25,7 +25,7 @@ class DonaturMakananController extends Controller
             ")
         ]);
 
-        $makanans = Makanan::where('id_user', Auth::id())
+        $makanans = Makanan::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -78,7 +78,7 @@ class DonaturMakananController extends Controller
 
         $dataToSave = $validatedData;
         $dataToSave['Foto_Makanan'] = $fotoPath;
-        $dataToSave['id_user'] = Auth::id();
+        $dataToSave['user_id'] = Auth::id();
 
         try {
             Makanan::create($dataToSave);
@@ -96,7 +96,7 @@ class DonaturMakananController extends Controller
 
     public function show(Makanan $makanan)
     {
-        if ($makanan->id_user !== Auth::id()) {
+        if ($makanan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk melihat makanan ini.');
         }
         return view('donatur.food-listing.show', compact('makanan'));
@@ -104,7 +104,7 @@ class DonaturMakananController extends Controller
 
     public function edit(Makanan $makanan)
     {
-        if ($makanan->id_user !== Auth::id()) {
+        if ($makanan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk mengedit makanan ini.');
         }
         return view('donatur.food-listing.edit', compact('makanan'));
@@ -112,7 +112,7 @@ class DonaturMakananController extends Controller
 
     public function update(Request $request, Makanan $makanan)
     {
-        if ($makanan->id_user !== Auth::id()) {
+        if ($makanan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk memperbarui makanan ini.');
         }
 
@@ -171,7 +171,7 @@ class DonaturMakananController extends Controller
 
     public function destroy(Makanan $makanan)
     {
-        if ($makanan->id_user !== Auth::id()) {
+        if ($makanan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk menghapus makanan ini.');
         }
 

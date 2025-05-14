@@ -5,10 +5,14 @@
 @section('content')
 <section class="pt-28 md:pt-32 pb-16 bg-gradient-to-br from-orange-50 to-gray-100 min-h-screen">
     <div class="container mx-auto px-4">
-        <div class="mb-6">
+        <div class="mb-6 flex justify-between items-center">
             <a href="{{ route('admin.dashboard') }}"
                 class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-xl shadow hover:bg-orange-700 transition duration-300">
                 <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
+            </a>
+            <a href="{{ route('admin.artikel.create') }}" 
+                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-xl shadow hover:bg-green-700 transition duration-300">
+                <i class="fas fa-plus mr-2"></i> Tambah Artikel Baru
             </a>
         </div>
 
@@ -41,17 +45,43 @@
                         <tr>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Judul</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Tanggal Publikasi</th>
+                            <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($artikelList as $artikel)
                             <tr>
-                                <td class="px-4 py-2">{{ $artikel->judul }}</td>
-                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($artikel->created_at)->translatedFormat('d M Y') }}</td>
+                                <td class="px-4 py-2">
+                                    <a href="{{ route('admin.artikel.edit', $artikel->id) }}" class="hover:underline text-orange-600">
+                                        {{ \Str::limit($artikel->judul, 50) }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    {{ \Carbon\Carbon::parse($artikel->created_at)->translatedFormat('d M Y') }}
+                                </td>
+                                <td class="px-4 py-2 text-center space-x-2">
+                                    <a href="{{ route('admin.artikel.edit', $artikel->id) }}" 
+                                        class="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition">
+                                        <i class="fas fa-edit mr-1"></i> Edit
+                                    </a>
+
+                                    <form action="{{ route('admin.artikel.destroy', $artikel->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus artikel ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                            class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition">
+                                            <i class="fas fa-trash-alt mr-1"></i> Hapus
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="mt-4">
+                    {{ $artikelList->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -62,8 +92,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var ctxArtikel = document.getElementById('artikelStatChart').getContext('2d');
-    var artikelStatChart = new Chart(ctxArtikel, {
+    var ctx = document.getElementById('artikelStatChart').getContext('2d');
+    new Chart(ctx, {
         type: 'bar',
         data: {
             labels: {!! json_encode($labels) !!},
@@ -80,33 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Artikel Masuk per Minggu',
-                    font: {
-                        size: 14
-                    }
-                }
+                legend: { display: false },
+                title: { display: true, text: 'Artikel Masuk per Minggu', font: { size: 14 } }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        maxRotation: 45,
-                        minRotation: 45
-                    }
-                }
+                y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 45 } }
             }
         }
     });
