@@ -18,6 +18,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ForumPenggunaController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -140,4 +141,29 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donasi-keuangan', [DonaturDonationController::class, 'index'])->name('donatur.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonaturDonationController::class, 'show'])->name('donatur.donation.show');
 
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Forum routes
+    Route::resource('pengguna/forum', ForumPenggunaController::class, [
+        'names' => [
+            'index' => 'pengguna.forum.index',
+            'create' => 'pengguna.forum.create',
+            'store' => 'pengguna.forum.store',
+            'show' => 'pengguna.forum.show',
+            'edit' => 'pengguna.forum.edit',
+            'update' => 'pengguna.forum.update',
+            'destroy' => 'pengguna.forum.destroy',
+        ]
+    ]);
+    
+    // Comment routes
+    Route::post('forum/{post}/comment', [ForumPenggunaController::class, 'addComment'])->name('pengguna.forum.comment');
+    Route::delete('forum/comment/{comment}', [ForumPenggunaController::class, 'deleteComment'])->name('pengguna.forum.comment.delete');
+    
+    // Like routes
+    Route::post('forum/{post}/like', [ForumPenggunaController::class, 'toggleLike'])->name('pengguna.forum.like');
+    
+    // Attachment routes
+    Route::delete('forum/attachment/{attachment}', [ForumPenggunaController::class, 'deleteAttachment'])->name('pengguna.forum.attachment.delete');
 });
