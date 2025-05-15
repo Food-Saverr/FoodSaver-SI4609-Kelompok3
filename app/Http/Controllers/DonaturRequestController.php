@@ -70,5 +70,5 @@ class DonaturRequestController extends Controller
         
         return redirect()->route('donatur.request.index', ['id_makanan' => $requestData->ID_Makanan])
             ->with('success', 'Status permintaan berhasil diperbarui');
-    }
+    } 
 }
