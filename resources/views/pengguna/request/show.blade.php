@@ -69,7 +69,7 @@
                                         <i class="fas fa-clock text-xl"></i>
                                     </div>
                                     <p class="text-xs text-purple-800 font-semibold mb-1">DITAMBAHKAN</p>
-                                    <p class="text-base font-bold text-gray-800">{{ $request->makanan->created_at ? $request->makanan->created_at->format('d/m/Y') : '-' }}</p>
+                                    <p class="text-base font-bold text-gray-800">{{ $request->makanan->created_at ? $request->makanan->created_at->setTimezone('Asia/Jakarta')->format('d/m/Y') : '-' }}</p>
                                 </div>
                             </div>
 
@@ -143,13 +143,13 @@
                                                 @if(is_null($expDate))
                                                     <p class="text-red-600 font-semibold text-lg">Tanggal Tidak Valid</p>
                                                 @elseif($isPast)
-                                                    <p class="text-red-600 font-semibold text-lg">{{ $expDate->format('d M Y') }}</p>
+                                                    <p class="text-red-600 font-semibold text-lg">{{ $expDate->setTimezone('Asia/Jakarta')->format('d M Y') }}</p>
                                                     <p class="text-red-500 text-sm italic">Kedaluwarsa</p>
                                                 @elseif($isToday && $totalHours <= 0)
-                                                    <p class="text-yellow-600 font-semibold text-lg">{{ $expDate->format('d M Y') }}</p>
+                                                    <p class="text-yellow-600 font-semibold text-lg">{{ $expDate->setTimezone('Asia/Jakarta')->format('d M Y') }}</p>
                                                     <p class="text-yellow-500 text-sm italic">Kurang dari 1 jam</p>
                                                 @else
-                                                    <p class="{{ $daysLeft <= 3 ? 'text-yellow-600' : 'text-gray-800' }} font-semibold text-lg">{{ $expDate->format('d M Y') }}</p>
+                                                    <p class="{{ $daysLeft <= 3 ? 'text-yellow-600' : 'text-gray-800' }} font-semibold text-lg">{{ $expDate->setTimezone('Asia/Jakarta')->format('d M Y') }}</p>
                                                     <p class="{{ $daysLeft <= 3 ? 'text-yellow-500' : 'text-gray-500' }} text-sm italic">
                                                         {{ $daysLeft }} hari, {{ $hoursLeft }} jam lagi
                                                     </p>
@@ -203,7 +203,7 @@
                                 <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
                                     <i class="fas fa-clock mr-1"></i>Pending
                                 </span>
-                            @elseif($request->Status_Request == 'Approve')
+                            @elseif($request->Status_Request == 'Approved')
                                 <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                                     <i class="fas fa-spinner mr-1"></i>On-Going
                                 </span>
@@ -219,20 +219,212 @@
                         </p>
                         <p class="text-xs text-gray-600">
                             <strong>Terakhir Diperbarui:</strong> 
-                            {{ $request->updated_at->format('d/m/Y H:i') }}
+                            {{ $request->updated_at->setTimezone('Asia/Jakarta')->format('d/m/Y H:i') }}
                         </p>
                     </div>
 
-                    <!-- Message for Pengguna -->
-                    <div class="text-center bg-gray-50 rounded-xl p-6 shadow-sm">
-                        <div class="mb-4 text-blue-500">
-                            <i class="fas fa-info-circle text-3xl"></i>
+                    @if($request->Status_Request === 'Approved')
+                        <div class="mt-6 p-5 bg-orange-50 rounded-xl shadow-sm">
+                            <h3 class="text-lg font-semibold text-orange-800 mb-4">
+                                <i class="fas fa-calendar-alt mr-2"></i>Pengaturan Pengambilan
+                            </h3>
+
+                            @if($request->Status_Pengambilan === 'Belum_Dijadwalkan')
+                                <form action="{{ route('pengguna.request.update-pickup', $request->ID_Request) }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                                        <div class="mb-4">
+                                            <label for="waktu_pengambilan" class="block text-sm font-medium text-gray-700 mb-2">
+                                                <i class="fas fa-clock mr-2"></i>Pilih Waktu Pengambilan
+                                            </label>
+                                            <input type="datetime-local" name="waktu_pengambilan" id="waktu_pengambilan" 
+                                                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                                min="{{ now()->addHours(1)->format('Y-m-d\TH:i') }}"
+                                                required>
+                                            <p class="mt-1 text-sm text-gray-500">Pilih waktu minimal 1 jam dari sekarang</p>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="alamat_pengambilan" class="block text-sm font-medium text-gray-700 mb-2">
+                                                <i class="fas fa-map-marker-alt mr-2"></i>Alamat Pengambilan
+                                            </label>
+                                            <textarea name="alamat_pengambilan" id="alamat_pengambilan" rows="3"
+                                                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                                required>{{ $request->Alamat_Pengambilan }}</textarea>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="w-full bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center">
+                                        <i class="fas fa-calendar-check mr-2"></i>Jadwalkan Pengambilan
+                                    </button>
+                                </form>
+                            @elseif($request->Status_Pengambilan === 'Dijadwalkan')
+                                <div class="space-y-4">
+                                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                                        <div class="flex items-center mb-3">
+                                            <i class="fas fa-calendar text-blue-500 mr-3"></i>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-700">Waktu Pengambilan:</p>
+                                                <p class="text-lg font-semibold text-gray-900">{{ $request->Waktu_Pengambilan->setTimezone('Asia/Jakarta')->format('d F Y H:i') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt text-blue-500 mr-3"></i>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-700">Alamat Pengambilan:</p>
+                                                <p class="text-lg font-semibold text-gray-900">{{ $request->Alamat_Pengambilan }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex space-x-3">
+                                        <button onclick="openEditPickupModal('{{ $request->ID_Request }}', '{{ $request->Waktu_Pengambilan ? $request->Waktu_Pengambilan->format('Y-m-d\TH:i') : '' }}', '{{ $request->makanan->Lokasi_Makanan }}')" 
+                                            class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
+                                            <i class="fas fa-edit mr-2"></i>Ubah Jadwal
+                                        </button>
+                                        @if($request->Status_Request === 'Pending')
+                                            <form action="{{ route('pengguna.request.cancel', $request->ID_Request) }}" method="POST" class="flex-1" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan permintaan ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center">
+                                                    <i class="fas fa-times-circle mr-2"></i>Batalkan
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            @elseif($request->Status_Pengambilan === 'Siap_Diambil')
+                                <div class="space-y-4">
+                                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                                        <div class="flex items-center mb-3">
+                                            <i class="fas fa-calendar text-green-500 mr-3"></i>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-700">Waktu Pengambilan:</p>
+                                                <p class="text-lg font-semibold text-gray-900">{{ $request->Waktu_Pengambilan->setTimezone('Asia/Jakarta')->format('d F Y H:i') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt text-green-500 mr-3"></i>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-700">Alamat Pengambilan:</p>
+                                                <p class="text-lg font-semibold text-gray-900">{{ $request->Alamat_Pengambilan }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-green-100 text-green-800 rounded-lg p-4 text-center">
+                                        <i class="fas fa-check-circle text-2xl mb-2"></i>
+                                        <p class="font-semibold">Makanan Sudah Siap Diambil</p>
+                                    </div>
+                                </div>
+                            @elseif($request->Status_Pengambilan === 'Dibatalkan')
+                                <div class="space-y-4">
+                                    <div class="bg-red-100 text-red-800 rounded-lg p-4 text-center">
+                                        <i class="fas fa-times-circle text-2xl mb-2"></i>
+                                        <p class="font-semibold">Pengambilan Dibatalkan</p>
+                                    </div>
+                                    @if($request->Catatan_Pembatalan)
+                                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                                            <p class="text-sm font-medium text-gray-700 mb-2">Alasan Pembatalan:</p>
+                                            <p class="text-gray-900">{{ $request->Catatan_Pembatalan }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
-                        <p class="text-gray-600 mb-4">Harap menunggu, proses sedang dilakukan.</p>
+                    @endif
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-3">
+                        @if($request->Status_Request === 'Pending')
+                            <form action="{{ route('pengguna.request.cancel', $request->ID_Request) }}" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
+                                    Batalkan Permintaan
+                                </button>
+                            </form>
+                        @endif
+
+                        @if(Auth::user()->Role_Pengguna === 'Admin' || 
+                            (Auth::user()->Role_Pengguna === 'Donatur' && $request->makanan->ID_Pengguna === Auth::id()))
+                            <form action="{{ route('pengguna.request.update', $request->ID_Request) }}" method="POST" class="w-full">
+                                @csrf
+                                <select name="status_request" 
+                                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 mb-3">
+                                    <option value="Pending" {{ $request->Status_Request === 'Pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="Approved" {{ $request->Status_Request === 'Approved' ? 'selected' : '' }}>Approved</option>
+                                    <option value="Done" {{ $request->Status_Request === 'Done' ? 'selected' : '' }}>Done</option>
+                                    <option value="Rejected" {{ $request->Status_Request === 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                </select>
+                                <button type="submit" class="w-full bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors">
+                                    Update Status
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Pengambilan -->
+<div id="editPickupModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md relative">
+        <button onclick="closeEditPickupModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times"></i>
+        </button>
+        <h3 class="text-xl font-bold mb-4 text-orange-600">Ubah Jadwal Pengambilan</h3>
+        <form id="editPickupForm" action="" method="POST" class="space-y-4">
+            @csrf
+            <div class="mb-4">
+                <label for="edit_waktu_pengambilan" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-clock mr-2"></i>Pilih Waktu Pengambilan
+                </label>
+                <input type="datetime-local" name="waktu_pengambilan" id="edit_waktu_pengambilan" 
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    min="{{ now()->addHours(1)->format('Y-m-d\TH:i') }}"
+                    required>
+                <p class="mt-1 text-sm text-gray-500">Pilih waktu minimal 1 jam dari sekarang</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Lokasi Pengambilan
+                </label>
+                <div class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50">
+                    <p id="modal_lokasi_pengambilan" class="text-gray-700"></p>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center">
+                <i class="fas fa-calendar-check mr-2"></i>Simpan Perubahan
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditPickupModal(id, waktu, lokasi) {
+        const modal = document.getElementById('editPickupModal');
+        const form = document.getElementById('editPickupForm');
+        const waktuInput = document.getElementById('edit_waktu_pengambilan');
+        const lokasiElement = document.getElementById('modal_lokasi_pengambilan');
+        
+        // Set form action
+        form.action = `/pengguna/request/${id}/pickup/edit`;
+        
+        // Set input values
+        waktuInput.value = waktu || '';
+        lokasiElement.textContent = lokasi || 'Lokasi tidak tersedia';
+        
+        modal.classList.remove('hidden');
+    }
+
+    function closeEditPickupModal() {
+        document.getElementById('editPickupModal').classList.add('hidden');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('editPickupModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditPickupModal();
+        }
+    });
+</script>
 @endsection
