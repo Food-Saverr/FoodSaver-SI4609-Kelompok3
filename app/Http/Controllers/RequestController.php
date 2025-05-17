@@ -6,6 +6,7 @@ use App\Models\Request as RequestModel;
 use App\Models\Makanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\NotificationService;
 
 class RequestController extends Controller
 {
@@ -28,12 +29,23 @@ class RequestController extends Controller
         }
 
         // Create the request
-        RequestModel::create([
+        $newRequest = RequestModel::create([
             'ID_Makanan' => $id_makanan,
             'ID_Pengguna' => Auth::id(),
             'Pesan' => $request->pesan,
             'Status_Request' => 'Pending',
         ]);
+
+        // Kirim notifikasi ke donatur makanan
+        $donatur = $makanan->donatur;
+        if ($donatur) {
+            $notificationService = app(\App\Services\NotificationService::class);
+            $notificationService->notifyNewRequest($donatur, [
+                'request_id' => $newRequest->ID_Request,
+                'makanan_id' => $id_makanan,
+                'makanan_nama' => $makanan->Nama_Makanan
+            ]);
+        }
 
         return redirect()->route('pengguna.request.index')
             ->with('success', 'Permintaan makanan berhasil dikirim.');

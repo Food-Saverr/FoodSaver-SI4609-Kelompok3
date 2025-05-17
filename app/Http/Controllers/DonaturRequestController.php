@@ -68,6 +68,12 @@ class DonaturRequestController extends Controller
         
         $requestData->save();
         
+        // Kirim notifikasi ke pengguna jika status request berubah
+        if ($request->has('status_request')) {
+            $notificationService = app(\App\Services\NotificationService::class);
+            $notificationService->notifyRequestStatus($requestData->pengguna, $request->status_request, ['request_id' => $requestData->ID_Request]);
+        }
+        
         return redirect()->route('donatur.request.index', ['id_makanan' => $requestData->ID_Makanan])
             ->with('success', 'Status permintaan berhasil diperbarui');
     } 

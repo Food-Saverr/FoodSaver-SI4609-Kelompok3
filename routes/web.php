@@ -18,6 +18,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -80,6 +81,17 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('DashboardAdmin.donasi');
     Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
+
+    // Notification Routes untuk Admin
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('admin.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('admin.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('admin.notifications.unread-count');
+    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('admin.notifications.dropdown');
+    Route::get('/notifications/send', [NotificationController::class, 'showSendForm'])->name('admin.notifications.send-form');
+    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('admin.notifications.send');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
@@ -93,6 +105,15 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
     Route::patch('/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
     Route::post('/request/{id_request}', [DonaturRequestController::class, 'update']);
+
+    // Notification Routes untuk Donatur
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('donatur.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('donatur.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('donatur.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('donatur.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('donatur.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('donatur.notifications.unread-count');
+    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('donatur.notifications.dropdown');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
@@ -111,6 +132,14 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::post('/request/{id_request}/pickup', [RequestController::class, 'updatePickup'])->name('pengguna.request.update-pickup');
     Route::post('/request/{id_request}/pickup/edit', [RequestController::class, 'editPickup'])->name('pengguna.request.edit-pickup');
     Route::post('/request/{id_request}/pickup/cancel', [RequestController::class, 'cancelPickup'])->name('pengguna.request.cancel-pickup');
+
+    // Notification Routes untuk Pengguna
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('pengguna.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('pengguna.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('pengguna.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('pengguna.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('pengguna.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('pengguna.notifications.unread-count');
 });
 // --- Routes buat Fitur Donasi keuangan -- Pengguna
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
