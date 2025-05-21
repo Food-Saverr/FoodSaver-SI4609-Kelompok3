@@ -809,53 +809,66 @@
     }
     
     document.addEventListener('DOMContentLoaded', function() {
-        // Like functionality with AJAX
-        const likeForm = document.querySelector('.like-form');
-        if (likeForm) {
-            likeForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+    // Like functionality with AJAX
+    const likeForm = document.querySelector('.like-form');
+    if (likeForm) {
+        likeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Ambil CSRF token dari meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            // Gunakan FormData untuk mendapatkan data form
+            const formData = new FormData(this);
+            
+            // Kirim request menggunakan fetch API dengan header yang benar
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => {
+                if (response.status === 401 || response.status === 419) {
+                    window.location.href = '/login';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
                 
-                fetch(this.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify(Object.fromEntries(new FormData(this)))
-                })
-                .then(response => {
-                    if (response.status === 401 || response.status === 419) {
-                        window.location.href = '/login';
-                        return;
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (!data) return;
-                    const likeBtn = document.querySelector('.like-form button');
-                    const likeIcon = likeBtn.querySelector('svg');
-                    document.querySelectorAll('.like-count').forEach(function(el) {
-                        el.textContent = data.likeCount;
-                    });
-
-                    // Tambahkan animasi pada icon
-                    likeIcon.classList.remove('like-animate'); // reset jika ada
-                    void likeIcon.offsetWidth; // force reflow
-                    likeIcon.classList.add('like-animate');
-
-                    if (data.isLiked) {
-                        likeBtn.classList.add('text-red-500', 'font-medium');
-                        likeIcon.setAttribute('fill', 'currentColor');
-                        likeIcon.setAttribute('stroke-width', '0');
-                    } else {
-                        likeBtn.classList.remove('text-red-500', 'font-medium');
-                        likeIcon.setAttribute('fill', 'none');
-                        likeIcon.setAttribute('stroke-width', '1.5');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                // Update semua elemen dengan class 'like-count'
+                document.querySelectorAll('.like-count').forEach(function(el) {
+                    el.textContent = data.likeCount;
+                });
+                
+                const likeBtn = likeForm.querySelector('button');
+                const likeIcon = likeBtn.querySelector('svg');
+                
+                // Tambahkan animasi pada icon
+                likeIcon.classList.remove('like-animate'); // reset jika ada
+                void likeIcon.offsetWidth; // force reflow
+                likeIcon.classList.add('like-animate');
+                
+                if (data.isLiked) {
+                    likeBtn.classList.add('text-red-500', 'font-medium');
+                    likeIcon.setAttribute('fill', 'currentColor');
+                    likeIcon.setAttribute('stroke-width', '0');
+                } else {
+                    likeBtn.classList.remove('text-red-500', 'font-medium');
+                    likeIcon.setAttribute('fill', 'none');
+                    likeIcon.setAttribute('stroke-width', '1.5');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-        }
+        });
+    }
         
         // Character counter for comment
         const commentBox = document.getElementById('comment-box');
