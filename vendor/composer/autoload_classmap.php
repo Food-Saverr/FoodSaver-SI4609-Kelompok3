@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\SendExpiredReminders' => $baseDir . '/app/Console/Commands/SendExpiredReminders.php',
     'App\\Http\\Controllers\\AdminDashboardController' => $baseDir . '/app/Http/Controllers/AdminDashboardController.php',
     'App\\Http\\Controllers\\AdminDonationController' => $baseDir . '/app/Http/Controllers/AdminDonationController.php',
     'App\\Http\\Controllers\\AdminMakananController' => $baseDir . '/app/Http/Controllers/AdminMakananController.php',
@@ -19,6 +20,7 @@ return array(
     'App\\Http\\Controllers\\DonaturMakananController' => $baseDir . '/app/Http/Controllers/DonaturMakananController.php',
     'App\\Http\\Controllers\\DonaturPaymentController' => $baseDir . '/app/Http/Controllers/DonaturPaymentController.php',
     'App\\Http\\Controllers\\DonaturRequestController' => $baseDir . '/app/Http/Controllers/DonaturRequestController.php',
+    'App\\Http\\Controllers\\ExpiredReminderController' => $baseDir . '/app/Http/Controllers/ExpiredReminderController.php',
     'App\\Http\\Controllers\\FoodListingController' => $baseDir . '/app/Http/Controllers/FoodListingController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',

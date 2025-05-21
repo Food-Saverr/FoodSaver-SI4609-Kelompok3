@@ -557,6 +557,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\SendExpiredReminders' => __DIR__ . '/../..' . '/app/Console/Commands/SendExpiredReminders.php',
         'App\\Http\\Controllers\\AdminDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminDashboardController.php',
         'App\\Http\\Controllers\\AdminDonationController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminDonationController.php',
         'App\\Http\\Controllers\\AdminMakananController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminMakananController.php',
@@ -570,6 +571,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Controllers\\DonaturMakananController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturMakananController.php',
         'App\\Http\\Controllers\\DonaturPaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturPaymentController.php',
         'App\\Http\\Controllers\\DonaturRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturRequestController.php',
+        'App\\Http\\Controllers\\ExpiredReminderController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExpiredReminderController.php',
         'App\\Http\\Controllers\\FoodListingController' => __DIR__ . '/../..' . '/app/Http/Controllers/FoodListingController.php',
         'App\\Http\\Controllers\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',

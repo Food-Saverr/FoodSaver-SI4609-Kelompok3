@@ -92,6 +92,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
 
     Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexAdmin'])->name('admin.expired-reminders.index');
+    Route::get('/expired-reminders/create', [ExpiredReminderController::class, 'create'])->name('admin.expired-reminders.create');
+    Route::post('/expired-reminders', [ExpiredReminderController::class, 'store'])->name('admin.expired-reminders.store');
+    Route::get('/expired-reminders/get-makanan/{donaturId}', [ExpiredReminderController::class, 'getMakanan'])->name('admin.expired-reminders.getMakanan');
+    Route::get('/expired-reminders/{id}', [ExpiredReminderController::class, 'show'])->name('admin.expired-reminders.show');
+    Route::post('/expired-reminders/{id}/notify', [ExpiredReminderController::class, 'notify'])->name('admin.expired-reminders.notify');
 
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
@@ -107,6 +112,7 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::patch('/donatur/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
     //Route untuk expired reminder
     Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexDonatur'])->name('donatur.expired-reminders.index');
+    Route::put('/expired-reminders/{id}/update-status', [ExpiredReminderController::class, 'updateStatus'])->name('donatur.expired-reminders.update-status');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');

@@ -19,10 +19,10 @@ class Forum extends Model
     public static function statistikPerBulan()
     {
         return self::select(
-                \DB::raw('MONTH(created_at) as bulan'),
+                \DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
                 \DB::raw('COUNT(*) as total_forum')
             )
-            ->groupBy(\DB::raw('MONTH(created_at)'))
+            ->groupBy(\DB::raw('cast(strftime("%m", created_at) as integer)'))
             ->orderBy('bulan')
             ->get();
     }

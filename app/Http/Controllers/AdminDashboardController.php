@@ -27,8 +27,8 @@ class AdminDashboardController extends Controller
         // Mendapatkan statistik artikel per minggu untuk chart
         $artikelPerMinggu = DB::table('artikels')
             ->select(
-                DB::raw('YEARWEEK(created_at) as yearweek'),
-                DB::raw('DATE(DATE_ADD(created_at, INTERVAL(1-DAYOFWEEK(created_at)) DAY)) as start_of_week'),
+                DB::raw('strftime("%Y%W", created_at) as yearweek'),
+                DB::raw('date(created_at, "weekday 0", "-6 days") as start_of_week'),
                 DB::raw('COUNT(*) as total_artikel')
             )
             ->where('status', 'dipublikasikan')
@@ -77,21 +77,21 @@ class AdminDashboardController extends Controller
 
         $donaturPerBulan = DB::table('penggunas')
             ->select(
-                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('Role_Pengguna', 'Donatur')
-            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
             ->orderBy('bulan')
             ->get();
 
         $penerimaPerBulan = DB::table('penggunas')
             ->select(
-                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('Role_Pengguna', 'Pengguna')
-            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
             ->orderBy('bulan')
             ->get();
 
@@ -112,11 +112,11 @@ class AdminDashboardController extends Controller
 
         $makananPerBulan = DB::table('makanans')
             ->select(
-                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
                 DB::raw('SUM(CASE WHEN Status_Makanan != "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_tersedia'),
                 DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_didonasi')
             )
-            ->groupBy('bulan')
+            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
             ->orderBy('bulan')
             ->get();
 
@@ -134,8 +134,8 @@ class AdminDashboardController extends Controller
 
         $artikelPerMinggu = DB::table('artikels')
             ->select(
-                DB::raw('YEARWEEK(created_at) as yearweek'),
-                DB::raw('DATE(DATE_ADD(created_at, INTERVAL(1-DAYOFWEEK(created_at)) DAY)) as start_of_week'),
+                DB::raw('strftime("%Y%W", created_at) as yearweek'),
+                DB::raw('date(created_at, "weekday 0", "-6 days") as start_of_week'),
                 DB::raw('COUNT(*) as total_artikel')
             )
             ->where('status', 'dipublikasikan')
@@ -186,10 +186,10 @@ class AdminDashboardController extends Controller
 
         $donasiPerBulan = DB::table('makanans')
             ->select(
-                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
                 DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_donasi')
             )
-            ->groupBy('bulan')
+            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
             ->orderBy('bulan')
             ->get();
 

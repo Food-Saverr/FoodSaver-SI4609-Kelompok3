@@ -126,4 +126,109 @@ public function notify($id)
             ->with('error', 'Gagal mengirim notifikasi: ' . $e->getMessage());
     }
 }
+
+/**
+ * Update status makanan oleh donatur setelah menerima pemberitahuan
+ */
+public function updateStatus(Request $request, $id)
+{
+    $makanan = Makanan::where('id_user', Auth::id())
+        ->where('ID_Makanan', $id)
+        ->firstOrFail();
+    
+    // Validasi input
+    $request->validate([
+        'Tanggal_Kedaluwarsa' => 'required|date',
+        'Status_Makanan' => 'required|in:Tersedia,Habis,Didonasikan',
+    ]);
+    
+    // Update data makanan
+    $makanan->Tanggal_Kedaluwarsa = $request->Tanggal_Kedaluwarsa;
+    $makanan->Status_Makanan = $request->Status_Makanan;
+    $makanan->save();
+    
+    return redirect()->route('donatur.expired-reminders.index')
+        ->with('success', 'Status makanan berhasil diperbarui');
+}
+
+/**
+ * Tampilkan form untuk membuat pemberitahuan baru oleh admin
+ */
+public function create()
+{
+    // Ambil semua pengguna dengan role Donatur
+    $donaturs = \App\Models\Pengguna::where('Role_Pengguna', 'Donatur')->get();
+    
+    return view('admin.ExpiredReminder.create', compact('donaturs'));
+}
+
+/**
+ * Simpan pemberitahuan baru dan kirim ke donatur
+ */
+public function store(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'donatur_id' => 'required|exists:penggunas,id_user',
+        'makanan_id' => 'required|exists:makanans,ID_Makanan',
+        'judul' => 'required|string|max:255',
+        'pesan' => 'required|string',
+    ]);
+    
+    // Ambil data makanan
+    $makanan = Makanan::findOrFail($request->makanan_id);
+    
+    // Periksa apakah makanan ini milik donatur yang dipilih
+    if ($makanan->id_user != $request->donatur_id) {
+        return redirect()->back()
+            ->with('error', 'Makanan ini bukan milik donatur yang dipilih.')
+            ->withInput();
+    }
+    
+    try {
+        // Kirim notifikasi kustom
+        $this->sendCustomNotification($makanan, $request->judul, $request->pesan);
+        
+        // Tandai makanan sebagai sudah diberi notifikasi
+        $makanan->markAsNotified();
+        
+        return redirect()->route('admin.expired-reminders.index')
+            ->with('success', 'Pemberitahuan berhasil dikirim ke donatur');
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Gagal mengirim pemberitahuan: ' . $e->getMessage())
+            ->withInput();
+    }
+}
+
+/**
+ * Ambil daftar makanan milik donatur tertentu
+ */
+public function getMakanan($donaturId)
+{
+    $makanan = Makanan::where('id_user', $donaturId)
+        ->where('Status_Makanan', 'Tersedia') // Hanya tampilkan makanan yang masih tersedia
+        ->select('ID_Makanan', 'Nama_Makanan', 'Tanggal_Kedaluwarsa')
+        ->get();
+    
+    return response()->json($makanan);
+}
+
+/**
+ * Kirim notifikasi kustom ke donatur
+ */
+private function sendCustomNotification(Makanan $makanan, $judul, $pesan)
+{
+    $donatur = $makanan->donatur;
+    if (!$donatur) {
+        Log::warning("Tidak dapat menemukan data donatur untuk makanan ID: {$makanan->ID_Makanan}");
+        throw new \Exception('Data donatur tidak ditemukan');
+    }
+    
+    // Di sini Anda bisa menambahkan pengiriman email atau notifikasi real-time
+    // Contoh: Mail::to($donatur->email)->send(new CustomNotification($makanan, $judul, $pesan));
+    
+    // Untuk saat ini, kita hanya log pesan
+    Log::info("Notifikasi kustom untuk donatur ID {$donatur->id_user}: $judul - $pesan");
+}
 }

@@ -1,4 +1,4 @@
-{{-- resources/views/admin/ExpiredReminder/index.blade.php --}}
+{{-- resources/views/admin/ExpiredReminder/index-tailwind.blade.php --}}
 @extends('layouts.appadmin')
 
 @section('title', 'Pengingat Makanan Kedaluwarsa - FoodSaver')
@@ -111,21 +111,21 @@
     @endif
 
     <!-- Main Content Card -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
         <!-- Card Header -->
-        <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
             <div class="flex items-center">
                 <div class="bg-blue-500 text-white rounded-full p-2 mr-3 flex items-center justify-center">
                     <i class="fas fa-list-alt"></i>
                 </div>
-                <h2 class="text-lg font-bold text-gray-700">Daftar Makanan Yang Akan Kedaluwarsa</h2>
+                <h2 class="text-xl font-bold text-gray-700">Daftar Makanan Yang Memerlukan Perhatian</h2>
             </div>
             
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md flex items-center text-sm">
+                <button @click="open = !open" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg flex items-center text-sm">
                     <i class="fas fa-cog mr-2"></i> Aksi
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10" style="display: none;">
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10" style="display: none;">
                     <div class="py-2 px-3 text-xs text-gray-600 border-b border-gray-100">Opsi Pemberitahuan:</div>
                     <a href="{{ route('ExpiredReminder.send') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white">
                         <i class="fas fa-bell mr-2 text-blue-500"></i> Kirim Semua Pengingat
@@ -141,33 +141,33 @@
         <!-- Card Body -->
         <div class="p-6">
             <!-- Filter Row -->
-            <div class="flex flex-col md:flex-row justify-between mb-4">
-                <div class="mb-3 md:mb-0">
+            <div class="flex flex-col md:flex-row justify-between mb-6">
+                <div class="mb-4 md:mb-0">
                     <div class="flex flex-wrap">
-                        <button type="button" class="bg-blue-500 text-white rounded-md px-3 py-1 mr-2 mb-2 filter-btn text-sm" data-filter="all">
+                        <button type="button" class="bg-blue-500 text-white rounded-full px-4 py-2 mr-2 mb-2 filter-btn" data-filter="all">
                             <i class="fas fa-th-list mr-1"></i> Semua
                         </button>
-                        <button type="button" class="bg-white hover:bg-red-500 hover:text-white text-red-500 border border-red-500 rounded-md px-3 py-1 mr-2 mb-2 filter-btn text-sm" data-filter="expired">
+                        <button type="button" class="bg-white hover:bg-red-500 hover:text-white text-red-500 border border-red-500 rounded-full px-4 py-2 mr-2 mb-2 filter-btn" data-filter="expired">
                             <i class="fas fa-exclamation-circle mr-1"></i> Kedaluwarsa
                         </button>
-                        <button type="button" class="bg-white hover:bg-yellow-500 hover:text-white text-yellow-500 border border-yellow-500 rounded-md px-3 py-1 mr-2 mb-2 filter-btn text-sm" data-filter="critical">
+                        <button type="button" class="bg-white hover:bg-yellow-500 hover:text-white text-yellow-500 border border-yellow-500 rounded-full px-4 py-2 mr-2 mb-2 filter-btn" data-filter="critical">
                             <i class="fas fa-exclamation-triangle mr-1"></i> Kritis
                         </button>
-                        <button type="button" class="bg-white hover:bg-blue-400 hover:text-white text-blue-400 border border-blue-400 rounded-md px-3 py-1 mr-2 mb-2 filter-btn text-sm" data-filter="warning">
+                        <button type="button" class="bg-white hover:bg-blue-400 hover:text-white text-blue-400 border border-blue-400 rounded-full px-4 py-2 mr-2 mb-2 filter-btn" data-filter="warning">
                             <i class="fas fa-clock mr-1"></i> Peringatan
                         </button>
-                        <button type="button" class="bg-white hover:bg-green-500 hover:text-white text-green-500 border border-green-500 rounded-md px-3 py-1 mb-2 filter-btn text-sm" data-filter="notified">
+                        <button type="button" class="bg-white hover:bg-green-500 hover:text-white text-green-500 border border-green-500 rounded-full px-4 py-2 mb-2 filter-btn" data-filter="notified">
                             <i class="fas fa-bell mr-1"></i> Telah Diberitahu
                         </button>
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
-                        <div class="bg-blue-500 text-white px-2 py-1">
+                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
+                        <div class="bg-blue-500 text-white px-3 py-2">
                             <i class="fas fa-search"></i>
                         </div>
-                        <input type="text" id="searchInput" placeholder="Cari makanan..." class="block w-full px-3 py-1 focus:outline-none text-sm">
-                        <div id="clearSearch" class="px-2 py-1 text-gray-500 hover:text-gray-700 cursor-pointer">
+                        <input type="text" id="searchInput" placeholder="Cari makanan..." class="block w-full px-4 py-2 focus:outline-none">
+                        <div id="clearSearch" class="px-3 py-2 text-gray-500 hover:text-gray-700 cursor-pointer">
                             <i class="fas fa-times"></i>
                         </div>
                     </div>
@@ -175,36 +175,36 @@
             </div>
             
             <!-- Table -->
-            <div class="overflow-x-auto rounded-md shadow-sm">
+            <div class="overflow-x-auto rounded-lg shadow-sm">
                 <table class="min-w-full divide-y divide-gray-200" id="dataTable">
-                    <thead class="bg-gray-100">
+                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                         <tr>
-                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class="fas fa-utensils text-blue-500 mr-2"></i> Nama Makanan
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class="fas fa-user text-green-500 mr-2"></i> Donatur
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Tanggal Kedaluwarsa
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class="fas fa-info-circle text-yellow-500 mr-2"></i> Status
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <i class="fas fa-bell text-red-500 mr-2"></i> Notifikasi
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 <div class="flex items-center justify-center">
                                     <i class="fas fa-cogs text-gray-500 mr-2"></i> Aksi
                                 </div>
@@ -214,11 +214,8 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($makanans as $makanan)
                             @php
-                                // Menghitung sisa hari dengan lebih akurat (sesuai tanggal kalender)
-                                $today = \Carbon\Carbon::now()->startOfDay();
-                                $expiryDate = \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa)->startOfDay();
-                                $isExpired = $today->gt($expiryDate);
-                                $daysLeft = $isExpired ? 0 : $today->diffInDays($expiryDate);
+                                $daysLeft = \Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa)->diffInDays(now());
+                                $isExpired = now()->gt(\Carbon\Carbon::parse($makanan->Tanggal_Kedaluwarsa));
                                 $rowClass = $isExpired ? 'bg-red-50' : ($daysLeft <= 1 ? 'bg-yellow-50' : ($daysLeft <= 3 ? 'bg-blue-50' : ''));
                             @endphp
                             <tr class="{{ $rowClass }} hover:bg-gray-50 transition duration-150 data-row" 
@@ -245,24 +242,20 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($isExpired)
-                                        <span class="px-3 py-1 inline-flex items-center bg-red-100 text-red-800 rounded-md text-sm font-medium">
-                                            <i class="fas fa-exclamation-circle mr-2"></i> Sudah Kedaluwarsa
+                                        <span class="px-3 py-1 inline-flex items-center bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                                            <i class="fas fa-exclamation-circle mr-1"></i> Kedaluwarsa
                                         </span>
-                                    @elseif($daysLeft == 0)
-                                        <span class="px-3 py-1 inline-flex items-center bg-red-100 text-red-800 rounded-md text-sm font-medium">
-                                            <i class="fas fa-exclamation-circle mr-2"></i> Hari Ini
-                                        </span>
-                                    @elseif($daysLeft == 1)
-                                        <span class="px-3 py-1 inline-flex items-center bg-yellow-100 text-yellow-800 rounded-md text-sm font-medium">
-                                            <i class="fas fa-exclamation-triangle mr-2"></i> Besok
+                                    @elseif($daysLeft <= 1)
+                                        <span class="px-3 py-1 inline-flex items-center bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i> {{ $daysLeft }} Hari Lagi
                                         </span>
                                     @elseif($daysLeft <= 3)
-                                        <span class="px-3 py-1 inline-flex items-center bg-blue-100 text-blue-800 rounded-md text-sm font-medium">
-                                            <i class="fas fa-clock mr-2"></i> {{ $daysLeft }} Hari Lagi
+                                        <span class="px-3 py-1 inline-flex items-center bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                            <i class="fas fa-clock mr-1"></i> {{ $daysLeft }} Hari Lagi
                                         </span>
                                     @else
-                                        <span class="px-3 py-1 inline-flex items-center bg-gray-100 text-gray-800 rounded-md text-sm font-medium">
-                                            <i class="fas fa-check-circle mr-2"></i> {{ $daysLeft }} Hari Lagi
+                                        <span class="px-3 py-1 inline-flex items-center bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
+                                            <i class="fas fa-clock mr-1"></i> {{ $daysLeft }} Hari Lagi
                                         </span>
                                     @endif
                                 </td>
