@@ -40,4 +40,9 @@ class Pengguna extends Authenticatable
 {
     return $this->Password_Pengguna;
 }
+
+public function forumPosts()
+{
+    return $this->hasMany(ForumPost::class, 'ID_Pengguna', 'ID_Pengguna');
+}
 }

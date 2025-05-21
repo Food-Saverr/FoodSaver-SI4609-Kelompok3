@@ -34,7 +34,7 @@
 
         <!-- Hero Section: About FoodSaver -->
         <div class="relative bg-white/80 backdrop-blur-xl rounded-2xl p-10 mb-16 custom-shadow animate-fade-up overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-orange-100/30 to-orange-200/30 opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-orange-100/30 to-orange-200/30 opacity-50 pointer-events-none"></div>
             <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-orange-500 to-orange-600"></div>
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center space-x-6">

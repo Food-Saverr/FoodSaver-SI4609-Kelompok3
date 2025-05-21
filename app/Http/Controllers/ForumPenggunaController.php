@@ -9,8 +9,6 @@ use App\Models\ForumAttachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ForumPenggunaController extends Controller
@@ -18,13 +16,46 @@ class ForumPenggunaController extends Controller
     /**
      * Display a listing of the posts.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = ForumPost::with(['pengguna', 'attachments'])
-            ->withCount(['comments', 'likes'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-            
+        $query = ForumPost::with(['pengguna', 'attachments'])
+            ->withCount(['comments', 'likes']);
+
+        // Handle search
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('judul', 'like', "%{$searchTerm}%")
+                  ->orWhere('konten', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        // Handle sorting
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'popular':
+                    $query->withCount('likes')->orderBy('likes_count', 'desc');
+                    break;
+                case 'most_comments':
+                    $query->withCount('comments')->orderBy('comments_count', 'desc');
+                    break;
+                case 'latest':
+                default:
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $posts = $query->paginate(10);
+
+        // Preserve query parameters in pagination links
+        if ($request->has(['search', 'sort'])) {
+            $posts->appends($request->only(['search', 'sort']));
+        }
+
         return view('pengguna.forum.index', compact('posts'));
     }
 
@@ -58,7 +89,7 @@ class ForumPenggunaController extends Controller
             foreach ($request->file('attachments') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('forum_attachments', $filename, 'public');
-                
+
                 ForumAttachment::create([
                     'ID_ForumPost' => $post->ID_ForumPost,
                     'nama_file' => $file->getClientOriginalName(),
@@ -79,16 +110,19 @@ class ForumPenggunaController extends Controller
     public function show($id)
     {
         $post = ForumPost::with([
-            'pengguna', 
-            'attachments', 
+            'pengguna',
+            'attachments',
             'comments' => function($query) {
                 $query->orderBy('created_at', 'asc');
             },
             'comments.pengguna'
         ])->findOrFail($id);
-        
-        $isLiked = $post->isLikedByUser(Auth::id());
-        
+
+        $isLiked = false;
+        if (Auth::check()) {
+            $isLiked = $post->isLikedByUser(Auth::id());
+        }
+
         return view('pengguna.forum.show', compact('post', 'isLiked'));
     }
 
@@ -98,13 +132,13 @@ class ForumPenggunaController extends Controller
     public function edit($id)
     {
         $post = ForumPost::with('attachments')->findOrFail($id);
-        
+
         // Check if user is authorized to edit this post
         if ($post->ID_Pengguna != Auth::id()) {
             Alert::error('Error', 'Anda tidak berhak mengedit postingan ini!');
             return redirect()->back();
         }
-        
+
         return view('pengguna.forum.edit', compact('post'));
     }
 
@@ -114,13 +148,13 @@ class ForumPenggunaController extends Controller
     public function update(Request $request, $id)
     {
         $post = ForumPost::findOrFail($id);
-        
+
         // Check if user is authorized to update this post
         if ($post->ID_Pengguna != Auth::id()) {
             Alert::error('Error', 'Anda tidak berhak mengupdate postingan ini!');
             return redirect()->back();
         }
-        
+
         $request->validate([
             'judul' => 'required|max:255',
             'konten' => 'required',
@@ -137,7 +171,7 @@ class ForumPenggunaController extends Controller
             foreach ($request->file('attachments') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('forum_attachments', $filename, 'public');
-                
+
                 ForumAttachment::create([
                     'ID_ForumPost' => $post->ID_ForumPost,
                     'nama_file' => $file->getClientOriginalName(),
@@ -147,13 +181,13 @@ class ForumPenggunaController extends Controller
                 ]);
             }
         }
-        
+
         // Handle deleted attachments
         if ($request->has('deleted_attachments')) {
             $attachmentsToDelete = ForumAttachment::whereIn('ID_Attachment', $request->deleted_attachments)
                 ->where('ID_ForumPost', $post->ID_ForumPost)
                 ->get();
-                
+
             foreach ($attachmentsToDelete as $attachment) {
                 Storage::disk('public')->delete($attachment->path);
                 $attachment->delete();
@@ -170,24 +204,24 @@ class ForumPenggunaController extends Controller
     public function destroy($id)
     {
         $post = ForumPost::findOrFail($id);
-        
+
         // Check if user is authorized to delete this post
         if ($post->ID_Pengguna != Auth::id()) {
             Alert::error('Error', 'Anda tidak berhak menghapus postingan ini!');
             return redirect()->back();
         }
-        
+
         // Delete attachments from storage
         foreach ($post->attachments as $attachment) {
             Storage::disk('public')->delete($attachment->path);
         }
-        
+
         $post->delete();
 
         Alert::success('Berhasil', 'Postingan forum berhasil dihapus!');
         return redirect()->route('pengguna.forum.index');
     }
-    
+
     /**
      * Add comment to a post
      */
@@ -196,29 +230,43 @@ class ForumPenggunaController extends Controller
         $request->validate([
             'konten' => 'required',
         ]);
-        
+
         ForumComment::create([
             'ID_ForumPost' => $postId,
             'ID_Pengguna' => Auth::id(),
             'konten' => $request->konten,
         ]);
-        
+
         Alert::success('Berhasil', 'Komentar berhasil ditambahkan!');
         return redirect()->back();
     }
-    
+
     /**
      * Toggle like/unlike for a post
      */
     public function toggleLike(Request $request, $postId)
     {
+        if (!Auth::check()) {
+            // Jika user tidak login, return error (AJAX atau redirect)
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'Unauthorized',
+                    'isLiked' => false,
+                    'likeCount' => ForumPost::find($postId)->likeCount(),
+                ], 401);
+            }
+            Alert::error('Error', 'Anda harus login untuk melakukan aksi ini!');
+            return redirect()->route('login');
+        }
+
         $post = ForumPost::findOrFail($postId);
         $userId = Auth::id();
-        
+
+        // Cek apakah sudah pernah like
         $existingLike = ForumLike::where('ID_ForumPost', $postId)
             ->where('ID_Pengguna', $userId)
             ->first();
-            
+
         if ($existingLike) {
             $existingLike->delete();
             $message = 'Post unliked';
@@ -231,7 +279,8 @@ class ForumPenggunaController extends Controller
             $message = 'Post liked';
             $isLiked = true;
         }
-        
+
+        // Pastikan return response JSON jika request AJAX
         if ($request->ajax()) {
             return response()->json([
                 'message' => $message,
@@ -239,29 +288,29 @@ class ForumPenggunaController extends Controller
                 'likeCount' => $post->fresh()->likeCount(),
             ]);
         }
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Delete a comment
      */
     public function deleteComment($commentId)
     {
         $comment = ForumComment::findOrFail($commentId);
-        
+
         // Check if user is authorized to delete this comment
         if ($comment->ID_Pengguna != Auth::id()) {
             Alert::error('Error', 'Anda tidak berhak menghapus komentar ini!');
             return redirect()->back();
         }
-        
+
         $comment->delete();
-        
+
         Alert::success('Berhasil', 'Komentar berhasil dihapus!');
         return redirect()->back();
     }
-    
+
     /**
      * Delete an attachment
      */
@@ -269,15 +318,15 @@ class ForumPenggunaController extends Controller
     {
         $attachment = ForumAttachment::findOrFail($attachmentId);
         $post = $attachment->post;
-        
+
         // Check if user is authorized to delete this attachment
         if ($post->ID_Pengguna != Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-        
+
         Storage::disk('public')->delete($attachment->path);
         $attachment->delete();
-        
+
         return response()->json(['success' => true]);
     }
 }
