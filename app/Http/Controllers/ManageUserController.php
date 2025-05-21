@@ -16,6 +16,3 @@ class ManageUserController extends Controller
 
     // Method lain untuk create, edit, delete akan ditambahkan nantinya
 }
-
-
-// coba commit lagi FS-55
