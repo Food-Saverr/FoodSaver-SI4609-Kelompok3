@@ -173,17 +173,17 @@
         </div>
     </aside>
     <!-- Hamburger Button -->
-    <button class="fixed top-4 left-4 z-60 bg-white rounded-full p-2 shadow-lg border border-gray-200" @click="open = true">
+    <button class="fixed top-12 left-4 z-60 bg-white rounded-full p-2 shadow-lg border border-gray-200" @click="open = true">
         <i class="fas fa-bars text-2xl text-orange-500"></i>
     </button>
     <!-- Main Content -->
     <div>
-        <main class="min-h-screen pt-8">
+        <main class="min-h-screen">
             @yield('content')
         </main>
-        <footer class="bg-white border-t border-gray-100 py-6 text-center text-gray-500 text-sm">
+        <!-- <footer class="bg-white border-t border-gray-100 py-6 text-center text-gray-500 text-sm">
             &copy; {{ date('Y') }} FoodSaver. All rights reserved.
-        </footer>
+        </footer> -->
     </div>
     @yield('scripts')
 </body>

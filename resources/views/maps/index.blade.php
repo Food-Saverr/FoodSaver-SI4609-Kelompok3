@@ -18,40 +18,28 @@
 @endsection
 
 @section('content')
-<div class="container pt-4 mt-4">
-    <!-- <div class="text-center mb-10">
-        <div class="col-md-12">
-        <h2 class="text-3xl font-extrabold title-font gradient-text mb-2 animate-fade-up">
-        Nearby Food Finder</h2>
-        </div>
-    </div> -->
-    <div class="flex flex-col md:flex-row gap-6">
-        <div class="w-full md:w-1/3">
-            <div class="bg-white/90 rounded-2xl shadow-lg p-4 max-h-[80vh] overflow-y-auto flex flex-col">
+<div class="w-full min-h-screen" style="height:100vh;">
+    <div class="flex flex-col md:flex-row h-full">
+        <!-- Kiri: Makanan Terdekat -->
+        <div class="w-full md:w-1/3 h-full">
+            <div class="bg-white/90 rounded-2xl shadow-lg p-4 h-full overflow-y-auto flex flex-col">
                 <div class="mb-4 text-center">
                     <h5 class="text-2xl font-extrabold title-font gradient-text mb-2 animate-fade-up">
                         Makanan Terdekat
                     </h5>
-                    <div class="relative flex items-center w-full">
-                        <span class="absolute left-4 text-gray-400 text-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-                            </svg>
-                        </span>
+                    <div class="flex items-center justify-center w-full">
                         <input type="number" id="radius" min="1" max="100" onchange="loadNearbyFood()"
-                            class="pl-12 pr-4 py-3 w-full rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none text-gray-700 placeholder-gray-400 shadow-sm transition text-base bg-white"
+                            class="pl-3 pr-3 py-1 w-56 rounded-xl border border-yellow-400 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none text-gray-700 placeholder-gray-400 shadow-sm transition text-base bg-white mx-auto"
                             placeholder="Jarak maksimum (km)...">
                     </div>
                 </div>
                 <div id="nearby-food-list" class="flex flex-col gap-6"></div>
             </div>
         </div>
-        <div class="w-full md:w-2/3">
-            <div id="map" style="height:600px;width:100%"></div>
-            <!-- <div class="form-group mt-3">
-                <label for="radius">Jarak Maksimum (km):</label>
-                <input type="number" id="radius" class="form-control" value="20" min="1" max="100" onchange="loadNearbyFood()">
-            </div> -->
+
+        <!-- Kanan: Maps -->
+        <div class="w-full md:w-2/3 h-full">
+            <div id="map" style="height: 100%; width: 100%;"></div>
         </div>
     </div>
 </div>
@@ -65,6 +53,7 @@
     let markers = [];
     let userMarker;
     let userLocation = null;
+    let foodMarkers = {};
 
     // Initialize map
     document.addEventListener('DOMContentLoaded', function() {
@@ -117,32 +106,17 @@
         }
         const jarak = food.distance ? `${Math.round(food.distance * 100) / 100} km` : '-';
         const popupHtml = `
-        <div style=\"max-width:320px; font-family:'Poppins',sans-serif;\">
-            <div class=\"rounded-t-xl flex justify-end items-center p-2 ${statusColor}\" style=\"font-size:15px;font-weight:600; border-top-left-radius:1rem; border-top-right-radius:1rem;\">
-                <span><i class='fas fa-check-circle mr-1'></i>${statusText}</span>
+        <div style="max-width:320px; font-family:'Poppins',sans-serif;">
+            <div style="border-top-left-radius:1rem;border-top-right-radius:1rem;font-size:15px;font-weight:600;padding:10px 0 10px 0;text-align:right;background:#d1fae5;color:#059669;">${statusText === 'Tersedia' ? '<i class=\'fas fa-check-circle\'></i> Tersedia' : statusText}</div>
+            <div style="background:#fff7ed;text-align:center;padding:10px 0 8px 0;font-size:22px;font-weight:700;color:#ea580c;letter-spacing:0.5px;">${food.Nama_Makanan}</div>
+            <div style="padding:16px 12px 0 12px;">
+                <div style="background:#eff6ff;border-radius:12px;padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:500;color:#2563eb;"><i class='fas fa-tag' style='margin-right:6px;'></i>KATEGORI<br><span style='color:#222;font-weight:600;'>${food.Kategori_Makanan || '-'}</span></div>
+                <div style="background:#ede9fe;border-radius:12px;padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:500;color:#7c3aed;"><i class='fas fa-box' style='margin-right:6px;'></i>JUMLAH<br><span style='color:#222;font-weight:600;'>${food.Jumlah_Makanan || '-'} Porsi</span></div>
+                <div style="background:#fee2e2;border-radius:12px;padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:500;color:#dc2626;"><i class='fas fa-calendar-alt' style='margin-right:6px;'></i>KEDALUWARSA<br><span style='color:#222;font-weight:600;'>${food.Tanggal_Kedaluwarsa ? getKedaluwarsaText(food.Tanggal_Kedaluwarsa) : '-'}</span></div>
+                <div style="background:#d1fae5;border-radius:12px;padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:500;color:#059669;"><i class='fas fa-map-marker-alt' style='margin-right:6px;'></i>LOKASI<br><span style='color:#222;font-weight:600;'>${food.Lokasi_Makanan || '-'}</span><br><span style='color:#666;font-size:12px;'><i class='fas fa-route' style='margin-right:4px;'></i>Jarak: ${jarak}</span></div>
             </div>
-            <div class=\"bg-orange-50 text-center py-2\" style=\"font-size:22px;font-weight:700;color:#ea580c;letter-spacing:0.5px;\">${food.Nama_Makanan}</div>
-            <div class=\"flex flex-col gap-2 p-3\">
-                <div class=\"bg-blue-50 rounded-xl px-3 py-2 mb-1\">
-                    <span class=\"text-xs text-blue-600 font-bold uppercase flex items-center mb-1\"><i class=\"fas fa-tag mr-1 text-xs\"></i>Kategori</span>
-                    <span class=\"text-base text-gray-800 font-medium\">${food.Kategori_Makanan || '-'}</span>
-                </div>
-                <div class="flex-1 min-w-[120px] bg-purple-50 rounded-xl p-2 text-xs ml-1 mb-2" style="display:inline-block;">
-                    <div class="font-bold text-purple-500 mb-1" style="font-size:11px;"><i class='fas fa-boxes mr-1'></i>JUMLAH</div>
-                    <div style="font-size:13px;">${food.Jumlah_Makanan || '-'} Porsi</div>
-                </div>
-                <div class=\"bg-red-50 rounded-xl px-3 py-2 mb-1\">
-                    <span class=\"text-xs text-red-600 font-bold uppercase flex items-center mb-1\"><i class=\"fas fa-calendar-alt mr-1 text-xs\"></i>Kedaluwarsa</span>
-                    <span class=\"text-base text-gray-800 font-medium\">${food.Tanggal_Kedaluwarsa ? getKedaluwarsaText(food.Tanggal_Kedaluwarsa) : '-'}</span>
-                </div>
-                <div class=\"bg-green-50 rounded-xl px-3 py-2 mb-1\">
-                    <span class=\"text-xs text-green-600 font-bold uppercase flex items-center mb-1\"><i class=\"fas fa-map-marker-alt mr-1 text-xs\"></i>Lokasi</span>
-                    <span class=\"text-base text-gray-800 font-medium\">${food.Lokasi_Makanan || '-'}</span>
-                    <span class=\"text-xs text-gray-500 mt-1\"><i class=\"fas fa-route mr-1\"></i>Jarak: ${jarak}</span>
-                </div>
-            </div>
-            <a href=\"/pengguna/food-listing/${food.ID_Makanan}\" class=\"block mt-3 py-2 w-full text-center rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition\" style=\"text-decoration:none;font-size:16px; border-radius:0.75rem;\">
-                <i class=\"fas fa-eye mr-2\"></i>Lihat Detail
+            <a href="/pengguna/food-listing/${food.ID_Makanan}" style="display:block;width:100%;padding:12px 0;margin-top:16px;background:linear-gradient(90deg,#f97316,#ea580c);color:#fff;font-weight:600;font-size:18px;border-radius:12px;text-align:center;text-decoration:none;box-shadow:0 2px 8px rgba(249,115,22,0.10);transition:background 0.2s;" onmouseover="this.style.background='linear-gradient(90deg,#ea580c,#f97316)'" onmouseout="this.style.background='linear-gradient(90deg,#f97316,#ea580c)'">
+              <i class="fas fa-eye" style="margin-right:8px"></i>Lihat Detail
             </a>
         </div>
         `;
@@ -160,6 +134,9 @@
             });
         markers.push(marker);
         marker.addTo(map);
+        if (food.ID_Makanan) {
+            foodMarkers[food.ID_Makanan] = marker;
+        }
     }
 
     // Helper untuk menghitung sisa hari kedaluwarsa
@@ -221,7 +198,7 @@
             const daysLeft = food.Tanggal_Kedaluwarsa ? getKedaluwarsaText(food.Tanggal_Kedaluwarsa) : '-';
             const jarak = food.distance ? `${Math.round(food.distance * 100) / 100} km` : '-';
             const card = document.createElement('div');
-            card.className = 'rounded-xl shadow-md bg-white mb-6 p-0 overflow-hidden border border-gray-100 max-w-md mx-auto';
+            card.className = 'rounded-xl shadow-md bg-white mb-6 p-0 overflow-hidden border border-gray-100 max-w-md mx-auto group cursor-pointer hover:shadow-lg transition';
             card.innerHTML = `
                 <div class="flex flex-col">
                     <div class="relative h-40 w-full overflow-hidden bg-gray-100 flex items-center justify-center rounded-t-xl">
@@ -255,14 +232,24 @@
                         </div>
                     </div>
                     <div class="px-4 pb-4 pt-2">
-                        <a href="/pengguna/food-listing/${food.ID_Makanan}" class="inline-block w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-xl font-semibold text-center transition animate-scale shadow-md mt-2" style="text-decoration:none;font-size:16px;">
+                        <a href="/pengguna/food-listing/${food.ID_Makanan}" class="inline-block w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-xl font-semibold text-center transition animate-scale shadow-md mt-2" style="text-decoration:none;font-size:16px;" onclick="event.stopPropagation();">
                             <i class="fas fa-eye mr-2"></i>Lihat Detail
                         </a>
                     </div>
                 </div>
             `;
+            card.addEventListener('click', function(e) {
+                if (foodMarkers[food.ID_Makanan]) {
+                    map.panTo(foodMarkers[food.ID_Makanan].getLatLng());
+                    foodMarkers[food.ID_Makanan].openPopup();
+                }
+            });
             list.appendChild(card);
         });
     }
+
+    window.addEventListener('resize', function() {
+        if (map) map.invalidateSize();
+    });
 </script>
 @endsection 

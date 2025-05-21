@@ -20,8 +20,6 @@ return array(
     'App\\Http\\Controllers\\DonaturPaymentController' => $baseDir . '/app/Http/Controllers/DonaturPaymentController.php',
     'App\\Http\\Controllers\\DonaturRequestController' => $baseDir . '/app/Http/Controllers/DonaturRequestController.php',
     'App\\Http\\Controllers\\FoodListingController' => $baseDir . '/app/Http/Controllers/FoodListingController.php',
-    'App\\Http\\Controllers\\MakananController' => $baseDir . '/app/Http/Controllers/MakananController.php',
-    'App\\Http\\Controllers\\MapController' => $baseDir . '/app/Http/Controllers/MapController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
     'App\\Http\\Controllers\\RequestController' => $baseDir . '/app/Http/Controllers/RequestController.php',

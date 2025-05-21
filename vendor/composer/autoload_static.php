@@ -571,8 +571,6 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Controllers\\DonaturPaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturPaymentController.php',
         'App\\Http\\Controllers\\DonaturRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturRequestController.php',
         'App\\Http\\Controllers\\FoodListingController' => __DIR__ . '/../..' . '/app/Http/Controllers/FoodListingController.php',
-        'App\\Http\\Controllers\\MakananController' => __DIR__ . '/../..' . '/app/Http/Controllers/MakananController.php',
-        'App\\Http\\Controllers\\MapController' => __DIR__ . '/../..' . '/app/Http/Controllers/MapController.php',
         'App\\Http\\Controllers\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\RequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/RequestController.php',
