@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <!-- Kedaluwarsa Card -->
+        <!-- Kadaluwarsa Card -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-red-500 hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
             <div class="p-6">
                 <div class="flex items-center justify-between">
