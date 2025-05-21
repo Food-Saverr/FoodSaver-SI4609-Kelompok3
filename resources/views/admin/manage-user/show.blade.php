@@ -24,6 +24,7 @@
                         <th class="py-3 px-6">Nama</th>
                         <th class="py-3 px-6">Email</th>
                         <th class="py-3 px-6">Jenis Pengguna</th>
+                        <th class="py-3 px-6">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,26 @@
                             <span class="text-blue-600">Donatur</span>
                             @else
                             <span class="text-green-600">Penerima</span>
+                            @endif
+                        </td>
+                        <td class="py-3 px-6">
+                            <!-- Lihat Detail -->
+                            <a href="#" class="btn btn-info">Lihat Detail</a>
+
+                            <!-- Edit Pengguna -->
+                            <a href="#" class="py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                                <i class="fas fa-edit mr-2"></i>Edit</a>
+                            
+                            <!-- Hapus Pengguna -->
+                            <form action="#" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Hapus</button>
+                            </form>
+
+                            <!-- Nonaktifkan Pengguna -->
+                            @if($user->is_active)
+                                <a href="#" class="btn btn-secondary">Nonaktifkan</a>
                             @endif
                         </td>
                     </tr>
