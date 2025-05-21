@@ -19,7 +19,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Nama Makanan</th>
+                            <th>Makanan</th>
                             <th>Donatur</th>
                             <th>Tanggal Kedaluwarsa</th>
                             <th>Sisa Hari</th>
