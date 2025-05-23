@@ -1,4 +1,3 @@
-<!-- resources/views/admin/dashboard.blade.php -->
 @extends('layouts.appadmin')
 
 @section('title', 'Dashboard Admin - FoodSaver')
@@ -80,7 +79,7 @@
                 </div>
                 <div class="flex justify-between items-start">
                     <div class="space-y-3">
-                        <p class="text-gray-700 text-lg">Jumlah Artikel: <strong class="text-blue-600">{{ $totalArtikel }}</strong></p>
+                        {{-- <p class="text-gray-700 text-lg">Jumlah Artikel: <strong class="text-blue-600">{{ $totalArtikel }}</strong></p> --}}
                     </div>
                     <div class="w-40 h-40">
                         <canvas id="totalArtikelChart"></canvas>
@@ -134,7 +133,7 @@
                     </div>
                 </a>
                 
-                <a href="#" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                <a href="{{ route('artikels.index') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
                     <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
                         <i class="fas fa-newspaper text-xl"></i>
                     </div>
@@ -333,18 +332,19 @@
     }
   });
 
+  // Chart: Total Artikel Terpublikasi
   var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
   var totalArtikelChart = new Chart(ctxArtikel, {
     type: 'bar',
     data: {
-      labels: {!! json_encode($artikelLabels) !!},
+      labels: ['Total Artikel'],
       datasets: [{
-        label: 'Jumlah Artikel per Minggu',
-        data: {!! json_encode($artikelData) !!},
-        backgroundColor: 'rgba(63, 81, 181, 0.2)',
-        borderColor: '#3f51b5',
+        label: 'Total Artikel',
+        data: [{{ $totalArtikel ?? 0 }}],
+        backgroundColor: ['#3b82f6'],
+        borderColor: ['#2563eb'],
         borderWidth: 1,
-        borderRadius: 4
+        borderRadius: 8
       }]
     },
     options: {
@@ -354,61 +354,53 @@
         legend: { display: false },
         title: {
           display: true,
-          text: 'Artikel Masuk per Minggu',
+          text: 'Total Artikel Terpublikasi',
           font: { size: 16 }
         }
       },
       scales: {
         y: {
           beginAtZero: true,
-          ticks: { 
+          ticks: {
             stepSize: 1,
-            font: {
-              size: 14
-            }
+            font: { size: 14 }
           }
         },
         x: {
           grid: { display: false },
-          ticks: { 
-            maxRotation: 45, 
-            minRotation: 45,
-            font: {
-              size: 14
-            }
-          }
+          ticks: { font: { size: 14 } }
         }
       }
     }
   });
 
-  var ctxForum = document.getElementById('forumPieChart').getContext('2d');
-  var forumChart = new Chart(ctxForum, {
-    type: 'pie',
-    data: {
-      labels: ['Total Forum Dibuat', 'Diskusi Aktif'],
-      datasets: [{
-        data: [{{ $totalForum }}, {{ $diskusiAktif }}],
-        backgroundColor: ['#6b46c1', '#d53f8c'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { 
-          position: 'bottom',
-          labels: {
-            padding: 20,
-            font: {
-              size: 14
-            }
-          }
-        }
-      },
-      cutout: '60%'
-    }
-  });
+  // var ctxForum = document.getElementById('forumPieChart').getContext('2d');
+  // var forumChart = new Chart(ctxForum, {
+  //   type: 'pie',
+  //   data: {
+  //     labels: ['Total Forum Dibuat', 'Diskusi Aktif'],
+  //     datasets: [{
+  //       data: [{{ $totalForum }}, {{ $diskusiAktif }}],
+  //       backgroundColor: ['#6b46c1', '#d53f8c'],
+  //       borderWidth: 0
+  //     }]
+  //   },
+  //   options: {
+  //     responsive: true,
+  //     maintainAspectRatio: false,
+  //     plugins: {
+  //       legend: { 
+  //         position: 'bottom',
+  //         labels: {
+  //           padding: 20,
+  //           font: {
+  //             size: 14
+  //           }
+  //         }
+  //       }
+  //     },
+  //     cutout: '60%'
+  //   }
+  // });
 </script>
 @endsection

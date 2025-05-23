@@ -4,17 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateArtikelsTable extends Migration
 {
     public function up()
     {
         Schema::create('artikels', function (Blueprint $table) {
             $table->id();
+
+            // Judul dan slug unik
             $table->string('judul');
+            $table->string('slug')->unique();
+
+            // Konten dan gambar
             $table->text('konten');
-            $table->string('Gambar_Artikel')->nullable();
-            $table->enum('status', ['dipublikasikan', 'draft'])->default('draft');
-            $table->foreignId('user_id')->constrained('penggunas', 'id_user')->onDelete('cascade');
+            $table->string('gambar')->nullable();
+
+            // Penulis (hanya admin yang bisa buat)
+            $table->foreignId('user_id')
+                  ->constrained('penggunas', 'id_user')
+                  ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
@@ -23,4 +32,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('artikels');
     }
-};
+}
