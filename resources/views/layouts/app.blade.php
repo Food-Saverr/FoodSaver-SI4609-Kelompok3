@@ -133,7 +133,7 @@
                 <a href="#" class="navbar-link disabled">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
-                <a href="#" class="navbar-link disabled">
+                <a href="{{ route('artikel.pengguna') }}" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
             </nav>

@@ -40,4 +40,14 @@ class Pengguna extends Authenticatable
     {
         return $this->Password_Pengguna;
     }
+
+    public function likedArtikels()
+    {
+        return $this->belongsToMany(
+        Artikel::class,
+        'artikel_user_like',
+        'user_id',
+        'artikel_id'
+    )->withTimestamps();
+    }
 }
