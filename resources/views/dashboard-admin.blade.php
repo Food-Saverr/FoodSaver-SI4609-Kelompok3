@@ -153,19 +153,6 @@
                         <p class="text-sm text-gray-500">Monitoring donasi keuangan untuk FoodSaver</p>
                     </div>
                 </a>
-                
-                <!-- Link to manage users -->
-                <a href="{{ route('DashboardAdmin.manageUser') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
-                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full mr-4">
-                            <i class="fas fa-users"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold">Manage Pengguna</h3>
-                        <p class="text-sm text-gray-500">Kelola daftar pengguna</p>
-                    </div>
-                </a>
-            </div>
-        </div>
         
         <!-- Recent Activities -->
         <div>

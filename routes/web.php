@@ -88,10 +88,28 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistik-makanan', [AdminDashboardController::class, 'statistikMakanan'])->name('DashboardAdmin.makanan');
     Route::get('/statistik-donasi', [AdminDashboardController::class, 'statistikDonasi'])->name('DashboardAdmin.donasi');
     Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
-    Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
+    Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum'); 
+    
+    // Route untuk menampilkan daftar pengguna
+    Route::get('/manage-user', [ManageUserController::class, 'index'])->name('admin.manage-user.index');
 
-    //route untuk manage user admin
-    Route::get('/manage-user', [ManageUserController::class, 'index'])->name('DashboardAdmin.manageUser');
+    // Route untuk menampilkan detail pengguna
+    Route::get('/manage-user/{id}', [ManageUserController::class, 'show'])->name('admin.manage-user.show');
+
+    // Route untuk menampilkan halaman edit pengguna
+    Route::get('/manage-user/{id}/edit', [ManageUserController::class, 'edit'])->name('admin.manage-user.edit');
+
+    // Route untuk memperbarui pengguna setelah edit
+    Route::put('/manage-user/{id}', [ManageUserController::class, 'update'])->name('admin.manage-user.update');
+
+    // Route untuk menghapus pengguna
+    Route::delete('/manage-user/{id}', [ManageUserController::class, 'destroy'])->name('admin.manage-user.destroy');
+
+    // Route untuk menonaktifkan pengguna
+    Route::post('/manage-user/{id}/deactivate', [ManageUserController::class, 'deactivate'])->name('admin.manage-user.deactivate');
+
+    // Route untuk mengaktifkan pengguna
+    Route::post('/manage-user/{id}/activate', [ManageUserController::class, 'activate'])->name('admin.manage-user.activate');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');

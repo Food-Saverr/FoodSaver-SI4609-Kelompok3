@@ -132,7 +132,7 @@
                 <a href="{{ route('admin.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Makanan
                 </a>
-                <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
+                <a href="{{ route('admin.manage-user.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.manage-user.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-users mr-2"></i>Pengguna
                 </a>
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">

@@ -28,6 +28,15 @@ class LoginController extends Controller
         $user = Pengguna::where('Email_Pengguna', $request->Email_Pengguna)->first();
 
         if ($user && Hash::check($request->Password_Pengguna, $user->Password_Pengguna)) {
+                // Cek apakah akun pengguna aktif (manage user))
+                if (!$user->is_active) {
+                    // Jika akun nonaktif, logout dan beri pesan error
+                    Auth::logout();
+                    return redirect()->back()->withErrors([
+                        'Email_Pengguna' => 'Akun Anda telah dinonaktifkan. Silakan hubungi admin.',
+                    ])->withInput();
+                }
+
             Auth::login($user, $request->has('remember'));
 
             // Redirect berdasarkan role

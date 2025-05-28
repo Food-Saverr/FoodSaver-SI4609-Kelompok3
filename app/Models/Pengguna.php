@@ -20,6 +20,7 @@ class Pengguna extends Authenticatable
         'Password_Pengguna',
         'Alamat_Pengguna',
         'Role_Pengguna',
+        'is_active', // Kolom is_active ditambahkan ke sini
     ];
 
     protected $hidden = [
