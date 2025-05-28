@@ -6,6 +6,7 @@ use App\Models\ForumPost;
 use App\Models\ForumComment;
 use App\Models\ForumLike;
 use App\Models\ForumAttachment;
+use App\Models\ForumReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -328,5 +329,35 @@ class ForumDonaturController extends Controller
         $attachment->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    public function reportPost(Request $request, $postId)
+    {
+        // Validate request
+        $request->validate([
+            'alasan_laporan' => 'required|string',
+            'deskripsi' => 'nullable|string|max:1000',
+        ]);
+
+        $post = ForumPost::findOrFail($postId);
+        $userId = Auth::id();
+
+        // Check if user has already reported this post
+        if ($post->isReportedByUser($userId)) {
+            Alert::warning('Peringatan', 'Anda sudah melaporkan postingan ini sebelumnya.');
+            return redirect()->back();
+        }
+
+        // Create a new report
+        ForumReport::create([
+            'ID_ForumPost' => $postId,
+            'ID_Pengguna' => $userId,
+            'alasan_laporan' => $request->alasan_laporan,
+            'deskripsi' => $request->deskripsi,
+            'status' => 'pending',
+        ]);
+
+        Alert::success('Berhasil', 'Laporan Anda telah dikirim dan akan ditinjau oleh moderator.');
+        return redirect()->back();
     }
 }

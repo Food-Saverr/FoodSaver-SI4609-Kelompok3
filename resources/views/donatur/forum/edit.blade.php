@@ -6,8 +6,8 @@
 <!-- Animated Background Elements -->
 <div class="fixed inset-0 -z-10 overflow-hidden">
     <div class="absolute -top-[10%] -right-[10%] w-[35%] h-[40%] bg-gradient-to-br from-blue-100/30 to-blue-200/20 blur-3xl rounded-full animate-blob"></div>
-    <div class="absolute top-[30%] -left-[5%] w-[25%] h-[30%] bg-gradient-to-br from-blue-100/20 to-indigo-100/20 blur-3xl rounded-full animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-[10%] right-[20%] w-[30%] h-[40%] bg-gradient-to-br from-blue-100/20 to-indigo-100/20 blur-3xl rounded-full animate-blob animation-delay-4000"></div>
+    <div class="absolute top-[30%] -left-[5%] w-[25%] h-[30%] bg-gradient-to-br from-green-100/20 to-blue-100/20 blur-3xl rounded-full animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-[10%] right-[20%] w-[30%] h-[40%] bg-gradient-to-br from-blue-100/20 to-green-100/20 blur-3xl rounded-full animate-blob animation-delay-4000"></div>
 </div>
 
 <div class="container mx-auto px-4 py-8 pt-24 relative z-10">

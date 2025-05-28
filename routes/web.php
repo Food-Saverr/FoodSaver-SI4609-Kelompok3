@@ -168,7 +168,11 @@ Route::middleware(['auth'])->group(function () {
     
     // Attachment routes
     Route::delete('forum/attachment/{attachment}', [ForumPenggunaController::class, 'deleteAttachment'])->name('pengguna.forum.attachment.delete');
+
+    // Report route
+    Route::post('forum/{id}/report', [ForumPenggunaController::class, 'reportPost'])->name('pengguna.forum.report');
 });
+
 
 // Donatur Forum Routes
 Route::middleware(['auth'])->group(function () {
@@ -188,7 +192,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('donatur/forum/comment/{comment}', [ForumDonaturController::class, 'deleteComment'])->name('donatur.forum.comment.delete');
     Route::post('donatur/forum/{post}/like', [ForumDonaturController::class, 'toggleLike'])->name('donatur.forum.like');
     Route::delete('donatur/forum/attachment/{attachment}', [ForumDonaturController::class, 'deleteAttachment'])->name('donatur.forum.attachment.delete');
+
+    // Report route
+    Route::post('donatur/forum/{id}/report', [ForumDonaturController::class, 'reportPost'])->name('donatur.forum.report');
 });
+
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('forum', [AdminForumController::class, 'index'])->name('forum.index');
@@ -201,4 +209,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::delete('forum/attachment/{attachmentId}', [AdminForumController::class, 'deleteAttachment'])->name('forum.attachment.delete');
     Route::get('forum/attachment/{attachmentId}/download', [AdminForumController::class, 'downloadAttachment'])->name('forum.attachment.download');
     Route::get('forum-statistics', [AdminForumController::class, 'statistics'])->name('forum.statistics');
+
+    // Forum report routes
+    Route::get('reports', [AdminForumController::class, 'reportIndex'])->name('forum.reports');
+    Route::get('reports/{id}', [AdminForumController::class, 'reportShow'])->name('forum.reports.show');
+    Route::post('reports/{id}/update', [AdminForumController::class, 'reportUpdate'])->name('forum.reports.update');
+    Route::delete('reports/{id}', [AdminForumController::class, 'reportDestroy'])->name('forum.reports.destroy');
 });

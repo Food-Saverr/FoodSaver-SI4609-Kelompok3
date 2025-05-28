@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ID_Pengguna');
             $table->string('judul');
             $table->text('konten');
+            $table->boolean('is_reported')->default(false);
             $table->timestamps();
             $table->softDeletes();
             

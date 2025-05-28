@@ -11,7 +11,7 @@ class ForumPost extends Model
     use HasFactory, SoftDeletes;
     
     protected $primaryKey = 'ID_ForumPost';
-    protected $fillable = ['ID_Pengguna', 'judul', 'konten'];
+    protected $fillable = ['ID_Pengguna', 'judul', 'konten', 'is_reported'];
     
     public function pengguna()
     {
@@ -48,5 +48,17 @@ class ForumPost extends Model
     public function commentCount()
     {
         return $this->comments()->count();
+    }
+
+    // Add this method to your existing ForumPost.php model
+    public function reports()
+    {
+        return $this->hasMany(ForumReport::class, 'ID_ForumPost', 'ID_ForumPost');
+    }
+
+    // Add this method to check if user has already reported this post
+    public function isReportedByUser($userId)
+    {
+        return $this->reports()->where('ID_Pengguna', $userId)->exists();
     }
 }

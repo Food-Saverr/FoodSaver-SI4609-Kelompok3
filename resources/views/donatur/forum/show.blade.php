@@ -260,6 +260,30 @@
                                 </svg>
                                 <span>{{ $post->commentCount() }}</span><span class="ml-1">Komentar</span>
                             </button>
+                            <!-- Report Button -->
+                            <button 
+                                @if(Auth::check()) 
+                                    @if($post->isReportedByUser(Auth::id()))
+                                        disabled
+                                        class="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-red-50 text-red-500 font-medium cursor-not-allowed"
+                                    @else
+                                        onclick="openReportModal()" 
+                                        class="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-gray-50 hover:bg-red-50 text-gray-700 hover:text-red-600 transition-all transform hover:-translate-y-1 group"
+                                    @endif
+                                @else
+                                    onclick="window.location.href='{{ route('login') }}'" 
+                                    class="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 transition-all transform hover:-translate-y-1 group"
+                                @endif
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:scale-125 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                @if(Auth::check() && $post->isReportedByUser(Auth::id()))
+                                    <span>Dilaporkan</span>
+                                @else
+                                    <span>Laporkan</span>
+                                @endif
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -571,6 +595,78 @@
         </div>
     </div>
 </div>
+<div id="reportModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeReportModal()"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div class="relative inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+                <button type="button" onclick="closeReportModal()" class="bg-white rounded-full p-1 hover:bg-gray-100 focus:outline-none">
+                    <span class="sr-only">Close</span>
+                    <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Laporkan Postingan
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                Laporkan postingan yang menurut Anda melanggar pedoman komunitas kami. Laporan Anda akan ditinjau oleh tim moderator.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-5">
+                    <form id="reportForm" action="{{ route('donatur.forum.report', $post->ID_ForumPost) }}" method="POST">
+                        @csrf
+                        
+                        <div class="mb-4">
+                            <label for="alasan_laporan" class="block text-sm font-medium text-gray-700 mb-1">Alasan Pelaporan <span class="text-red-500">*</span></label>
+                            <select id="alasan_laporan" name="alasan_laporan" class="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-xl" required>
+                                <option value="">Pilih alasan</option>
+                                <option value="spam">Spam atau Konten Promosi</option>
+                                <option value="inappropriate">Konten Tidak Pantas</option>
+                                <option value="harassment">Pelecehan atau Intimidasi</option>
+                                <option value="violence">Konten Kekerasan</option>
+                                <option value="hate_speech">Ujaran Kebencian</option>
+                                <option value="false_info">Informasi Palsu</option>
+                                <option value="other">Alasan Lain</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi (Opsional)</label>
+                            <textarea id="deskripsi" name="deskripsi" rows="4" class="mt-1 block w-full border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-xl" placeholder="Jelaskan detail mengapa postingan ini dilaporkan..."></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="submit" form="reportForm" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Kirim Laporan
+                </button>
+                <button type="button" onclick="closeReportModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('styles')
@@ -764,6 +860,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
+
+    // Report Modal Functions
+    function openReportModal() {
+        document.getElementById('reportModal').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeReportModal() {
+        document.getElementById('reportModal').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
     // Focus on comment box
     function focusCommentBox() {
         document.getElementById('comment-box').focus();

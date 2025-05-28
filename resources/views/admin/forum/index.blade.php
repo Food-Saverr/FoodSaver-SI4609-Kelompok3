@@ -257,6 +257,11 @@
                                             <td class="px-6 py-4">
                                                 <a href="{{ route('admin.forum.show', $post->ID_ForumPost) }}" class="text-blue-600 hover:text-blue-800 font-medium {{ $post->trashed() ? 'line-through' : '' }}">
                                                     {{ $post->judul }}
+                                                    @if($post->is_reported)
+                                                        <span class="inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                            <i class="fas fa-flag mr-1"></i> Dilaporkan
+                                                        </span>
+                                                    @endif
                                                 </a>
                                                 <div class="flex flex-wrap items-center mt-2 text-xs">
                                                     <span class="flex items-center text-gray-500 mr-3">
@@ -397,6 +402,79 @@
             
             <!-- Sidebar -->
             <div class="col-span-12 lg:col-span-4 space-y-8">
+                <!-- Add this to the admin.forum.index page, in the sidebar section -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-red-50 to-red-100">
+                        <h5 class="font-bold text-gray-800 flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-flag text-red-500"></i>
+                            </div>
+                            Laporan Forum
+                        </h5>
+                    </div>
+                    <div class="p-6">
+                        @php
+                            $pendingReports = \App\Models\ForumReport::pending()->count();
+                            $latestReports = \App\Models\ForumReport::with(['reporter', 'post'])
+                                ->latest()
+                                ->take(3)
+                                ->get();
+                        @endphp
+                        
+                        @if($pendingReports > 0)
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-red-100 text-red-800 text-sm font-medium">
+                                    <i class="fas fa-exclamation-circle mr-2"></i> {{ $pendingReports }} laporan menunggu tindakan
+                                </span>
+                                <a href="{{ route('admin.forum.reports', ['status' => 'pending']) }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                    Tinjau Sekarang
+                                </a>
+                            </div>
+                        @endif
+                        
+                        <div class="space-y-3 mt-3">
+                            @forelse($latestReports as $report)
+                                <a href="{{ route('admin.forum.reports.show', $report->ID_Report) }}" class="block p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <div class="text-sm font-medium text-gray-900 truncate max-w-[200px]">
+                                            {{ Str::limit($report->post->judul ?? '[Postingan Dihapus]', 35) }}
+                                        </div>
+                                        <span class="inline-block px-2 py-0.5 text-xs rounded-full 
+                                            {{ $report->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                            {{ $report->status == 'reviewed' ? 'bg-blue-100 text-blue-800' : '' }}
+                                            {{ $report->status == 'rejected' ? 'bg-gray-100 text-gray-800' : '' }}
+                                            {{ $report->status == 'actioned' ? 'bg-green-100 text-green-800' : '' }}
+                                        ">
+                                            @if($report->status == 'pending')
+                                                Menunggu
+                                            @elseif($report->status == 'reviewed')
+                                                Ditinjau
+                                            @elseif($report->status == 'rejected')
+                                                Ditolak
+                                            @elseif($report->status == 'actioned')
+                                                Ditindak
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 flex items-center">
+                                        <i class="fas fa-user-circle mr-1"></i>
+                                        {{ $report->reporter->Nama_Pengguna }} &bull; {{ $report->created_at->diffForHumans() }}
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-4 text-gray-500">
+                                    Belum ada laporan forum
+                                </div>
+                            @endforelse
+                        </div>
+                        
+                        <div class="mt-4 pt-3 border-t border-gray-200">
+                            <a href="{{ route('admin.forum.reports') }}" class="flex items-center justify-center w-full px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium">
+                                <i class="fas fa-list-ul mr-2"></i> Lihat Semua Laporan
+                            </a>
+                        </div>
+                    </div>
+                </div>   
                 <!-- Top Posters Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">

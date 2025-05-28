@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ForumPost;
 use App\Models\ForumComment;
 use App\Models\ForumAttachment;
+use App\Models\ForumReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -273,11 +274,20 @@ class AdminForumController extends Controller
     public function deleteAttachment($attachmentId)
     {
         $attachment = ForumAttachment::findOrFail($attachmentId);
-        
+        $postId = $attachment->ID_ForumPost;
+
         Storage::disk('public')->delete($attachment->path);
         $attachment->delete();
-        
-        return response()->json(['success' => true]);
+
+        // Jika request minta JSON (AJAX), baru balas JSON
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        // Kalau form biasa (tidak AJAX), redirect balik ke show
+        return redirect()
+            ->route('admin.forum.show', $postId)
+            ->with('success', 'Lampiran berhasil dihapus!');
     }
     
     /**
@@ -294,5 +304,179 @@ class AdminForumController extends Controller
         
         Alert::error('Error', 'File tidak ditemukan');
         return redirect()->back();
+    }
+    public function reportIndex(Request $request)
+    {
+        $query = ForumReport::with(['post', 'reporter', 'admin']);
+
+        // Handle search
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->whereHas('post', function($q) use ($searchTerm) {
+                $q->where('judul', 'like', "%{$searchTerm}%");
+            })->orWhereHas('reporter', function($q) use ($searchTerm) {
+                $q->where('Nama_Pengguna', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        // Handle status filter
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        // Handle reason filter
+        if ($request->has('reason') && !empty($request->reason)) {
+            $query->where('alasan_laporan', $request->reason);
+        }
+
+        // Handle sorting
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                case 'latest':
+                default:
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $reports = $query->paginate(15);
+
+        // Get statistics for the dashboard
+        $totalReports = ForumReport::count();
+        $pendingReports = ForumReport::where('status', 'pending')->count();
+        $actionedReports = ForumReport::where('status', 'actioned')->count();
+        $rejectedReports = ForumReport::where('status', 'rejected')->count();
+        
+        // Get counts by reason
+        $reportsByReason = ForumReport::selectRaw('alasan_laporan, count(*) as count')
+            ->groupBy('alasan_laporan')
+            ->get()
+            ->pluck('count', 'alasan_laporan')
+            ->toArray();
+
+        // Preserve query parameters in pagination links
+        if ($request->has(['search', 'sort', 'status', 'reason'])) {
+            $reports->appends($request->only(['search', 'sort', 'status', 'reason']));
+        }
+
+        return view('admin.forum.reports.index', compact(
+            'reports', 
+            'totalReports', 
+            'pendingReports', 
+            'actionedReports', 
+            'rejectedReports',
+            'reportsByReason'
+        ));
+    }
+
+    /**
+     * Display the specified report details.
+     */
+    public function reportShow($id)
+    {
+        $report = ForumReport::with([
+            'post', 
+            'post.pengguna',
+            'post.comments', 
+            'post.attachments',
+            'reporter',
+            'admin'
+        ])->findOrFail($id);
+        
+        // Get other reports for this post
+        $otherReports = ForumReport::where('ID_ForumPost', $report->ID_ForumPost)
+            ->where('ID_Report', '!=', $id)
+            ->with('reporter')
+            ->get();
+
+        return view('admin.forum.reports.show', compact('report', 'otherReports'));
+    }
+
+    /**
+     * Update the status of a report.
+     */
+    public function reportUpdate(Request $request, $id)
+    {
+        $report = ForumReport::findOrFail($id);
+        
+        $request->validate([
+            'status' => 'required|in:pending,reviewed,rejected,actioned',
+            'admin_notes' => 'nullable|string|max:1000',
+            'action' => 'nullable|in:none,hide_post,delete_post,warn_user,ban_user',
+        ]);
+        
+        // Update report
+        $report->status = $request->status;
+        $report->admin_notes = $request->admin_notes;
+        $report->ID_Admin = Auth::id();
+        $report->handled_at = now();
+        $report->save();
+        
+        // Perform action based on admin's decision if status is actioned
+        if ($request->status === 'actioned' && $request->has('action')) {
+            $post = $report->post;
+            
+            switch ($request->action) {
+                case 'hide_post':
+                    // Mark post as hidden/reported
+                    $post->is_reported = true;
+                    $post->save();
+                    break;
+                    
+                case 'delete_post':
+                    // Soft delete the post
+                    $post->delete();
+                    
+                    // Update other reports about this post
+                    ForumReport::where('ID_ForumPost', $post->ID_ForumPost)
+                        ->where('status', 'pending')
+                        ->update([
+                            'status' => 'actioned',
+                            'admin_notes' => 'Post deleted due to violations',
+                            'ID_Admin' => Auth::id(),
+                            'handled_at' => now()
+                        ]);
+                    break;
+                    
+                case 'warn_user':
+                    // TODO: Implement warning system for users
+                    // This would typically create a warning record and possibly send an email/notification
+                    
+                    // For now, we'll just make a note
+                    $report->admin_notes .= "\n(User warning has been issued)";
+                    $report->save();
+                    break;
+                    
+                case 'ban_user':
+                    // TODO: Implement ban functionality
+                    // This would typically update user status and possibly send an email/notification
+                    
+                    // For now, we'll just make a note
+                    $report->admin_notes .= "\n(User ban has been initiated)";
+                    $report->save();
+                    break;
+            }
+        }
+        
+        Alert::success('Berhasil', 'Status laporan berhasil diperbarui');
+        return redirect()->back();
+    }
+
+    /**
+     * Remove a report from system.
+     */
+    public function reportDestroy($id)
+    {
+        $report = ForumReport::findOrFail($id);
+        $report->delete();
+        
+        Alert::success('Berhasil', 'Laporan berhasil dihapus dari sistem');
+        return redirect()->route('admin.forum.reports');
     }
 }
