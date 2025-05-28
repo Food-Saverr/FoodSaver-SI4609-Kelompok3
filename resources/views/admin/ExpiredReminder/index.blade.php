@@ -1,7 +1,7 @@
 {{-- resources/views/admin/ExpiredReminder/index.blade.php --}}
 @extends('layouts.appadmin')
 
-@section('title', 'Pengingat Makanan Kedaluwarsa - FoodSaver')
+@section('title', 'Reminder Makanan Kedaluwarsa - FoodSaver')
 
 @section('content')
 <!-- Main Container -->
@@ -10,7 +10,7 @@
     <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
         <div class="p-6 flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-extrabold title-font gradient-text mb-2">Pengingat Makanan Kedaluwarsa</h1>
+                <h1 class="text-3xl font-extrabold title-font gradient-text mb-2">Reminder Makanan Kedaluwarsa</h1>
                 <p class="text-gray-600">Kelola daftar makanan yang mendekati tanggal kedaluwarsa dan kirim pengingat kepada donatur.</p>
             </div>
             <div class="bg-primary-500 text-white rounded-full p-4 flex items-center justify-center">
