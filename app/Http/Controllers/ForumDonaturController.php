@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class ForumPenggunaController extends Controller
+class ForumDonaturController extends Controller
 {
     /**
      * Display a listing of the posts.
@@ -56,7 +56,7 @@ class ForumPenggunaController extends Controller
             $posts->appends($request->only(['search', 'sort']));
         }
 
-        return view('pengguna.forum.index', compact('posts'));
+        return view('donatur.forum.index', compact('posts'));
     }
 
     /**
@@ -64,7 +64,7 @@ class ForumPenggunaController extends Controller
      */
     public function create()
     {
-        return view('pengguna.forum.create');
+        return view('donatur.forum.create');
     }
 
     /**
@@ -101,7 +101,7 @@ class ForumPenggunaController extends Controller
         }
 
         Alert::success('Berhasil', 'Postingan forum berhasil dibuat!');
-        return redirect()->route('pengguna.forum.show', $post->ID_ForumPost);
+        return redirect()->route('donatur.forum.show', $post->ID_ForumPost);
     }
 
     /**
@@ -123,7 +123,7 @@ class ForumPenggunaController extends Controller
             $isLiked = $post->isLikedByUser(Auth::id());
         }
 
-        return view('pengguna.forum.show', compact('post', 'isLiked'));
+        return view('donatur.forum.show', compact('post', 'isLiked'));
     }
 
     /**
@@ -139,7 +139,7 @@ class ForumPenggunaController extends Controller
             return redirect()->back();
         }
 
-        return view('pengguna.forum.edit', compact('post'));
+        return view('donatur.forum.edit', compact('post'));
     }
 
     /**
@@ -195,7 +195,7 @@ class ForumPenggunaController extends Controller
         }
 
         Alert::success('Berhasil', 'Postingan forum berhasil diperbarui!');
-        return redirect()->route('pengguna.forum.show', $post->ID_ForumPost);
+        return redirect()->route('donatur.forum.show', $post->ID_ForumPost);
     }
 
     /**
@@ -219,7 +219,7 @@ class ForumPenggunaController extends Controller
         $post->delete();
 
         Alert::success('Berhasil', 'Postingan forum berhasil dihapus!');
-        return redirect()->route('pengguna.forum.index');
+        return redirect()->route('donatur.forum.index');
     }
 
     /**

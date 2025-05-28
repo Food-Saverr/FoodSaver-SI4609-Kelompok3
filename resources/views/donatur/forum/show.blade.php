@@ -5,14 +5,14 @@
 @section('content')
 <!-- Animated Background Elements -->
 <div class="fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-[10%] -right-[10%] w-[35%] h-[40%] bg-gradient-to-br from-green-100/30 to-green-200/20 blur-3xl rounded-full animate-blob"></div>
-    <div class="absolute top-[30%] -left-[5%] w-[25%] h-[30%] bg-gradient-to-br from-blue-100/20 to-green-100/20 blur-3xl rounded-full animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-[10%] right-[20%] w-[30%] h-[40%] bg-gradient-to-br from-green-100/20 to-blue-100/20 blur-3xl rounded-full animate-blob animation-delay-4000"></div>
+    <div class="absolute -top-[10%] -right-[10%] w-[35%] h-[40%] bg-gradient-to-br from-blue-100/30 to-blue-200/20 blur-3xl rounded-full animate-blob"></div>
+    <div class="absolute top-[30%] -left-[5%] w-[25%] h-[30%] bg-gradient-to-br from-indigo-100/20 to-blue-100/20 blur-3xl rounded-full animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-[10%] right-[20%] w-[30%] h-[40%] bg-gradient-to-br from-blue-100/20 to-indigo-100/20 blur-3xl rounded-full animate-blob animation-delay-4000"></div>
 </div>
 
 <!-- Hero Section with Semi-transparent Overlay for better text contrast -->
 <div class="relative py-10 mb-8">
-    <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-500 shadow-xl"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 shadow-xl"></div>
     <div class="absolute inset-0 bg-black/20"></div> <!-- Dark overlay for better text contrast -->
     
     <div class="container mx-auto px-4 relative z-10">
@@ -20,7 +20,7 @@
         <nav class="flex mb-4 text-sm" aria-label="Breadcrumb">
             <ol class="flex flex-wrap items-center space-x-2">
                 <li>
-                    <a href="{{ route('pengguna.forum.index') }}" class="text-white hover:text-white/90 transition-colors">
+                    <a href="{{ route('donatur.forum.index') }}" class="text-white hover:text-white/90 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                         </svg>
@@ -32,7 +32,7 @@
                     </svg>
                 </li>
                 <li>
-                    <a href="{{ route('pengguna.forum.index') }}" class="text-white hover:text-white/90 transition-colors">Forum</a>
+                    <a href="{{ route('donatur.forum.index') }}" class="text-white hover:text-white/90 transition-colors">Forum</a>
                 </li>
                 <li>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,13 +127,13 @@
                     <!-- Author Information -->
                     <div class="flex items-start mb-8">
                         <div class="relative group">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-green-400 to-green-500 opacity-10 group-hover:opacity-30 transform group-hover:scale-110 transition-all"></div>
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 opacity-10 group-hover:opacity-30 transform group-hover:scale-110 transition-all"></div>
                             <img src="{{ $post->pengguna->foto ? asset('storage/'.$post->pengguna->foto) : asset('images/default-avatar.png') }}" 
-                                class="w-14 h-14 rounded-full object-cover ring-2 ring-green-100 group-hover:ring-green-300 transition-all z-10 relative" 
+                                class="w-14 h-14 rounded-full object-cover ring-2 ring-blue-100 group-hover:ring-blue-300 transition-all z-10 relative" 
                                 alt="{{ $post->pengguna->Nama_Pengguna }}"
                                 onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=80'">
-                            <div class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-green-100 border-2 border-white flex items-center justify-center z-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                            <div class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center z-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                 </svg>
                             </div>
@@ -156,13 +156,13 @@
                             <div x-show="open" 
                                  @click.away="open = false" 
                                  class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10">
-                                <a href="{{ route('pengguna.forum.edit', $post->ID_ForumPost) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('donatur.forum.edit', $post->ID_ForumPost) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                     Edit Postingan
                                 </a>
-                                <form action="{{ route('pengguna.forum.destroy', $post->ID_ForumPost) }}" method="POST" class="w-full" id="delete-post-form">
+                                <form action="{{ route('donatur.forum.destroy', $post->ID_ForumPost) }}" method="POST" class="w-full" id="delete-post-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" onclick="return confirm('Apakah Anda yakin ingin menghapus postingan ini?')">
@@ -245,7 +245,7 @@
                     <!-- Post Actions with Animation and spacing fix -->
                     <div class="border-t border-gray-200 mt-8 pt-6">
                         <div class="grid grid-cols-2 gap-4">
-                            <form action="{{ route('pengguna.forum.like', $post->ID_ForumPost) }}" method="POST" class="like-form">
+                            <form action="{{ route('donatur.forum.like', $post->ID_ForumPost) }}" method="POST" class="like-form">
                                 @csrf
                                 <button type="submit" class="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 {{ $isLiked ? 'text-red-500 font-medium' : 'text-gray-700' }} transition-all transform hover:shadow-md group">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:scale-125 transition-transform" fill="{{ $isLiked ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="{{ $isLiked ? '0' : '1.5' }}">
@@ -277,13 +277,13 @@
                 </div>
                 <div class="p-6">
                     <!-- Comment Form with Enhanced Design -->
-                    <form action="{{ route('pengguna.forum.comment', $post->ID_ForumPost) }}" method="POST" class="mb-8 animate-fadeIn animation-delay-600">
+                    <form action="{{ route('donatur.forum.comment', $post->ID_ForumPost) }}" method="POST" class="mb-8 animate-fadeIn animation-delay-600">
                         @csrf
                         <div class="mb-4">
-                            <label for="comment-box" class="block text-sm font-medium text-gray-700 mb-2">Tulis komentar sebagai <span class="font-semibold text-green-600">{{ Auth::user()->Nama_Pengguna }}</span></label>
+                            <label for="comment-box" class="block text-sm font-medium text-gray-700 mb-2">Tulis komentar sebagai <span class="font-semibold text-blue-600">{{ Auth::user()->Nama_Pengguna }}</span></label>
                             <div class="relative">
                                 <textarea 
-                                    class="w-full px-4 py-3 border {{ $errors->has('konten') ? 'border-red-500' : 'border-gray-200' }} rounded-xl bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all" 
+                                    class="w-full px-4 py-3 border {{ $errors->has('konten') ? 'border-red-500' : 'border-gray-200' }} rounded-xl bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
                                     id="comment-box" 
                                     name="konten" 
                                     rows="4" 
@@ -297,8 +297,8 @@
                             @enderror
                         </div>
                         <div class="flex justify-end">
-                            <button type="submit" class="relative overflow-hidden group inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                                <span class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></span>
+                            <button type="submit" class="relative overflow-hidden group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 relative z-10" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                                 </svg>
@@ -325,7 +325,7 @@
                                     <div class="flex">
                                         <!-- Fixed avatar hover effect -->
                                         <div class="relative flex-shrink-0">
-                                            <div class="h-10 w-10 overflow-hidden rounded-full ring-2 ring-gray-200 hover:ring-green-300 transition-all duration-300">
+                                            <div class="h-10 w-10 overflow-hidden rounded-full ring-2 ring-gray-200 hover:ring-blue-300 transition-all duration-300">
                                                 <img src="{{ $comment->pengguna->foto ? asset('storage/'.$comment->pengguna->foto) : asset('images/default-avatar.png') }}" 
                                                      class="h-full w-full object-cover transition-transform duration-300 hover:scale-110" 
                                                      alt="{{ $comment->pengguna->Nama_Pengguna }}"
@@ -341,7 +341,7 @@
                                             
                                             @if(Auth::id() == $comment->ID_Pengguna)
                                                 <div class="text-right">
-                                                    <form action="{{ route('pengguna.forum.comment.delete', $comment->ID_Comment) }}" method="POST" class="inline-block">
+                                                    <form action="{{ route('donatur.forum.comment.delete', $comment->ID_Comment) }}" method="POST" class="inline-block">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-xs text-red-500 hover:text-red-700 flex items-center justify-end ml-auto" 
@@ -368,9 +368,9 @@
         <div class="space-y-6 animate-fadeIn animation-delay-600">
             <!-- Author Card -->
             <div class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
-                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-blue-50">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
                     <h3 class="font-bold text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         Tentang Penulis
@@ -378,7 +378,7 @@
                 </div>
                 <div class="p-6 text-center">
                     <div class="inline-block relative mb-4 group">
-                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-green-400/30 to-green-500/20 group-hover:from-green-400/40 group-hover:to-green-500/30 transform group-hover:scale-110 transition-all duration-300"></div>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/30 to-blue-500/20 group-hover:from-blue-400/40 group-hover:to-blue-500/30 transform group-hover:scale-110 transition-all duration-300"></div>
                         <img src="{{ $post->pengguna->foto ? asset('storage/'.$post->pengguna->foto) : asset('images/default-avatar.png') }}" 
                              class="h-24 w-24 relative z-10 rounded-full object-cover ring-4 ring-white shadow-lg" 
                              alt="{{ $post->pengguna->Nama_Pengguna }}"
@@ -386,13 +386,12 @@
                     </div>
                     <h4 class="mt-2 text-lg font-bold text-gray-900">{{ $post->pengguna->Nama_Pengguna }}</h4>
                     <p class="text-sm text-gray-500 mb-6">Bergabung sejak {{ $post->pengguna->created_at->format('M Y') }}</p>
-                
                 </div>
                 
                 <!-- Author Stats with improved styling -->
-                <div class="grid grid-cols-3 border-t border-gray-200 bg-gradient-to-r from-green-50 to-blue-50">
+                <div class="grid grid-cols-3 border-t border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
                     <div class="p-4 text-center hover:bg-white/50 transition-colors">
-                        <div class="text-2xl font-bold text-green-600">
+                        <div class="text-2xl font-bold text-blue-600">
                             @php
                                 $postCount = $post->pengguna->forumPosts()->count();
                             @endphp
@@ -401,7 +400,7 @@
                         <div class="text-xs text-gray-500 mt-1">Postingan</div>
                     </div>
                     <div class="p-4 text-center border-x border-gray-200 hover:bg-white/50 transition-colors">
-                        <div class="text-2xl font-bold text-green-600">
+                        <div class="text-2xl font-bold text-blue-600">
                             @php
                                 $commentCount = \App\Models\ForumComment::where('ID_Pengguna', $post->pengguna->ID_Pengguna)->count();
                             @endphp
@@ -410,7 +409,7 @@
                         <div class="text-xs text-gray-500 mt-1">Komentar</div>
                     </div>
                     <div class="p-4 text-center hover:bg-white/50 transition-colors">
-                        <div class="text-2xl font-bold text-green-600">
+                        <div class="text-2xl font-bold text-blue-600">
                             @php
                                 $likeCount = \App\Models\ForumLike::where('ID_Pengguna', $post->pengguna->ID_Pengguna)->count();
                             @endphp
@@ -423,9 +422,9 @@
             
             <!-- Recent Posts Card -->
             <div class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
-                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-green-50">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-50 to-blue-50">
                     <h3 class="font-bold text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                         </svg>
                         Diskusi Terbaru
@@ -440,8 +439,8 @@
                     @endphp
                     
                     @forelse($recentPosts as $recentPost)
-                        <a href="{{ route('pengguna.forum.show', $recentPost->ID_ForumPost) }}" class="block p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors group">
-                            <h5 class="font-medium text-gray-900 mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">{{ $recentPost->judul }}</h5>
+                        <a href="{{ route('donatur.forum.show', $recentPost->ID_ForumPost) }}" class="block p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors group">
+                            <h5 class="font-medium text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">{{ $recentPost->judul }}</h5>
                             <div class="flex justify-between items-center">
                                 <p class="text-xs text-gray-500 flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -467,7 +466,7 @@
             
             <!-- Quick Actions Card -->
             <div class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
-                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-green-50">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-blue-50">
                     <h3 class="font-bold text-gray-900 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -477,9 +476,9 @@
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-1 gap-3">
-                        <a href="{{ route('pengguna.forum.create') }}" class="flex items-center p-3 bg-gray-50 hover:bg-green-50 rounded-xl transition-colors group">
-                            <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center mr-3 group-hover:bg-green-200 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a href="{{ route('donatur.forum.create') }}" class="flex items-center p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors group">
+                            <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg>
                             </div>
@@ -489,7 +488,7 @@
                             </div>
                         </a>
                         
-                        <a href="{{ route('pengguna.forum.index') }}" class="flex items-center p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors group">
+                        <a href="{{ route('donatur.forum.index') }}" class="flex items-center p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors group">
                             <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -564,7 +563,7 @@
                             <span class="text-xs text-gray-600">Copy Link</span>
                         </button>
                     </div>
-                    <div id="copy-message" class="hidden mt-3 text-center text-xs text-green-600 font-medium py-1 bg-green-50 rounded-lg">
+                    <div id="copy-message" class="hidden mt-3 text-center text-xs text-blue-600 font-medium py-1 bg-blue-50 rounded-lg">
                         Link berhasil disalin!
                     </div>
                 </div>

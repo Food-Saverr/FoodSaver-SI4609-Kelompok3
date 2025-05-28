@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Pengguna; 
 use App\Models\Makanan; 
 use App\Models\Artikel;
-use App\Models\Forum;
+use App\Models\ForumPost; 
 
 class AdminDashboardController extends Controller
 {
@@ -42,10 +42,19 @@ class AdminDashboardController extends Controller
         });
         $artikelData = $artikelPerMinggu->pluck('total_artikel');
 
-        $totalForum = Forum::count(); 
-        $diskusiAktif = Forum::where('is_active', true)->count();
+        $totalForum = ForumPost::count(); // Ubah Forum menjadi ForumPost
+        $diskusiAktif = ForumPost::whereNotNull('ID_ForumPost')->count(); // Sesuaikan kondisi
     
-        $forumPerBulan = Forum::statistikPerBulan();
+        // Mendapatkan statistik forum per bulan
+        $forumPerBulan = DB::table('forum_posts') // Sesuaikan nama tabel
+            ->select(
+                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('COUNT(*) as total_forum')
+            )
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
+            
         $bulanLabels = [];
         $forumData = [];
         
@@ -157,10 +166,18 @@ class AdminDashboardController extends Controller
     }
     public function statistikForum()
     {
-        $totalForum = Forum::count(); 
-        $diskusiAktif = Forum::where('is_active', true)->count();
+        $totalForum = ForumPost::count(); // Ubah Forum menjadi ForumPost
+        $diskusiAktif = ForumPost::whereNotNull('ID_ForumPost')->count(); // Sesuaikan kondisi
 
-        $forumPerBulan = Forum::statistikPerBulan();
+        // Mendapatkan statistik forum per bulan
+        $forumPerBulan = DB::table('forum_posts') // Sesuaikan nama tabel
+            ->select(
+                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('COUNT(*) as total_forum')
+            )
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
     
         $bulanLabels = [];
         $forumData = [];

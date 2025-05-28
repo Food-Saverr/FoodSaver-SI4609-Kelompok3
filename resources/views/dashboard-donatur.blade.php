@@ -247,7 +247,7 @@
                         class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
                             <i class="fas fa-plus mr-2"></i> Tambah Donasi
                         </a>
-                        <a href="" 
+                        <a href="{{ route('donatur.forum.index') }}" 
                         class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-comments"></i> Forum
                         </a>
