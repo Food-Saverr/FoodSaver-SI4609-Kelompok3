@@ -8,7 +8,7 @@
         <!-- Breadcrumb -->
         <a href="{{ route('admin.food-listing.show', $makanan->ID_Makanan) }}" class="text-sm text-orange-500 flex items-center hover:text-orange-700 transition-colors group mb-6">
             <i class="fas fa-arrow-left mr-2 transition-transform group-hover:-translate-x-1"></i>
-            Kembali ke Detail Makanan
+            Kembali ke Detail Makanan 
         </a>
 
         <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow">
