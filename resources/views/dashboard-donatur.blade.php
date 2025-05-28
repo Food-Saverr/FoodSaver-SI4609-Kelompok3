@@ -224,7 +224,7 @@
                     <div class="h-full bg-blue-400 w-2/3"></div>
                 </div>
             </div>
-        </div>
+        </div> 
 
         <!-- Recent Donations -->
         <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-10 custom-shadow mb-16">
