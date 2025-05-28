@@ -126,7 +126,7 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/payments', [PaymentController::class, 'index'])->name('pengguna.payment.index');
     // Route::get('/payments/{id}/download', [PaymentController::class, 'downloadInvoice'])->name('payment.download');
     Route::get('/payments/download/{id}', [PaymentController::class, 'downloadInvoice'])->name('pengguna.payment.downloadInvoice');
-
+    
     Route::get('/donasi-keuangan', [DonationController::class, 'index'])->name('pengguna.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonationController::class, 'show'])->name('pengguna.donation.show');
 
