@@ -110,10 +110,7 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('donatur.notifications.index');
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('donatur.notifications.mark-as-read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('donatur.notifications.mark-all-read');
-    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('donatur.notifications.preferences');
-    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('donatur.notifications.update-preferences');
     Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('donatur.notifications.unread-count');
-    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('donatur.notifications.dropdown');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'FoodSaver - Selamatkan Makanan, Selamatkan Dunia')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -152,7 +153,7 @@
                             $prefix = $role == 'Admin' ? 'admin' : ($role == 'Donatur' ? 'donatur' : 'pengguna');
                         @endphp
                         <div class="relative">
-                            <x-notification-dropdown :notifications="$notifications" :role="'donatur'" />
+                            <x-notification.donaturdropdown :notifications="$notifications" />
                         </div>
                         <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
                             <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
@@ -266,6 +267,6 @@
         });
     </script>
     
-    @yield('scripts')
+    @stack('scripts')
 </body>
 </html>

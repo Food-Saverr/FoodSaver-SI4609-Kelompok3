@@ -6,6 +6,8 @@ use App\Models\Notification;
 use App\Models\NotificationPreference;
 use App\Models\User;
 use App\Models\Pengguna;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationService
 {
@@ -24,20 +26,20 @@ class NotificationService
         ], [
             'request_status' => true,
             'new_requests' => true,
-            'maintenance' => true
+            'maintenance' => true,
+            'announcements_enabled' => true,
+            'ads_enabled' => true,
         ])->fresh();
 
         // Check if this type of notification is enabled
-        if (in_array($type, ['announcement', 'info'])) {
-            $isEnabled = true;
-        } else {
-            $isEnabled = match($type) {
-                'request_status' => $preferences->request_status,
-                'new_request' => $preferences->new_requests,
-                'maintenance' => $preferences->maintenance,
-                default => true
-            };
-        }
+        $isEnabled = match($type) {
+            'request_status' => $preferences->request_status,
+            'new_request' => $preferences->new_requests,
+            'maintenance' => $preferences->maintenance,
+            'announcement' => $preferences->announcements_enabled,
+            'advertisement' => $preferences->ads_enabled,
+            default => true
+        };
 
         if (!$isEnabled) {
             return;

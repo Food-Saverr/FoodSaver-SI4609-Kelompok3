@@ -14,6 +14,8 @@ return new class extends Migration
             $table->boolean('request_status')->default(true); // Notifications for request status changes
             $table->boolean('new_requests')->default(true); // Notifications for new food requests
             $table->boolean('maintenance')->default(true); // System maintenance notifications
+            $table->boolean('announcements_enabled')->default(true); // Notifications for announcements
+            $table->boolean('ads_enabled')->default(true); // Notifications for ads
             $table->timestamps();
         });
     }

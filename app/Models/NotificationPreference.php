@@ -13,13 +13,17 @@ class NotificationPreference extends Model
         'user_id',
         'request_status',
         'new_requests',
-        'maintenance'
+        'maintenance',
+        'announcements_enabled',
+        'ads_enabled'
     ];
 
     protected $casts = [
         'request_status' => 'boolean',
         'new_requests' => 'boolean',
-        'maintenance' => 'boolean'
+        'maintenance' => 'boolean',
+        'announcements_enabled' => 'boolean',
+        'ads_enabled' => 'boolean'
     ];
 
     public function user()

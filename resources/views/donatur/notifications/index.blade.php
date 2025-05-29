@@ -47,41 +47,101 @@
 
 @push('scripts')
 <script>
-function markAsRead(id) {
-    fetch(`/donatur/notifications/${id}/mark-as-read`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const notification = document.getElementById(`notification-${id}`);
-            notification.classList.remove('bg-blue-50');
-            notification.classList.add('bg-white');
-            const button = notification.querySelector('button');
-            if (button) {
-                button.remove();
+document.addEventListener('DOMContentLoaded', function() {
+    function updateNotificationCount() {
+        fetch('/donatur/notifications/unread-count', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
             }
-        }
-    });
-}
+        })
+        .then(response => response.json())
+        .then(data => {
+            const countElement = document.getElementById('notification-count');
+            if (countElement) {
+                countElement.textContent = data.count;
+                countElement.style.display = data.count > 0 ? 'inline-flex' : 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching notification count:', error));
+    }
 
-document.getElementById('mark-all-read').addEventListener('click', function() {
-    fetch('/donatur/notifications/mark-all-read', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        }
-    });
+    function markAsRead(id) {
+        fetch(`/donatur/notifications/${id}/mark-as-read`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const notification = document.getElementById(`notification-${id}`);
+                if (notification) {
+                    notification.classList.remove('bg-blue-50');
+                    notification.classList.add('bg-white');
+                    const button = notification.querySelector('button');
+                    if (button) {
+                        button.remove();
+                    }
+                    updateNotificationCount();
+                }
+            } else {
+                console.error('Error:', data.error);
+                alert('Gagal menandai notifikasi sebagai dibaca: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Terjadi kesalahan saat menandai notifikasi sebagai dibaca.');
+        });
+    }
+
+    const markAllButton = document.getElementById('mark-all-read');
+    if (markAllButton) {
+        markAllButton.addEventListener('click', function() {
+            fetch('/donatur/notifications/mark-all-read', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    document.querySelectorAll('[id^="notification-"]').forEach(notification => {
+                        notification.classList.remove('bg-blue-50');
+                        notification.classList.add('bg-white');
+                        const button = notification.querySelector('button');
+                        if (button) {
+                            button.remove();
+                        }
+                    });
+                    updateNotificationCount();
+                } else {
+                    console.error('Error:', data.error);
+                    alert('Gagal menandai semua notifikasi sebagai dibaca: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert('Terjadi kesalahan saat menandai semua notifikasi sebagai dibaca.');
+            });
+        });
+    }
 });
 </script>
 @endpush
-@endsection 
+@endsection

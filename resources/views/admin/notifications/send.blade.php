@@ -33,7 +33,7 @@
             <select name="type" class="w-full border rounded p-2" required>
                 <option value="maintenance">Maintenance</option>
                 <option value="announcement">Pengumuman</option>
-                <option value="info">Info</option>
+                <option value="advertisement">Iklan</option>
             </select>
         </div>
         <div class="mb-4">

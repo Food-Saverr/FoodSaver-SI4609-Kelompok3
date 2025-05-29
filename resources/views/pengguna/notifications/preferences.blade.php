@@ -15,22 +15,22 @@
                 <div class="space-y-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900">Request Status Updates</h3>
-                            <p class="text-sm text-gray-500">Get notified when your food requests are accepted or rejected</p>
+                            <h3 class="text-lg font-medium text-gray-900">Pengumuman</h3>
+                            <p class="text-sm text-gray-500">Dapatkan notifikasi mengenai pengumuman dan informasi penting.</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="request_status" class="sr-only peer" {{ $preferences->request_status ? 'checked' : '' }}>
+                            <input type="checkbox" name="announcements_enabled" class="sr-only peer" {{ $preferences->announcements_enabled ? 'checked' : '' }}>
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                     </div>
 
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900">System Maintenance</h3>
-                            <p class="text-sm text-gray-500">Get notified about system maintenance and updates</p>
+                            <h3 class="text-lg font-medium text-gray-900">Iklan</h3>
+                            <p class="text-sm text-gray-500">Dapatkan notifikasi mengenai penawaran dan iklan promosi.</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="maintenance" class="sr-only peer" {{ $preferences->maintenance ? 'checked' : '' }}>
+                            <input type="checkbox" name="ads_enabled" class="sr-only peer" {{ $preferences->ads_enabled ? 'checked' : '' }}>
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                     </div>

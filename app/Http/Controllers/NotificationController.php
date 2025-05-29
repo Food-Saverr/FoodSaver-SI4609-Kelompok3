@@ -14,6 +14,12 @@ class NotificationController extends Controller
         $notifications = Auth::user()->notifications()
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+        
+        \Log::info('Notifications fetched for user', [
+            'user_id' => Auth::id(),
+            'notification_count' => $notifications->count(),
+            'notifications' => $notifications->pluck('id')->toArray()
+        ]);
 
         $role = Auth::user()->Role_Pengguna;
         if ($role == 'Admin') {
@@ -27,24 +33,33 @@ class NotificationController extends Controller
 
     public function markAsRead($id)
     {
-        $notification = Auth::user()->notifications()->findOrFail($id);
-        $notification->update(['is_read' => true]);
-
-        return response()->json(['success' => true]);
+        try {
+            $notification = Auth::user()->notifications()->findOrFail($id);
+            $notification->update(['is_read' => true, 'read_at' => now()]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to mark notification as read', ['id' => $id, 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'error' => 'Notification not found or unauthorized'], 404);
+        }
     }
 
     public function markAllAsRead()
     {
-        Auth::user()->notifications()
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+        try {
+            $updated = Auth::user()->notifications()
+                ->where('is_read', false)
+                ->update(['is_read' => true, 'read_at' => now()]);
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'updated' => $updated]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to mark all notifications as read', ['error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'error' => 'Failed to mark all notifications as read'], 500);
+        }
     }
 
     public function preferences()
     {
-        $preferences = Auth::user()->notificationPreference;
+        $preferences = Auth::user()->notificationPreference()->firstOrNew();
         $role = Auth::user()->Role_Pengguna;
         if ($role == 'Admin') {
             return view('admin.notifications.preferences', compact('preferences'));
@@ -57,14 +72,18 @@ class NotificationController extends Controller
 
     public function updatePreferences(Request $request)
     {
-        // Set default value jika checkbox tidak dicentang
         $data = [
             'request_status' => $request->has('request_status'),
             'new_requests' => $request->has('new_requests'),
             'maintenance' => $request->has('maintenance'),
+            'announcements_enabled' => $request->has('announcements_enabled'),
+            'ads_enabled' => $request->has('ads_enabled'),
         ];
 
-        Auth::user()->notificationPreference()->update($data);
+        Auth::user()->notificationPreference()->updateOrCreate(
+            ['user_id' => Auth::id()],
+            $data
+        );
 
         return redirect()->back()->with('success', 'Notification preferences updated successfully');
     }
@@ -107,10 +126,8 @@ class NotificationController extends Controller
             $users = [\App\Models\Pengguna::find($request->user_id)];
         }
 
-        // Filter user valid
         $users = collect($users)->filter();
 
-        // Debug: log user target
         \Log::info('Target users for notification', ['ids' => $users->pluck('ID_Pengguna')->toArray(), 'count' => $users->count()]);
 
         if ($users->isEmpty()) {
