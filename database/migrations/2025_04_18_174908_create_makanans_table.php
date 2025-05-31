@@ -16,10 +16,10 @@ class CreateMakanansTable extends Migration
             $table->string('Foto_Makanan')->nullable();
             $table->string('Status_Makanan')->nullable();
             $table->dateTime('Tanggal_Kedaluwarsa')->nullable();
+            $table->boolean('notified')->default(false); // Removed after() clause
             $table->string('Lokasi_Makanan')->nullable();
             $table->integer('Jumlah_Makanan')->nullable();
             $table->integer('Jumlah_Didonasi')->nullable();
-
             $table->unsignedBigInteger('id_user')->nullable(); // Bisa Donatur / Admin
 
             $table->timestamps();

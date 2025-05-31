@@ -1,4 +1,7 @@
-@extends(Auth::user()->Role_Pengguna == 'Donatur' ? 'layouts.appdonatur' : 'layouts.app') <!-- Tentukan layout berdasarkan role -->
+@extends(
+    Auth::user()->Role_Pengguna == 'Donatur' ? 'layouts.appdonatur' : (
+        Auth::user()->Role_Pengguna == 'Admin' ? 'layouts.appadmin' : 'layouts.app')
+)
 
 @section('title', 'Edit Profil')
 

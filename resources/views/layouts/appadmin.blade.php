@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Admin - FoodSaver')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -135,48 +136,58 @@
                 <a href="{{ route('admin.manage-user.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.manage-user.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-users mr-2"></i>Pengguna
                 </a>
-                <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
+                <a href="{{ route('artikels.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikels.*') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
-                <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
+                <a href="{{ route('admin.forum.index') }}" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
+
             </nav>
             
             <div class="flex items-center space-x-6">
-                <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
-                    <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
-                        <img 
-                            src="{{ auth()->user()->Foto_Profil ? asset('storage/' . auth()->user()->Foto_Profil) : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=32' }}" 
-                            class="w-9 h-9 rounded-full border-2 border-orange-200 group-hover:border-orange-400 transition" 
-                            alt="{{ auth()->user()->Nama_Pengguna ?? 'Admin' }}"
-                            onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=32'"
-                        >
-                        <span class="ml-2 hidden lg:block font-medium group-hover:gradient-text">{{ auth()->user()->Nama_Pengguna ?? 'Admin' }}</span>
-                        <i class="fas fa-chevron-down ml-2 text-xs group-hover:gradient-text transition"></i>
-                    </button>
-                    
-                    <div x-show="open" @click.away="open = false" 
-                         x-transition:enter="transition ease-out duration-200" 
-                         x-transition:enter-start="opacity-0 scale-y-0" 
-                         x-transition:enter-end="opacity-100 scale-y-100" 
-                         x-transition:leave="transition ease-in duration-150" 
-                         x-transition:leave-start="opacity-100 scale-y-100" 
-                         x-transition:leave-end="opacity-0 scale-y-0"
-                         class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl py-3 z-20 custom-shadow dropdown-menu">
-                        <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
-                            <i class="fas fa-user-circle mr-3 text-orange-500"></i>Profil
-                        </a>
-                        <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
-                            <i class="fas fa-cog mr-3 text-orange-500"></i>Pengaturan
-                        </a>
-                        <hr class="my-2 border-gray-100">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="flex items-center w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">
-                                <i class="fas fa-sign-out-alt mr-3"></i>Logout
-                            </button>
-                        </form>
+                <div class="flex items-center space-x-4">
+                    @php
+                        $role = Auth::check() ? Auth::user()->Role_Pengguna : null;
+                        $prefix = $role == 'Admin' ? 'admin' : ($role == 'Donatur' ? 'donatur' : 'pengguna');
+                    @endphp
+                    <a href="{{ route('admin.notifications.send-form') }}" class="text-gray-600 hover:text-orange-600 transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                    </a>
+                    <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
+                        <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
+                            <img 
+                                src="{{ auth()->user()->Foto_Profil ? asset('storage/' . auth()->user()->Foto_Profil) : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=32' }}" 
+                                class="w-9 h-9 rounded-full border-2 border-orange-200 group-hover:border-orange-400 transition" 
+                                alt="{{ auth()->user()->Nama_Pengguna ?? 'Admin' }}"
+                                onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=32'"
+                            >
+                            <span class="ml-2 hidden lg:block font-medium group-hover:gradient-text">{{ auth()->user()->Nama_Pengguna ?? 'Admin' }}</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs group-hover:gradient-text transition"></i>
+                        </button>
+                        
+                        <div x-show="open" @click.away="open = false" 
+                             x-transition:enter="transition ease-out duration-200" 
+                             x-transition:enter-start="opacity-0 scale-y-0" 
+                             x-transition:enter-end="opacity-100 scale-y-100" 
+                             x-transition:leave="transition ease-in duration-150" 
+                             x-transition:leave-start="opacity-100 scale-y-100" 
+                             x-transition:leave-end="opacity-0 scale-y-0"
+                             class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl py-3 z-20 custom-shadow dropdown-menu">
+                            <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
+                                <i class="fas fa-user-circle mr-3 text-orange-500"></i>Profil
+                            </a>
+                            <a href="#" class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150">
+                                <i class="fas fa-cog mr-3 text-orange-500"></i>Pengaturan
+                            </a>
+                            <hr class="my-2 border-gray-100">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="flex items-center w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-150">
+                                    <i class="fas fa-sign-out-alt mr-3"></i>Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 
@@ -210,7 +221,7 @@
     </header>
 
     <!-- Main Content -->
-    <main>
+    <main class="pt-24">
         @yield('content')
     </main>
 
@@ -235,6 +246,6 @@
         });
     </script>
     
-    @yield('scripts')
+    @stack('scripts')
 </body>
 </html>

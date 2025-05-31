@@ -34,7 +34,7 @@
 
         <!-- Hero Section: About FoodSaver -->
         <div class="relative bg-white/80 backdrop-blur-xl rounded-2xl p-10 mb-16 custom-shadow animate-fade-up overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-orange-100/30 to-orange-200/30 opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-orange-100/30 to-orange-200/30 opacity-50 pointer-events-none"></div>
             <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-orange-500 to-orange-600"></div>
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center space-x-6">
@@ -43,7 +43,7 @@
                              alt="{{ Auth::user()->Nama_Pengguna }}" 
                              class="w-20 h-20 rounded-full border-4 border-orange-200 object-cover transition-transform group-hover:scale-110"
                              onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=80'">
-                        <a href="" 
+                        <a href="{{ route('profile.show') }}" 
                            class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fas fa-cog text-white text-lg"></i>
                         </a>
@@ -58,14 +58,14 @@
                     </div>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="" 
+                    <a href="{{ route('pengguna.forum.index') }}" 
                        class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
                         <i class="fas fa-comments"></i> Forum Komunitas
                     </a>
-                    <a href="" 
-                    class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
+                    <a href="{{ route ('artikel.pengguna') }}" 
+                       class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
                         <i class="fas fa-newspaper"></i> Artikel & Tips
-                    </class=>
+                    </a>
                 </div>
             </div>
             <div class="mt-8 bg-orange-50/70 rounded-xl p-8">
@@ -211,11 +211,11 @@
                     <p class="text-xl font-semibold text-gray-600">Belum Ada Makanan Tersedia</p>
                     <p class="text-sm text-gray-500 mt-2 max-w-md mx-auto">Jelajahi artikel kami untuk tips mengurangi limbah makanan atau bergabung di forum komunitas!</p>
                     <div class="flex justify-center space-x-4 mt-6">
-                        <a href="" 
+                        <a href="{{ route ('artikel.pengguna') }}" 
                            class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-newspaper"></i> Lihat Artikel
                         </a>
-                        <a href="" 
+                        <a href="{{ route('pengguna.forum.index') }}" 
                            class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-comments"></i> Forum
                         </a>

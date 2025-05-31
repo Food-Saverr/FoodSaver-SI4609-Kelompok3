@@ -11,7 +11,20 @@ class Request extends Model
 
     protected $table = 'requests';
     protected $primaryKey = 'ID_Request';
-    protected $fillable = ['ID_Makanan', 'id_user', 'Pesan', 'Status_Request'];
+    protected $fillable = [
+        'ID_Makanan', 
+        'id_user',
+        'Pesan', 
+        'Status_Request',
+        'Status_Pengambilan',
+        'Waktu_Pengambilan',
+        'Alamat_Pengambilan',
+        'Catatan_Pembatalan'
+    ];
+
+    protected $casts = [
+        'Waktu_Pengambilan' => 'datetime'
+    ];
 
     public function makanan()
     {
