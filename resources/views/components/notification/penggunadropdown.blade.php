@@ -22,7 +22,7 @@
          class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
         <div class="p-4 border-b">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-800">Pengguna Notifications</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Notifications</h3>
                 <button id="mark-all-read-pengguna" class="text-sm text-blue-600 hover:text-blue-800">Mark all as read</button>
             </div>
         </div>

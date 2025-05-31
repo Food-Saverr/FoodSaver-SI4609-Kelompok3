@@ -15,45 +15,78 @@ class NotificationService
     {
         // Debug: log create notification
         \Log::info('Create notification called', [
-            'user_id' => $user->ID_Pengguna,
-            'type' => $type,
-            'title' => $title
-        ]);
-
-        // Get or create notification preferences
-        $preferences = $user->notificationPreference()->firstOrCreate([
-            'user_id' => $user->ID_Pengguna,
-        ], [
-            'request_status' => true,
-            'new_requests' => true,
-            'maintenance' => true,
-            'announcements_enabled' => true,
-            'ads_enabled' => true,
-        ])->fresh();
-
-        // Check if this type of notification is enabled
-        $isEnabled = match($type) {
-            'request_status' => $preferences->request_status,
-            'new_request' => $preferences->new_requests,
-            'maintenance' => $preferences->maintenance,
-            'announcement' => $preferences->announcements_enabled,
-            'advertisement' => $preferences->ads_enabled,
-            default => true
-        };
-
-        if (!$isEnabled) {
-            return;
-        }
-
-        // Create the notification
-        $user->notifications()->create([
-            'user_id' => $user->ID_Pengguna,
+            'user_id' => $user->id_user,
+            'user_name' => $user->Nama_Pengguna,
             'type' => $type,
             'title' => $title,
             'message' => $message,
-            'data' => $data,
-            'read_at' => null
+            'data' => $data
         ]);
+
+        try {
+            // Get or create notification preferences
+            $preferences = $user->notificationPreference()->firstOrCreate([
+                'user_id' => $user->id_user,
+            ], [
+                'request_status' => true,
+                'new_requests' => true,
+                'maintenance' => true,
+                'announcements_enabled' => true,
+                'ads_enabled' => true,
+            ])->fresh();
+
+            \Log::info('Notification preferences', [
+                'user_id' => $user->id_user,
+                'preferences' => $preferences->toArray()
+            ]);
+
+            // Check if this type of notification is enabled
+            $isEnabled = match($type) {
+                'request_status' => $preferences->request_status,
+                'new_request' => $preferences->new_requests,
+                'maintenance' => $preferences->maintenance,
+                'announcement' => $preferences->announcements_enabled,
+                'advertisement' => $preferences->ads_enabled,
+                default => true
+            };
+
+            \Log::info('Notification enabled status', [
+                'user_id' => $user->id_user,
+                'type' => $type,
+                'is_enabled' => $isEnabled
+            ]);
+
+            if (!$isEnabled) {
+                \Log::info('Notification disabled for user', [
+                    'user_id' => $user->id_user,
+                    'type' => $type
+                ]);
+                return;
+            }
+
+            // Create the notification
+            $notification = $user->notifications()->create([
+                'user_id' => $user->id_user,
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'data' => $data,
+                'read_at' => null
+            ]);
+
+            \Log::info('Notification created successfully', [
+                'notification_id' => $notification->id,
+                'user_id' => $user->id_user,
+                'type' => $type
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to create notification', [
+                'user_id' => $user->id_user,
+                'type' => $type,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
     }
 
     public function notifyRequestStatus(Pengguna $user, string $status, array $data = []): void

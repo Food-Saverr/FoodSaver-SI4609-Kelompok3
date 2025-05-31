@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Pengguna extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'penggunas';
     protected $primaryKey = 'id_user';
@@ -33,12 +34,12 @@ class Pengguna extends Authenticatable
 
     public function notifications()
     {
-        return $this->hasMany(\App\Models\Notification::class, 'user_id', 'ID_Pengguna');
+        return $this->hasMany(\App\Models\Notification::class, 'user_id', 'id_user');
     }
 
     public function notificationPreference()
     {
-        return $this->hasOne(\App\Models\NotificationPreference::class, 'user_id', 'ID_Pengguna');
+        return $this->hasOne(\App\Models\NotificationPreference::class, 'user_id', 'id_user');
     }
 
     public function getAuthIdentifierName()

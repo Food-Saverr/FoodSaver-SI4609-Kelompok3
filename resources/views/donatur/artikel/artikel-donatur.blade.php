@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.appdonatur')
 
 @section('title', 'Artikel - FoodSaver')
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('penggunas', 'ID_Pengguna')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('penggunas', 'id_user')->onDelete('cascade');
             $table->string('type'); // 'request_status', 'new_request', 'maintenance', etc.
             $table->string('title');
             $table->text('message');

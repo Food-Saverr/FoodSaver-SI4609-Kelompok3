@@ -150,9 +150,9 @@
                         $role = Auth::check() ? Auth::user()->Role_Pengguna : null;
                         $prefix = $role == 'Admin' ? 'admin' : ($role == 'Donatur' ? 'donatur' : 'pengguna');
                     @endphp
-                    <div class="relative">
-                        <x-notification.admindropdown :notifications="$notifications" />
-                    </div>
+                    <a href="{{ route('admin.notifications.send-form') }}" class="text-gray-600 hover:text-orange-600 transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                    </a>
                     <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
                         <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
                             <img 

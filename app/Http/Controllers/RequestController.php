@@ -94,6 +94,10 @@ class RequestController extends Controller
             'Status_Request' => 'Rejected',
         ]);
 
+        // Kirim notifikasi ke pengguna
+        $notificationService = app(\App\Services\NotificationService::class);
+        $notificationService->notifyRequestStatus($requestModel->pengguna, 'Rejected', ['request_id' => $requestModel->ID_Request]);
+
         return redirect()->route('pengguna.request.index', ['status' => $request->query('status', 'All')])
             ->with('success', 'Permintaan berhasil dibatalkan.');
     }
@@ -101,7 +105,7 @@ class RequestController extends Controller
     public function updatePickup(Request $request, $id_request)
     {
         $requestModel = RequestModel::where('ID_Request', $id_request)
-            ->where('ID_Pengguna', Auth::id())
+            ->where('id_user', Auth::id())
             ->firstOrFail();
 
         // Validate that the request is in approved status
@@ -130,7 +134,7 @@ class RequestController extends Controller
     public function editPickup(Request $request, $id_request)
     {
         $requestModel = RequestModel::where('ID_Request', $id_request)
-            ->where('ID_Pengguna', Auth::id())
+            ->where('id_user', Auth::id())
             ->firstOrFail();
 
         // Validate that the request is in approved status and has been scheduled
@@ -158,7 +162,7 @@ class RequestController extends Controller
     public function cancelPickup(Request $request, $id_request)
     {
         $requestModel = RequestModel::where('ID_Request', $id_request)
-            ->where('ID_Pengguna', Auth::id())
+            ->where('id_user', Auth::id())
             ->firstOrFail();
 
         // Validate that the request is in approved status and has been scheduled
@@ -206,6 +210,10 @@ class RequestController extends Controller
         $requestModel->update([
             'Status_Request' => $request->status_request,
         ]);
+
+        // Kirim notifikasi ke pengguna
+        $notificationService = app(\App\Services\NotificationService::class);
+        $notificationService->notifyRequestStatus($requestModel->pengguna, $request->status_request, ['request_id' => $requestModel->ID_Request]);
 
         return redirect()->route('pengguna.request.show', $id_request)
             ->with('success', 'Status permintaan berhasil diperbarui.');
