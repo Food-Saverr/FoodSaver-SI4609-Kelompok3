@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Pengguna extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'penggunas';
     protected $primaryKey = 'id_user';
@@ -49,5 +50,15 @@ class Pengguna extends Authenticatable
     public function getAuthPassword()
     {
         return $this->Password_Pengguna;
+    }
+
+    public function likedArtikels()
+    {
+        return $this->belongsToMany(
+        Artikel::class,
+        'artikel_user_like',
+        'user_id',
+        'artikel_id'
+    )->withTimestamps();
     }
 }

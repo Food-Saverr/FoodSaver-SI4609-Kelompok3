@@ -13,9 +13,8 @@ class Request extends Model
     protected $primaryKey = 'ID_Request';
     protected $fillable = [
         'ID_Makanan', 
-        'ID_Pengguna', 
-        'Pesan', 
         'id_user',
+        'Pesan', 
         'Status_Request',
         'Status_Pengambilan',
         'Waktu_Pengambilan',

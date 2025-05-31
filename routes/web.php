@@ -18,10 +18,13 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminArtikelController;
+use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ExpiredReminderController;
 use App\Http\Controllers\ExpiredFoodHistoryController;
 
-use App\Http\Controllers\NotificationController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -62,13 +65,13 @@ Route::middleware('auth')->group(function () {
 
     // Route untuk halaman edit profil
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    
+
     // Route untuk update password
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     // Route untuk update profil
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Route untuk menghapus akun
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
 });
@@ -94,13 +97,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
 
     // Notification Routes untuk Admin
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.mark-as-read');
-    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.mark-all-read');
-    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('admin.notifications.preferences');
-    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('admin.notifications.update-preferences');
-    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('admin.notifications.unread-count');
-    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('admin.notifications.dropdown');
     Route::get('/notifications/send', [NotificationController::class, 'showSendForm'])->name('admin.notifications.send-form');
     Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('admin.notifications.send');
 });
@@ -112,11 +108,6 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing/{makanan}/edit', [DonaturMakananController::class, 'edit'])->name('donatur.food-listing.edit');
     Route::put('/food-listing/{makanan}', [DonaturMakananController::class, 'update'])->name('donatur.food-listing.update');
     Route::delete('/food-listing/{makanan}', [DonaturMakananController::class, 'destroy'])->name('donatur.food-listing.destroy');
-    Route::get('/donatur/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
-    Route::get('/donatur/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
-    Route::patch('/donatur/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
-    //Route untuk expired reminder
-
     Route::get('/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
     Route::get('/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
     Route::patch('/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
@@ -126,16 +117,7 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('donatur.notifications.index');
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('donatur.notifications.mark-as-read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('donatur.notifications.mark-all-read');
-    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('donatur.notifications.preferences');
-    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('donatur.notifications.update-preferences');
     Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('donatur.notifications.unread-count');
-    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('donatur.notifications.dropdown');
-
-    // Routes untuk riwayat makanan kedaluwarsa
-    Route::get('/expired-food-history', [ExpiredFoodHistoryController::class, 'index'])
-        ->name('donatur.expired-food-history.index');
-    Route::get('/expired-food-history/{expiredFood}', [ExpiredFoodHistoryController::class, 'show'])
-        ->name('donatur.expired-food-history.show');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
@@ -168,7 +150,7 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     // Dashboard donation
     Route::get('/donation/create', [DonationController::class, 'create'])->name('pengguna.donation.create')->middleware('auth');
     Route::post('/donation', [DonationController::class, 'store'])->name('pengguna.donation.store');
-        
+
     // payment
     Route::get('/payments/create', [PaymentController::class, 'create'])->name('pengguna.payment.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('pengguna.payment.store');
@@ -178,14 +160,13 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
 
     Route::get('/donasi-keuangan', [DonationController::class, 'index'])->name('pengguna.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonationController::class, 'show'])->name('pengguna.donation.show');
-
 });
 
 // --- Routes buat Fitur Donasi keuangan -- Donatur
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donation/create', [DonaturDonationController::class, 'create'])->name('donatur.donation.create')->middleware('auth');
     Route::post('/donation', [DonaturDonationController::class, 'store'])->name('donatur.donation.store');
-        
+
     // payment
     Route::get('/payments/create', [DonaturPaymentController::class, 'create'])->name('donatur.payment.create');
     Route::post('/payments', [DonaturPaymentController::class, 'store'])->name('donatur.payment.store');
@@ -195,7 +176,68 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
 
     Route::get('/donasi-keuangan', [DonaturDonationController::class, 'index'])->name('donatur.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonaturDonationController::class, 'show'])->name('donatur.donation.show');
-
 });
 
+// Admin routes Artikel (gunakan huruf besar "Admin" pada prefix dan middleware)
+Route::middleware(['auth', 'can:Admin'])->prefix('Admin')->group(function () {
+    Route::resource('artikel', AdminArtikelController::class, [
+        'as' => 'Admin'
+    ])->except(['show']);
+});
 
+// Public routes Artikel (Pengguna & Donatur)
+Route::get('artikels', [ArtikelController::class, 'index'])
+    ->name('artikels.index');
+Route::get('artikel/{slug}', [ArtikelController::class, 'show'])
+    ->name('artikels.show');
+
+// web.php
+Route::middleware('auth')->group(function () {
+    Route::post('artikel/{artikel}/like', [LikeController::class, 'toggle'])
+        ->name('artikels.toggleLike');
+});
+
+// Untuk user (public)
+Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index');
+Route::get('/artikel/{slug}', [ArtikelController::class, 'show'])->name('artikel.show');
+
+// Untuk admin (gunakan middleware jika perlu)
+Route::prefix('admin/artikel')->name('admin.artikel.')->group(function () {
+    Route::get('/', [ArtikelController::class, 'index'])->name('index');
+    Route::get('/create', [ArtikelController::class, 'create'])->name('create');
+    Route::post('/', [ArtikelController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [ArtikelController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [ArtikelController::class, 'update'])->name('update');
+    Route::delete('/{id}', [ArtikelController::class, 'destroy'])->name('destroy');
+});
+
+// public lihat artikel & search
+Route::get('artikels', [ArtikelController::class, 'index'])->name('artikels.index');
+Route::get('artikels/{slug}', [ArtikelController::class, 'show'])->name('artikels.show');
+
+// untuk like/unlike (harus login)
+Route::middleware('auth')->group(function () {
+    Route::post('artikels/{artikel}/like', [LikeController::class, 'toggle'])
+        ->name('artikels.toggleLike');
+});
+
+// // Untuk Donatur
+// Route::get('/donatur/artikel', [ArtikelController::class, 'artikelDonatur'])->name('artikel.donatur');
+
+// // Untuk Pengguna
+// Route::get('/pengguna/artikel', [ArtikelController::class, 'artikelPengguna'])->name('artikel.pengguna');
+
+// Untuk Pengguna
+Route::get('/pengguna/artikel', [ArtikelController::class, 'indexPengguna'])
+    ->name('artikel.pengguna')
+    ->middleware('auth');
+
+// Untuk Donatur
+Route::get('/donatur/artikel', [ArtikelController::class, 'indexDonatur'])
+    ->name('artikel.donatur')
+    ->middleware('auth');
+
+Route::get('/expired-food-history', [ExpiredFoodHistoryController::class, 'index'])
+        ->name('donatur.expired-food-history.index');
+Route::get('/expired-food-history/{expiredFood}', [ExpiredFoodHistoryController::class, 'show'])
+        ->name('donatur.expired-food-history.show');

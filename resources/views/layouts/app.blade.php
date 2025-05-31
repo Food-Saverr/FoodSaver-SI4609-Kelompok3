@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'FoodSaver - Selamatkan Makanan, Selamatkan Dunia')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -133,7 +134,7 @@
                 <a href="#" class="navbar-link disabled">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
-                <a href="#" class="navbar-link disabled">
+                <a href="{{ route('artikel.pengguna') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikels.*') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
             </nav>
@@ -152,7 +153,7 @@
                             $prefix = $role == 'Admin' ? 'admin' : ($role == 'Donatur' ? 'donatur' : 'pengguna');
                         @endphp
                         <div class="relative">
-                            <x-notification-dropdown :notifications="$notifications" :role="'pengguna'" />
+                            <x-notification.penggunadropdown :notifications="$notifications" />
                         </div>
                         <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
                             <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
@@ -211,7 +212,7 @@
                 <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                     <i class="fas fa-comments mr-3"></i>Forum
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
+                <a href="{{ route('artikel.pengguna') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('artikels.*') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">
                     <i class="fas fa-newspaper mr-3"></i>Artikel
                 </a>
                 @guest

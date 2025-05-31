@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Admin - FoodSaver')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -135,7 +136,7 @@
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-users mr-2"></i>Pengguna
                 </a>
-                <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
+                <a href="{{ route('artikels.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikels.*') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
@@ -150,9 +151,9 @@
                         $role = Auth::check() ? Auth::user()->Role_Pengguna : null;
                         $prefix = $role == 'Admin' ? 'admin' : ($role == 'Donatur' ? 'donatur' : 'pengguna');
                     @endphp
-                    <div class="relative">
-                        <x-notification-dropdown :notifications="$notifications" :role="'admin'" />
-                    </div>
+                    <a href="{{ route('admin.notifications.send-form') }}" class="text-gray-600 hover:text-orange-600 transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                    </a>
                     <div x-data="{ open: false }" class="relative" @keydown.escape="open = false">
                         <button @click="open = !open" class="flex items-center text-gray-700 hover:text-orange-600 transition duration-200 group">
                             <img 
