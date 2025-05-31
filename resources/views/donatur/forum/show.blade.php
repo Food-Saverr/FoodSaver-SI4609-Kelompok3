@@ -15,7 +15,7 @@
     <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 shadow-xl"></div>
     <div class="absolute inset-0 bg-black/20"></div> <!-- Dark overlay for better text contrast -->
     
-    <div class="container mx-auto px-4 relative z-10">
+    <div class="mt-20 container mx-auto px-4 relative z-10">
         <!-- Breadcrumb with improved styling -->
         <nav class="flex mb-4 text-sm" aria-label="Breadcrumb">
             <ol class="flex flex-wrap items-center space-x-2">

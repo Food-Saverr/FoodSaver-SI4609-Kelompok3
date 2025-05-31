@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Page Header with Dynamic Gradient -->
-<div class="relative bg-gradient-to-r from-red-700 to-red-800 shadow-lg overflow-hidden">
+<div class="relative min-h-[400px] flex items-center overflow-hidden bg-gradient-to-r from-red-700 to-red-600 shadow-xl">
     <!-- Decorative Patterns with reduced opacity -->
     <div class="absolute inset-0 opacity-5">
         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white"></div>
@@ -45,7 +45,7 @@
 </div>
 
 <!-- Page Content -->
-<div class="bg-gray-50 min-h-screen pb-12">
+<div class="bg-gray-50 min-h-screen pb-12 mt-20">
     <div class="container mx-auto px-4 sm:px-6 -mt-6">
         <!-- Stats Dashboard -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
