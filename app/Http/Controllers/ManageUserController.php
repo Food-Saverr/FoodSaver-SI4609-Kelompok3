@@ -43,18 +43,29 @@ class ManageUserController extends Controller
         $pengguna = Pengguna::findOrFail($id); // Cari pengguna berdasarkan ID
         $pengguna->update($request->all()); // Update data pengguna dengan input baru
 
-        return redirect()->route('admin.manage-user.index')->with('success', 'Pengguna berhasil diperbarui');
+         return redirect()->route('admin.manage-user.show', $pengguna->id_user)->with('success', 'Pengguna berhasil diperbarui');
     }
 
-    // Menghapus pengguna
+    // Menampilkan halaman konfirmasi untuk menghapus akun
+    public function confirmDelete($id)
+    {
+        $pengguna = Pengguna::findOrFail($id);
+        return view('admin.manage-user.confirm-delete', compact('pengguna'));
+    }
+
+    // Menghapus akun pengguna setelah konfirmasi
     public function destroy($id)
     {
-        $pengguna = Pengguna::findOrFail($id);  // Cari pengguna berdasarkan ID
-        $pengguna->delete(); // Hapus pengguna
+        $pengguna = Pengguna::findOrFail($id); // Ambil data pengguna berdasarkan ID
 
+        // Hapus akun pengguna
+        $pengguna->delete();
+
+        // Redirect ke halaman daftar pengguna dengan flash message
         return redirect()->route('admin.manage-user.index')->with('success', 'Pengguna berhasil dihapus');
     }
 
+    
     // Menonaktifkan akun pengguna
     public function deactivate($id)
     {
@@ -71,5 +82,16 @@ class ManageUserController extends Controller
         $pengguna->update(['is_active' => true]);
 
         return redirect()->route('admin.manage-user.index')->with('success', 'Pengguna berhasil diaktifkan');
+    }
+
+    //update status akun pengguna (index)
+    public function updateStatus(Request $request, $id)
+    {
+        $pengguna = Pengguna::findOrFail($id); // Cari pengguna berdasarkan ID
+        $pengguna->is_active = $request->is_active; // Perbarui status akun
+        $pengguna->save(); // Simpan perubahan
+
+        // Kembali ke halaman daftar pengguna dengan pesan sukses
+        return redirect()->route('admin.manage-user.index')->with('success', 'Status akun berhasil diperbarui');
     }
 }

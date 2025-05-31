@@ -104,12 +104,16 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Route untuk menghapus pengguna
     Route::delete('/manage-user/{id}', [ManageUserController::class, 'destroy'])->name('admin.manage-user.destroy');
+    Route::get('/manage-user/{id}/confirm-delete', [ManageUserController::class, 'confirmDelete'])->name('admin.manage-user.confirm-delete');
 
     // Route untuk menonaktifkan pengguna
     Route::post('/manage-user/{id}/deactivate', [ManageUserController::class, 'deactivate'])->name('admin.manage-user.deactivate');
 
     // Route untuk mengaktifkan pengguna
     Route::post('/manage-user/{id}/activate', [ManageUserController::class, 'activate'])->name('admin.manage-user.activate');
+
+    //update status akun pengguna (index)
+    Route::put('/manage-user/{id}/status', [ManageUserController::class, 'updateStatus'])->name('admin.manage-user.update-status');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');

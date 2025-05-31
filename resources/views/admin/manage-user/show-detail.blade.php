@@ -33,13 +33,10 @@
                 </h1>
 
                 <div class="flex space-x-2 mt-4 md:mt-0">
-                    <form action="{{ route('admin.manage-user.destroy', $pengguna->id_user) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
-                            <i class="fas fa-trash mr-2"></i>Hapus
-                        </button>
-                    </form>
+                    <!-- Tombol Hapus Akun -->
+                    <button onclick="openModal()" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
 
                     <a href="{{ route('admin.manage-user.edit', $pengguna->id_user) }}" class="py-2 px-4 bg-green-500 text-white rounded-xl hover:bg-green-600 font-medium transition animate-scale shadow">
                         <i class="fas fa-edit mr-2"></i>Edit
@@ -72,45 +69,85 @@
                     <h3 class="text-sm font-medium text-yellow-500 mb-1">Status Akun</h3>
                     <p class="font-medium text-gray-800">{{ $pengguna->is_active ? 'Aktif' : 'Nonaktif' }}</p>
                 </div>
-            </div>
 
-            <!-- Timeline Status -->
-            <div class="p-6 bg-gray-50 rounded-xl">
-                <h3 class="text-lg font-bold mb-4">Riwayat Perubahan</h3>
-                <div class="relative">
-                    <!-- Garis Timeline -->
-                    <div class="absolute h-full w-0.5 bg-gray-200 left-6 top-0"></div>
+                <!-- Alamat -->
+                <div class="p-4 bg-blue-50 rounded-xl">
+                    <label class="text-sm font-medium text-blue-500 mb-1">Alamat</label>
+                    <p class="mt-1 text-gray-900 font-semibold">{{ $pengguna->Alamat_Pengguna }}</p>
+                </div>
 
-                    <!-- Status Item -->
-                    <div class="relative flex items-start mb-4 pl-16">
-                        <div class="absolute left-0 rounded-full w-12 h-12 flex items-center justify-center {{ $pengguna->created_at ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400' }}">
-                            <i class="fas fa-plus-circle text-lg"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">Ditambahkan</h4>
-                            <p class="text-sm text-gray-500">
-                                {{ $pengguna->created_at ? $pengguna->created_at->format('d M Y, H:i') : 'Tidak tercatat' }}
-                            </p>
-                        </div>
-                    </div>
+                <!-- Timeline Status -->
+                <div class="p-4 bg-gray-50 rounded-xl">
+                    <h3 class="text-lg font-medium mb-4">Riwayat Perubahan</h3>
+                    <div class="relative">
+                        <!-- Garis Timeline -->
+                        <div class="absolute h-full w-0.5 bg-gray-200 left-6 top-0"></div>
 
-                    <!-- Status Item -->
-                    <div class="relative flex items-start mb-4 pl-16">
-                        <div class="absolute left-0 rounded-full w-12 h-12 flex items-center justify-center {{ $pengguna->updated_at && $pengguna->updated_at->gt($pengguna->created_at) ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400' }}">
-                            <i class="fas fa-edit text-lg"></i>
+                        <!-- Status Item -->
+                        <div class="relative flex items-start mb-4 pl-16">
+                            <div class="absolute left-0 rounded-full w-12 h-12 flex items-center justify-center {{ $pengguna->created_at ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400' }}">
+                                <i class="fas fa-plus-circle text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Ditambahkan</h4>
+                                <p class="text-sm text-gray-500">
+                                    {{ $pengguna->created_at ? $pengguna->created_at->format('d M Y, H:i') : 'Tidak tercatat' }}
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="font-medium">Terakhir Diperbarui</h4>
-                            <p class="text-sm text-gray-500">
-                                {{ $pengguna->updated_at && $pengguna->updated_at->gt($pengguna->created_at) ? $pengguna->updated_at->format('d M Y, H:i') : 'Belum diperbarui' }}
-                            </p>
+
+                        <!-- Status Item -->
+                        <div class="relative flex items-start mb-4 pl-16">
+                            <div class="absolute left-0 rounded-full w-12 h-12 flex items-center justify-center {{ $pengguna->updated_at && $pengguna->updated_at->gt($pengguna->created_at) ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400' }}">
+                                <i class="fas fa-edit text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Terakhir Diperbarui</h4>
+                                <p class="text-sm text-gray-500">
+                                    {{ $pengguna->updated_at && $pengguna->updated_at->gt($pengguna->created_at) ? $pengguna->updated_at->format('d M Y, H:i') : 'Belum diperbarui' }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-<!-- Commit Ulang -->
+    <!-- Modal Konfirmasi Hapus Akun -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-xl font-bold text-red-600 mb-4">Konfirmasi Hapus Akun</h3>
+            <p class="mb-4 text-gray-700">Anda yakin ingin menghapus akun ini? Semua data akan hilang dan tidak dapat dipulihkan.</p>
+
+            <div class="flex justify-between">
+                <!-- Tombol Batal -->
+                <button onclick="closeModal()" class="py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                    Batal
+                </button>
+
+                <!-- Tombol Hapus Akun -->
+                <form action="{{ route('admin.manage-user.destroy', $pengguna->id_user) }}" method="POST" id="delete-account-form">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                        Hapus Akun
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fungsi untuk membuka modal
+    function openModal() {
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    // Fungsi untuk menutup modal
+    function closeModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+@endsection

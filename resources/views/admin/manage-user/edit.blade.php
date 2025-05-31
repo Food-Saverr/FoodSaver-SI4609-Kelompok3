@@ -19,13 +19,10 @@
                 </h1>
 
                 <div class="flex space-x-2 mt-4 md:mt-0">
-                    <form action="{{ route('admin.manage-user.destroy', $pengguna->id_user) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
-                            <i class="fas fa-trash mr-2"></i>Hapus
-                        </button>
-                    </form>
+                    <!-- Tombol Hapus Akun -->
+                    <button onclick="openModal()" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
                 </div>
             </div>
 
@@ -76,18 +73,64 @@
                             <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <!-- Alamat Pengguna -->
+                    <div class="p-4 bg-blue-50 rounded-xl">
+                        <h3 class="text-sm font-medium text-blue-500 mb-1">Alamat Pengguna</h3>
+                        <input type="text" name="Alamat_Pengguna" id="Alamat_Pengguna" value="{{ old('Alamat_Pengguna', $pengguna->Alamat_Pengguna) }}" class="w-full px-4 py-2 border rounded-md">
+                        @error('Alamat_Pengguna')
+                            <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>     
+                                   
                 </div>
 
                 <div class="mt-6">
                     <button type="submit" class="py-2 px-4 bg-green-500 text-white rounded-xl hover:bg-green-600 font-medium transition animate-scale shadow">
                         <i class="fas fa-save mr-2"></i>Simpan
                     </button>
-                    <a href="{{ route('admin.manage-user.index') }}" class="py-2 px-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 font-medium transition animate-scale shadow">
+                    <a href="{{ route('admin.manage-user.show', $pengguna->id_user) }}" class="py-2 px-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 font-medium transition animate-scale shadow">
                         <i class="fas fa-arrow-left mr-2"></i>Batal
                     </a>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Modal Konfirmasi Hapus Akun -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-xl font-bold text-red-600 mb-4">Konfirmasi Hapus Akun</h3>
+            <p class="mb-4 text-gray-700">Anda yakin ingin menghapus akun ini? Semua data akan hilang dan tidak dapat dipulihkan.</p>
+
+            <div class="flex justify-between">
+                <!-- Tombol Batal -->
+                <button onclick="closeModal()" class="py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                    Batal
+                </button>
+
+                <!-- Tombol Hapus Akun -->
+                <form action="{{ route('admin.manage-user.destroy', $pengguna->id_user) }}" method="POST" id="delete-account-form">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition animate-scale shadow">
+                        Hapus Akun
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    // Fungsi untuk membuka modal
+    function openModal() {
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    // Fungsi untuk menutup modal
+    function closeModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
 @endsection
