@@ -236,7 +236,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-24">
+    <main>
         @yield('content')
     </main>
 
@@ -267,6 +267,6 @@
         });
     </script>
     
-    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>

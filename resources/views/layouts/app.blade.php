@@ -131,6 +131,9 @@
                 <a href="{{ route('pengguna.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('pengguna.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Food Listing
                 </a>
+                <a href="{{ route('pengguna.maps.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('pengguna.maps.index') ? 'active gradient-text' : 'text-gray-700' }}">
+                    <i class="fas fa-map-marked-alt mr-2"></i>Nearby Food Finder
+                </a>
                 <a href="#" class="navbar-link disabled">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>

@@ -22,6 +22,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminArtikelController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MapController;
 
 
 // Landing Page (bisa diakses semua)
@@ -158,6 +159,11 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
 
     Route::get('/donasi-keuangan', [DonationController::class, 'index'])->name('pengguna.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonationController::class, 'show'])->name('pengguna.donation.show');
+
+    // Map routes
+    Route::get('/maps', [MapController::class, 'index'])->name('pengguna.maps.index');
+    Route::get('/maps/nearby', [MapController::class, 'nearby'])->name('pengguna.maps.nearby');
+    Route::post('/maps/{makanan}/location', [MapController::class, 'updateLocation'])->name('maps.update-location');
 });
 
 // --- Routes buat Fitur Donasi keuangan -- Donatur
