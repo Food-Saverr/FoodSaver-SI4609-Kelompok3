@@ -142,6 +142,7 @@
                 <a href="#" class="navbar-link hover:text-orange-600 text-gray-700">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
+
             </nav>
             
             <div class="flex items-center space-x-6">

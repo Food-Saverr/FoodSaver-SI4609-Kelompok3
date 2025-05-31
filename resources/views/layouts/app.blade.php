@@ -137,7 +137,7 @@
                 <a href="#" class="navbar-link disabled">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
-                <a href="{{ route('artikel.pengguna') }}" class="navbar-link hover:text-orange-600 text-gray-700">
+                <a href="{{ route('artikel.pengguna') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikels.*') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-newspaper mr-2"></i>Artikel
                 </a>
             </nav>
@@ -215,7 +215,7 @@
                 <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                     <i class="fas fa-comments mr-3"></i>Forum
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
+                <a href="{{ route('artikel.pengguna') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('artikels.*') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">
                     <i class="fas fa-newspaper mr-3"></i>Artikel
                 </a>
                 @guest

@@ -23,6 +23,8 @@ use App\Http\Controllers\AdminArtikelController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\ExpiredReminderController;
+use App\Http\Controllers\ExpiredFoodHistoryController;
 
 
 // Landing Page (bisa diakses semua)
@@ -240,3 +242,8 @@ Route::get('/pengguna/artikel', [ArtikelController::class, 'indexPengguna'])
 Route::get('/donatur/artikel', [ArtikelController::class, 'indexDonatur'])
     ->name('artikel.donatur')
     ->middleware('auth');
+
+Route::get('/expired-food-history', [ExpiredFoodHistoryController::class, 'index'])
+        ->name('donatur.expired-food-history.index');
+Route::get('/expired-food-history/{expiredFood}', [ExpiredFoodHistoryController::class, 'show'])
+        ->name('donatur.expired-food-history.show');
