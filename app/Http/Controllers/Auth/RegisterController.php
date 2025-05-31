@@ -7,6 +7,7 @@ use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -39,16 +40,34 @@ class RegisterController extends Controller
                             ->withInput();
         }
         
-    
-        $pengguna = Pengguna::create([
-            'Nama_Pengguna'    => $request->Nama_Pengguna,
-            'Email_Pengguna'   => $request->Email_Pengguna,
-            'Password_Pengguna'=> Hash::make($request->Password_Pengguna),
-            'Alamat_Pengguna'  => $request->Alamat_Pengguna,
-            'Role_Pengguna'    => $request->Role_Pengguna,
-        ]);
+        try {
+            DB::beginTransaction();
+            
+            $pengguna = Pengguna::create([
+                'Nama_Pengguna'    => $request->Nama_Pengguna,
+                'Email_Pengguna'   => $request->Email_Pengguna,
+                'Password_Pengguna'=> Hash::make($request->Password_Pengguna),
+                'Alamat_Pengguna'  => $request->Alamat_Pengguna,
+                'Role_Pengguna'    => $request->Role_Pengguna,
+            ]);
 
-        // Redirect ke halaman login dengan flash message
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silahkan login.');
+            // Buat notification preference untuk pengguna baru
+            $pengguna->notificationPreference()->create([
+                'request_status' => true,
+                'new_requests' => true,
+                'maintenance' => true,
+                'expiration_alerts' => true
+            ]);
+
+            DB::commit();
+
+            // Redirect ke halaman login dengan flash message
+            return redirect()->route('login')->with('success', 'Registrasi berhasil! Silahkan login.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withErrors(['error' => 'Terjadi kesalahan saat registrasi. Silakan coba lagi.'])
+                ->withInput();
+        }
     }
 }

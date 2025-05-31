@@ -31,6 +31,16 @@ class Pengguna extends Authenticatable
         return $this->hasMany(Makanan::class, 'id_user', 'id_user');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class, 'user_id', 'id_user');
+    }
+
+    public function notificationPreference()
+    {
+        return $this->hasOne(\App\Models\NotificationPreference::class, 'user_id', 'id_user');
+    }
+
     public function getAuthIdentifierName()
     {
         return 'id_user';

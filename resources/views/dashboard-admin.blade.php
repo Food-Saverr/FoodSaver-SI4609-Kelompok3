@@ -123,6 +123,15 @@
                         <p class="text-sm text-gray-500">Monitoring donasi makanan baru</p>
                     </div>
                 </a>
+                <a href="{{ route('admin.notifications.send-form') }}" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
+                    <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full mr-4">
+                        <i class="fas fa-bell text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Kirim Notifikasi</h3>
+                        <p class="text-sm text-gray-500">Broadcast info ke donatur & pengguna</p>
+                    </div>
+                </a>
                 
                 <a href="#" class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 custom-shadow hover:shadow-lg transition-all flex items-center animate-scale">
                     <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">

@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('notification_preferences', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('penggunas', 'id_user')->onDelete('cascade');
+            $table->boolean('request_status')->default(true); // Notifications for request status changes
+            $table->boolean('new_requests')->default(true); // Notifications for new food requests
+            $table->boolean('maintenance')->default(true); // System maintenance notifications
+            $table->boolean('expiration_alerts')->default(true); // Notifications for food expiration alerts
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('notification_preferences');
+    }
+}; 

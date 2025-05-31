@@ -19,7 +19,9 @@ use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExpiredReminderController;
+use App\Http\Controllers\ExpiredFoodHistoryController;
 
+use App\Http\Controllers\NotificationController;
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
@@ -91,13 +93,16 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistik-artikel', [AdminDashboardController::class, 'showTotalArtikel'])->name('DashboardAdmin.artikel');
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
 
-    Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexAdmin'])->name('admin.expired-reminders.index');
-    Route::get('/expired-reminders/create', [ExpiredReminderController::class, 'create'])->name('admin.expired-reminders.create');
-    Route::post('/expired-reminders', [ExpiredReminderController::class, 'store'])->name('admin.expired-reminders.store');
-    Route::get('/expired-reminders/get-makanan/{donaturId}', [ExpiredReminderController::class, 'getMakanan'])->name('admin.expired-reminders.getMakanan');
-    Route::get('/expired-reminders/{id}', [ExpiredReminderController::class, 'show'])->name('admin.expired-reminders.show');
-    Route::post('/expired-reminders/{id}/notify', [ExpiredReminderController::class, 'notify'])->name('admin.expired-reminders.notify');
-
+    // Notification Routes untuk Admin
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('admin.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('admin.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('admin.notifications.unread-count');
+    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('admin.notifications.dropdown');
+    Route::get('/notifications/send', [NotificationController::class, 'showSendForm'])->name('admin.notifications.send-form');
+    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('admin.notifications.send');
 });
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/food-listing', [DonaturMakananController::class, 'index'])->name('donatur.food-listing.index');
@@ -111,8 +116,26 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donatur/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
     Route::patch('/donatur/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
     //Route untuk expired reminder
-    Route::get('/expired-reminders', [ExpiredReminderController::class, 'indexDonatur'])->name('donatur.expired-reminders.index');
-    Route::put('/expired-reminders/{id}/update-status', [ExpiredReminderController::class, 'updateStatus'])->name('donatur.expired-reminders.update-status');
+
+    Route::get('/request/{id_makanan}', [DonaturRequestController::class, 'index'])->name('donatur.request.index');
+    Route::get('/request/show/{id_request}', [DonaturRequestController::class, 'show'])->name('donatur.request.show');
+    Route::patch('/request/{id_request}', [DonaturRequestController::class, 'update'])->name('donatur.request.update');
+    Route::post('/request/{id_request}', [DonaturRequestController::class, 'update']);
+
+    // Notification Routes untuk Donatur
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('donatur.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('donatur.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('donatur.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('donatur.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('donatur.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('donatur.notifications.unread-count');
+    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('donatur.notifications.dropdown');
+
+    // Routes untuk riwayat makanan kedaluwarsa
+    Route::get('/expired-food-history', [ExpiredFoodHistoryController::class, 'index'])
+        ->name('donatur.expired-food-history.index');
+    Route::get('/expired-food-history/{expiredFood}', [ExpiredFoodHistoryController::class, 'show'])
+        ->name('donatur.expired-food-history.show');
 });
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::get('/food-listing', [FoodListingController::class, 'index'])->name('pengguna.food-listing.index');
@@ -127,8 +150,18 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     Route::delete('/request/{id_request}/cancel', [RequestController::class, 'cancel'])->name('pengguna.request.cancel');
     // Rute untuk memperbarui status permintaan
     Route::patch('/request/{id_request}', [RequestController::class, 'update'])->name('pengguna.request.update');
+    // Rute untuk mengatur pengambilan
+    Route::post('/request/{id_request}/pickup', [RequestController::class, 'updatePickup'])->name('pengguna.request.update-pickup');
+    Route::post('/request/{id_request}/pickup/edit', [RequestController::class, 'editPickup'])->name('pengguna.request.edit-pickup');
+    Route::post('/request/{id_request}/pickup/cancel', [RequestController::class, 'cancelPickup'])->name('pengguna.request.cancel-pickup');
 
-
+    // Notification Routes untuk Pengguna
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('pengguna.notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('pengguna.notifications.mark-as-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('pengguna.notifications.mark-all-read');
+    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('pengguna.notifications.preferences');
+    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('pengguna.notifications.update-preferences');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('pengguna.notifications.unread-count');
 });
 // --- Routes buat Fitur Donasi keuangan -- Pengguna
 Route::middleware(['auth'])->prefix('pengguna')->group(function () {
@@ -166,5 +199,3 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
 });
 
 
-// Route untuk API
-Route::get('/send-expired-reminders', [ExpiredReminderController::class, 'sendExpiredReminders'])->name('ExpiredReminder.send');
