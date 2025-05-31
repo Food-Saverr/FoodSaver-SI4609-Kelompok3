@@ -136,6 +136,8 @@ class DonaturMakananController extends Controller
             'Status_Makanan' => 'nullable|string|in:Tersedia,Segera Habis,Habis',
             'Tanggal_Kedaluwarsa' => 'required|date',
             'Lokasi_Makanan' => 'nullable|string|max:255',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ], [
             'Nama_Makanan.required' => 'Nama makanan harus diisi.',
             'Jumlah_Makanan.required' => 'Jumlah makanan harus diisi.',
@@ -145,6 +147,10 @@ class DonaturMakananController extends Controller
             'Foto_Makanan.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
             'Foto_Makanan.max' => 'Ukuran gambar maksimal 2MB.',
             'Tanggal_Kedaluwarsa.required' => 'Tanggal kedaluwarsa harus diisi.',
+            'latitude.required' => 'Latitude harus diisi.',
+            'latitude.numeric' => 'Latitude harus berupa angka.',
+            'longitude.required' => 'Longitude harus diisi.',
+            'longitude.numeric' => 'Longitude harus berupa angka.',
         ]);
 
         // Debug: Log validation passed

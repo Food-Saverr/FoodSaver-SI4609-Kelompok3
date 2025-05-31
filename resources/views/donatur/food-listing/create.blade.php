@@ -320,6 +320,16 @@
             }
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
+
+            // Reverse geocoding to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('Lokasi_Makanan').value = data.display_name;
+                    }
+                })
+                .catch(error => console.error('Error getting address:', error));
         });
     });
 </script>

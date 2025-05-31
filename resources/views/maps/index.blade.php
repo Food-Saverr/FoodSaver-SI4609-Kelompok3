@@ -67,7 +67,7 @@
             return;
         }
 
-        // Get user's location
+        // mengambil lokasi pengguna
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 userLocation = {
@@ -75,7 +75,7 @@
                     lng: position.coords.longitude
                 };
                 
-                // Add user marker
+                // mendefinisikan marker pengguna
                 userMarker = L.marker([userLocation.lat, userLocation.lng])
                     .addTo(map)
                     .bindPopup('Lokasi Anda')
@@ -86,14 +86,14 @@
             });
         }
 
-        // Load initial food markers
+        // memuat marker makanan awal
         const makanan = @json($makanan);
         makanan.forEach(food => {
             addFoodMarker(food);
         });
     });
 
-    // Add food marker to map
+    // menambahkan marker makanan ke peta
     function addFoodMarker(food) {
         let statusColor = 'bg-green-100 text-green-700';
         let statusText = 'Tersedia';

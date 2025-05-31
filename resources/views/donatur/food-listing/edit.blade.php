@@ -168,6 +168,14 @@
                                 class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white/90 focus:outline-none focus:border-orange-400 input-focus-effect transition-all"
                             />
                         </div>
+                        <!-- Maps -->
+                        <div class="mt-4">
+                            <label class="block text-gray-700 font-medium mb-1">Tentukan Lokasi pada Peta</label>
+                            <div id="location-map" style="height: 350px; border-radius: 12px; margin-bottom: 10px;"></div>
+                            <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $makanan->latitude) }}">
+                            <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $makanan->longitude) }}">
+                            <p class="text-xs text-gray-500 mt-1">Klik pada peta untuk menentukan lokasi makanan. Koordinat akan terisi otomatis.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -235,7 +243,65 @@
 @endsection
 
 @section('scripts')
+@parent
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    let map;
+    let marker;
+    document.addEventListener('DOMContentLoaded', function() {
+        // 
+        const defaultLat = {{ $makanan->latitude ?? -6.2088 }};
+        const defaultLng = {{ $makanan->longitude ?? 106.8456 }};
+        
+        map = L.map('location-map').setView([defaultLat, defaultLng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // menambahkan marker jika ada koordinat
+        if (defaultLat && defaultLng) {
+            marker = L.marker([defaultLat, defaultLng]).addTo(map);
+        }
+
+        // mengambil lokasi pengguna jika tidak ada koordinat
+        if (!defaultLat || !defaultLng) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    map.setView([lat, lng], 13);
+                    marker = L.marker([lat, lng]).addTo(map);
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+                });
+            }
+        }
+
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng]).addTo(map);
+            }
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            // Reverse geocoding to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('Lokasi_Makanan').value = data.display_name;
+                    }
+                })
+                .catch(error => console.error('Error getting address:', error));
+        });
+    });
+
+    // Existing image preview code
     document.getElementById('Foto_Makanan').addEventListener('change', function(e) {
         const imagePreview = document.getElementById('image-preview');
         const previewImage = document.getElementById('preview-image');
