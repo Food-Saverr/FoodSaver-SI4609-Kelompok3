@@ -13,7 +13,7 @@ class Request extends Model
     protected $primaryKey = 'ID_Request';
     protected $fillable = [
         'ID_Makanan', 
-        'ID_Pengguna', 
+        'id_user',
         'Pesan', 
         'Status_Request',
         'Status_Pengambilan',
@@ -33,6 +33,6 @@ class Request extends Model
 
     public function pengguna()
     {
-        return $this->belongsTo(Pengguna::class, 'ID_Pengguna', 'ID_Pengguna');
+        return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
     }
 }

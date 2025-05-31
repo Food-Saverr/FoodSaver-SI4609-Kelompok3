@@ -63,9 +63,9 @@
                         <i class="fas fa-comments"></i> Forum Komunitas
                     </a>
                     <a href="" 
-                       class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
+                    class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
                         <i class="fas fa-newspaper"></i> Artikel & Tips
-                    </a>
+                    </class=>
                 </div>
             </div>
             <div class="mt-8 bg-orange-50/70 rounded-xl p-8">

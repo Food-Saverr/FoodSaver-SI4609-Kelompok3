@@ -19,11 +19,26 @@ use App\Http\Controllers\DonaturDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminArtikelController;
+use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\LikeController;
+
 
 // Landing Page (bisa diakses semua)
 Route::get('/', function () {
-    return view('welcome'); // Landing Page
-})->name('landing');
+    if (Auth::check()) {
+        $role = Auth::user()->Role_Pengguna;
+
+        return match ($role) {
+            'Admin'    => redirect()->route('dashboard.admin'),
+            'Donatur'  => redirect()->route('dashboard.donatur'),
+            'Pengguna' => redirect()->route('dashboard.pengguna'),
+            default    => redirect()->route('/'),
+        };
+    }
+
+    return view('welcome');
+})->name('/');
 
 Route::middleware('guest')->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'showRegisterForm'])->name('registrasi.form');
@@ -41,23 +56,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-donatur', [DonaturDashboardController::class, 'index'])->name('dashboard.donatur');
     Route::get('/dashboard-admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
 
-    Route::post('/logout', function () {
-        Auth::logout();
-        return redirect('/');
-    })->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Route untuk profil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); // Satu route untuk tampilan profil
 
     // Route untuk halaman edit profil
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    
+
     // Route untuk update password
     Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     // Route untuk update profil
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Route untuk menghapus akun
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
 });
@@ -83,13 +95,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/statistikforum', [AdminDashboardController::class, 'statistikForum'])->name('DashboardAdmin.statistikForum');
 
     // Notification Routes untuk Admin
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.mark-as-read');
-    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.mark-all-read');
-    Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->name('admin.notifications.preferences');
-    Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->name('admin.notifications.update-preferences');
-    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('admin.notifications.unread-count');
-    Route::get('/notifications/dropdown', [NotificationController::class, 'dropdown'])->name('admin.notifications.dropdown');
     Route::get('/notifications/send', [NotificationController::class, 'showSendForm'])->name('admin.notifications.send-form');
     Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('admin.notifications.send');
 });
@@ -143,7 +148,7 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
     // Dashboard donation
     Route::get('/donation/create', [DonationController::class, 'create'])->name('pengguna.donation.create')->middleware('auth');
     Route::post('/donation', [DonationController::class, 'store'])->name('pengguna.donation.store');
-        
+
     // payment
     Route::get('/payments/create', [PaymentController::class, 'create'])->name('pengguna.payment.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('pengguna.payment.store');
@@ -153,14 +158,13 @@ Route::middleware(['auth'])->prefix('pengguna')->group(function () {
 
     Route::get('/donasi-keuangan', [DonationController::class, 'index'])->name('pengguna.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonationController::class, 'show'])->name('pengguna.donation.show');
-
 });
 
 // --- Routes buat Fitur Donasi keuangan -- Donatur
 Route::middleware(['auth'])->prefix('donatur')->group(function () {
     Route::get('/donation/create', [DonaturDonationController::class, 'create'])->name('donatur.donation.create')->middleware('auth');
     Route::post('/donation', [DonaturDonationController::class, 'store'])->name('donatur.donation.store');
-        
+
     // payment
     Route::get('/payments/create', [DonaturPaymentController::class, 'create'])->name('donatur.payment.create');
     Route::post('/payments', [DonaturPaymentController::class, 'store'])->name('donatur.payment.store');
@@ -170,5 +174,63 @@ Route::middleware(['auth'])->prefix('donatur')->group(function () {
 
     Route::get('/donasi-keuangan', [DonaturDonationController::class, 'index'])->name('donatur.donation.index');
     Route::get('/donasi-keuangan/{donation}', [DonaturDonationController::class, 'show'])->name('donatur.donation.show');
-
 });
+
+// Admin routes Artikel (gunakan huruf besar "Admin" pada prefix dan middleware)
+Route::middleware(['auth', 'can:Admin'])->prefix('Admin')->group(function () {
+    Route::resource('artikel', AdminArtikelController::class, [
+        'as' => 'Admin'
+    ])->except(['show']);
+});
+
+// Public routes Artikel (Pengguna & Donatur)
+Route::get('artikels', [ArtikelController::class, 'index'])
+    ->name('artikels.index');
+Route::get('artikel/{slug}', [ArtikelController::class, 'show'])
+    ->name('artikels.show');
+
+// web.php
+Route::middleware('auth')->group(function () {
+    Route::post('artikel/{artikel}/like', [LikeController::class, 'toggle'])
+        ->name('artikels.toggleLike');
+});
+
+// Untuk user (public)
+Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index');
+Route::get('/artikel/{slug}', [ArtikelController::class, 'show'])->name('artikel.show');
+
+// Untuk admin (gunakan middleware jika perlu)
+Route::prefix('admin/artikel')->name('admin.artikel.')->group(function () {
+    Route::get('/', [ArtikelController::class, 'index'])->name('index');
+    Route::get('/create', [ArtikelController::class, 'create'])->name('create');
+    Route::post('/', [ArtikelController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [ArtikelController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [ArtikelController::class, 'update'])->name('update');
+    Route::delete('/{id}', [ArtikelController::class, 'destroy'])->name('destroy');
+});
+
+// public lihat artikel & search
+Route::get('artikels', [ArtikelController::class, 'index'])->name('artikels.index');
+Route::get('artikels/{slug}', [ArtikelController::class, 'show'])->name('artikels.show');
+
+// untuk like/unlike (harus login)
+Route::middleware('auth')->group(function () {
+    Route::post('artikels/{artikel}/like', [LikeController::class, 'toggle'])
+        ->name('artikels.toggleLike');
+});
+
+// // Untuk Donatur
+// Route::get('/donatur/artikel', [ArtikelController::class, 'artikelDonatur'])->name('artikel.donatur');
+
+// // Untuk Pengguna
+// Route::get('/pengguna/artikel', [ArtikelController::class, 'artikelPengguna'])->name('artikel.pengguna');
+
+// Untuk Pengguna
+Route::get('/pengguna/artikel', [ArtikelController::class, 'indexPengguna'])
+    ->name('artikel.pengguna')
+    ->middleware('auth');
+
+// Untuk Donatur
+Route::get('/donatur/artikel', [ArtikelController::class, 'indexDonatur'])
+    ->name('artikel.donatur')
+    ->middleware('auth');

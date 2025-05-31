@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ID_Pengguna')->constrained('penggunas', 'ID_Pengguna')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('penggunas', 'id_user')->onDelete('cascade');
             $table->string('full_name');
             $table->string('phone');
             $table->decimal('nominal', 15, 2);

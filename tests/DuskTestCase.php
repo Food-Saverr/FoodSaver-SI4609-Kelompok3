@@ -22,6 +22,12 @@ abstract class DuskTestCase extends BaseTestCase
         }
     }
 
+    protected function baseUrl(): string
+    {
+        // Sesuaikan dengan URL tempat aplikasi kamu berjalan
+        return env('APP_URL', 'http://127.0.0.1:8000');
+    }
+
     /**
      * Create the RemoteWebDriver instance.
      */

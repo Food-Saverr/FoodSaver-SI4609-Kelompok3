@@ -14,7 +14,7 @@ class DonaturRequestController extends Controller
     public function index(Request $request, $id_makanan)
     {
         $makanan  = Makanan::where('ID_Makanan', $id_makanan)
-            ->where('ID_Pengguna', Auth::id())
+            ->where('id_user', Auth::id())
             ->firstOrFail();
 
         $status = $request->query('status', 'All');
@@ -37,7 +37,7 @@ class DonaturRequestController extends Controller
             ->firstOrFail();
 
         // Pastikan donatur memiliki makanan ini
-        if ($request->makanan->ID_Pengguna !== Auth::id() && Auth::user()->Role_Pengguna !== 'Admin') {
+        if ($request->makanan->id_user !== Auth::id() && Auth::user()->Role_Pengguna !== 'Admin') {
             return redirect()->route('donatur.food-listing.index')
                 ->with('error', 'Anda tidak memiliki izin untuk melihat permintaan ini.');
         }

@@ -1,41 +1,92 @@
 <?php
-
-namespace Tests\Browser;
-
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-use App\Models\Pengguna;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('Login')]
 class LoginTest extends DuskTestCase
 {
-    public function testSuccessfulLogin()
+    /**
+     * TC.Login.001: Login berhasil (email & password benar)
+     */
+    public function test_TC_Login_001_successfulLogin()
     {
-        $user = Pengguna::factory()->create([
-            'Email_Pengguna' => 'login@example.com',
-            'Password_Pengguna' => bcrypt('Test@1234'),
-        ]);
-
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit('/')
-                    ->clickLink('Login')
-                    ->type('Email', 'Testuser@example.com')
-                    ->type('Password', 'Test@1234')
-                    ->check('Ingat saya di perangkat ini')
-                    ->press('Masuk')
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/login')
+                    ->assertPathIs('/login')
+                    ->assertPresent('input[name="Email_Pengguna"]')
+                    ->assertPresent('input[name="Password_Pengguna"]')
+                    ->type('Email_Pengguna', 'pengguna@example.com')
+                    ->type('Password_Pengguna', 'Abcd1234!')
+                    ->click('@submit-login')
+                    ->waitForLocation('/dashboard-pengguna')
                     ->assertPathIs('/dashboard-pengguna');
         });
     }
 
-    public function testLoginFailsWithWrongPassword()
+    /**
+     * TC.Login.002: Email benar, password salah
+     */
+    public function test_TC_Login_002_failedWrongPassword()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/')
-            ->clickLink('Login')
-                    ->type('Email', 'login@example.com')
-                    ->type('Password', 'WrongPass1!')
-                    ->check('Ingat saya di perangkat ini')
-                    ->press('Masuk')
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->visit('/login')
+                    ->type('Email_Pengguna', 'pengguna@example.com')
+                    ->type('Password_Pengguna', 'WrongPass!')
+                    ->click('@submit-login')
+                    ->pause(1000)
+                    ->assertPathIs('/login')
+                    ->pause(1000)
                     ->assertSee('Email atau Password salah');
+        });
+    }
+
+    /**
+     * TC.Login.003: Email tidak terdaftar
+     */
+    public function test_TC_Login_003_emailNotRegistered()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->visit('/login')
+                    ->type('Email_Pengguna', 'notfound@example.com')
+                    ->type('Password_Pengguna', 'SomePass123!')
+                    ->click('@submit-login')
+                    ->pause(1000)
+                    ->assertPathIs('/login')
+                    ->pause(1000)
+                    ->assertSee('Email atau Password salah');
+        });
+    }
+
+    /**
+     * TC.Login.004: Email kosong
+     */
+    public function test_TC_Login_004_emailEmpty()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->visit('/login')
+                    ->type('Email_Pengguna', '')
+                    ->type('Password_Pengguna', 'Pass1234!')
+                    ->click('@submit-login')
+                    ->assertPathIs('/login');
+        });
+    }
+
+    /**
+     * TC.Login.005: Password kosong
+     */
+    public function test_TC_Login_005_passwordEmpty()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->visit('/login')
+                    ->type('Email_Pengguna', 'login@example.com')
+                    ->type('Password_Pengguna', '')
+                    ->click('@submit-login')
+                    ->assertPathIs('/login');
         });
     }
 }

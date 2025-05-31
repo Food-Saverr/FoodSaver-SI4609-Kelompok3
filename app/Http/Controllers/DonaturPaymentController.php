@@ -19,7 +19,7 @@ class DonaturPaymentController extends Controller
     public function create(Request $request)
     {
         $donation = Donation::where('id', $request->donation_id)
-            ->where('ID_Pengguna', Auth::user()->ID_Pengguna)
+            ->where('id_user', Auth::user()->id_user)
             ->firstOrFail();
 
         return view('donatur.payment.create', compact('donation'));
@@ -33,7 +33,7 @@ class DonaturPaymentController extends Controller
         ]);
 
         $donation = Donation::where('id', $request->donation_id)
-            ->where('ID_Pengguna', Auth::user()->ID_Pengguna)
+            ->where('id_user', Auth::user()->id_user)
             ->firstOrFail();
 
         $payment = Payment::create([
@@ -52,7 +52,7 @@ class DonaturPaymentController extends Controller
             ->join('payments', 'donations.id', '=', 'payments.donation_id')
             ->where('donations.id', $donation->id)
             ->first();
-        
+
         session()->put('donation_id', $donation->id);
         return redirect()->route('donatur.payment.index')
             ->with('success', 'Payment initiated successfully')
@@ -63,9 +63,9 @@ class DonaturPaymentController extends Controller
     {
         $donation = Donation::where('id', $id)
             ->firstOrFail();
-        
+
         $payment = Payment::where('donation_id', $id)->firstOrFail();
-        
+
         $data = [
             'full_name' => $donation->full_name,
             'phone' => $donation->phone,

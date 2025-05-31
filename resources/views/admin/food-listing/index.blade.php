@@ -123,7 +123,7 @@
                             {{ $makanan->Jumlah_Makanan ? $makanan->Jumlah_Makanan . ' porsi' : 'Habis' }}
                         </td>
                         <td class="py-3 px-4">
-                            {{ $makanan->donatur->Nama_Pengguna ?? 'Pengguna ' . $makanan->ID_Pengguna }}
+                            {{ $makanan->donatur->Nama_Pengguna ?? 'Pengguna ' . $makanan->id_user }}
                         </td>
                         <td class="py-3 px-4 text-center">
                             <div class="flex justify-center space-x-2">

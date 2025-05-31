@@ -84,7 +84,7 @@
                                          alt="{{ optional($request->makanan->donatur)->Nama_Pengguna ?? 'Donatur' }}" 
                                          onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=48'">
                                     <div class="ml-4">
-                                        <p class="font-medium text-gray-800 text-lg">{{ optional($request->makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . ($request->makanan->ID_Pengguna ?? 'N/A') }}</p>
+                                        <p class="font-medium text-gray-800 text-lg">{{ optional($request->makanan->donatur)->Nama_Pengguna ?: 'Pengguna #' . ($request->makanan->id_user ?? 'N/A') }}</p>
                                         <p class="text-gray-500">{{ optional($request->makanan->donatur)->Role_Pengguna ?: 'Donatur' }}</p>
                                     </div>
                                 </div>
