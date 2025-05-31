@@ -343,7 +343,7 @@
                         @endif
 
                         @if(Auth::user()->Role_Pengguna === 'Admin' || 
-                            (Auth::user()->Role_Pengguna === 'Donatur' && $request->makanan->ID_Pengguna === Auth::id()))
+                            (Auth::user()->Role_Pengguna === 'Donatur' && $request->makanan->id_user === Auth::id()))
                             <form action="{{ route('pengguna.request.update', $request->ID_Request) }}" method="POST" class="w-full">
                                 @csrf
                                 <select name="status_request" 
