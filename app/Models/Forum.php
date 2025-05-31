@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Forum extends Model
 {
@@ -19,10 +20,10 @@ class Forum extends Model
     public static function statistikPerBulan()
     {
         return self::select(
-                \DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
+                \DB::raw('MONTH(created_at) as bulan'),
                 \DB::raw('COUNT(*) as total_forum')
             )
-            ->groupBy(\DB::raw('cast(strftime("%m", created_at) as integer)'))
+            ->groupBy(\DB::raw('MONTH(created_at)'))
             ->orderBy('bulan')
             ->get();
     }
