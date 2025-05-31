@@ -55,10 +55,15 @@ class Pengguna extends Authenticatable
     public function likedArtikels()
     {
         return $this->belongsToMany(
-        Artikel::class,
-        'artikel_user_like',
-        'user_id',
-        'artikel_id'
-    )->withTimestamps();
+            Artikel::class,
+            'artikel_user_like',
+            'user_id',
+            'artikel_id'
+        )->withTimestamps();
+    }
+
+    public function forumPosts()
+    {
+        return $this->hasMany(\App\Models\ForumPost::class, 'id_user', 'id_user');
     }
 }

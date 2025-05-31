@@ -131,7 +131,7 @@
                 <a href="{{ route('pengguna.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('pengguna.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Food Listing
                 </a>
-                <a href="#" class="navbar-link disabled">
+                <a href="{{ route('pengguna.forum.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.forum.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
                 <a href="{{ route('artikel.pengguna') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikels.*') ? 'active gradient-text' : 'text-gray-700' }}">
@@ -209,7 +209,7 @@
                 <a href="{{ route('pengguna.food-listing.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('pengguna.food-listing.index') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">
                     <i class="fas fa-utensils mr-3"></i>Food Listing
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
+                <a href="{{ route('admin.forum.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-400 hover:bg-orange-50 transition duration-150">
                     <i class="fas fa-comments mr-3"></i>Forum
                 </a>
                 <a href="{{ route('artikel.pengguna') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-medium {{ request()->routeIs('artikels.*') ? 'bg-orange-100 text-orange-600' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} transition duration-150">

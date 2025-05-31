@@ -131,7 +131,7 @@
                 <a href="{{ route('donatur.food-listing.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('donatur.food-listing.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-utensils mr-2"></i>Food Listing
                 </a>
-                <a href="#" class="navbar-link disabled">
+                <a href="{{ route('donatur.forum.index') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('admin.forum.index') ? 'active gradient-text' : 'text-gray-700' }}">
                     <i class="fas fa-comments mr-2"></i>Forum
                 </a>
                 <a href="{{ route('artikel.donatur') }}" class="navbar-link hover:text-orange-600 {{ request()->routeIs('artikel.donatur') ? 'active gradient-text' : 'text-gray-700' }}">

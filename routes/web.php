@@ -24,6 +24,9 @@ use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ExpiredReminderController;
 use App\Http\Controllers\ExpiredFoodHistoryController;
+use App\Http\Controllers\ForumPenggunaController;
+use App\Http\Controllers\ForumDonaturController;
+use App\Http\Controllers\AdminForumController;
 
 
 // Landing Page (bisa diakses semua)
@@ -241,3 +244,75 @@ Route::get('/expired-food-history', [ExpiredFoodHistoryController::class, 'index
         ->name('donatur.expired-food-history.index');
 Route::get('/expired-food-history/{expiredFood}', [ExpiredFoodHistoryController::class, 'show'])
         ->name('donatur.expired-food-history.show');
+
+Route::middleware(['auth'])->group(function () {
+    // Forum routes
+    Route::resource('pengguna/forum', ForumPenggunaController::class, [
+        'names' => [
+            'index' => 'pengguna.forum.index',
+            'create' => 'pengguna.forum.create',
+            'store' => 'pengguna.forum.store',
+            'show' => 'pengguna.forum.show',
+            'edit' => 'pengguna.forum.edit',
+            'update' => 'pengguna.forum.update',
+            'destroy' => 'pengguna.forum.destroy',
+        ]
+    ]);
+    
+    // Comment routes
+    Route::post('forum/{post}/comment', [ForumPenggunaController::class, 'addComment'])->name('pengguna.forum.comment');
+    Route::delete('forum/comment/{comment}', [ForumPenggunaController::class, 'deleteComment'])->name('pengguna.forum.comment.delete');
+    
+    // Like routes
+    Route::post('forum/{post}/like', [ForumPenggunaController::class, 'toggleLike'])->name('pengguna.forum.like');
+    
+    // Attachment routes
+    Route::delete('forum/attachment/{attachment}', [ForumPenggunaController::class, 'deleteAttachment'])->name('pengguna.forum.attachment.delete');
+
+    // Report route
+    Route::post('forum/{id}/report', [ForumPenggunaController::class, 'reportPost'])->name('pengguna.forum.report');
+});
+
+
+// Donatur Forum Routes
+Route::middleware(['auth'])->group(function () {
+    Route::resource('donatur/forum', ForumDonaturController::class, [
+        'names' => [
+            'index' => 'donatur.forum.index',
+            'create' => 'donatur.forum.create',
+            'store' => 'donatur.forum.store',
+            'show' => 'donatur.forum.show',
+            'edit' => 'donatur.forum.edit',
+            'update' => 'donatur.forum.update',
+            'destroy' => 'donatur.forum.destroy',
+        ]
+    ]);
+    
+    Route::post('donatur/forum/{post}/comment', [ForumDonaturController::class, 'addComment'])->name('donatur.forum.comment');
+    Route::delete('donatur/forum/comment/{comment}', [ForumDonaturController::class, 'deleteComment'])->name('donatur.forum.comment.delete');
+    Route::post('donatur/forum/{post}/like', [ForumDonaturController::class, 'toggleLike'])->name('donatur.forum.like');
+    Route::delete('donatur/forum/attachment/{attachment}', [ForumDonaturController::class, 'deleteAttachment'])->name('donatur.forum.attachment.delete');
+
+    // Report route
+    Route::post('donatur/forum/{id}/report', [ForumDonaturController::class, 'reportPost'])->name('donatur.forum.report');
+});
+
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('forum', [AdminForumController::class, 'index'])->name('forum.index');
+    Route::get('forum/{id}', [AdminForumController::class, 'show'])->name('forum.show');
+    Route::get('forum/{id}/edit', [AdminForumController::class, 'edit'])->name('forum.edit');
+    Route::put('forum/{id}', [AdminForumController::class, 'update'])->name('forum.update');
+    Route::delete('forum/{id}', [AdminForumController::class, 'destroy'])->name('forum.destroy');
+    Route::post('forum/{id}/restore', [AdminForumController::class, 'restore'])->name('forum.restore');
+    Route::delete('forum/comment/{commentId}', [AdminForumController::class, 'deleteComment'])->name('forum.comment.delete');
+    Route::delete('forum/attachment/{attachmentId}', [AdminForumController::class, 'deleteAttachment'])->name('forum.attachment.delete');
+    Route::get('forum/attachment/{attachmentId}/download', [AdminForumController::class, 'downloadAttachment'])->name('forum.attachment.download');
+    Route::get('forum-statistics', [AdminForumController::class, 'statistics'])->name('forum.statistics');
+
+    // Forum report routes
+    Route::get('reports', [AdminForumController::class, 'reportIndex'])->name('forum.reports');
+    Route::get('reports/{id}', [AdminForumController::class, 'reportShow'])->name('forum.reports.show');
+    Route::post('reports/{id}/update', [AdminForumController::class, 'reportUpdate'])->name('forum.reports.update');
+    Route::delete('reports/{id}', [AdminForumController::class, 'reportDestroy'])->name('forum.reports.destroy');
+});

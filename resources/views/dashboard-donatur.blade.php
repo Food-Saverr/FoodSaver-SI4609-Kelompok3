@@ -40,11 +40,11 @@
                 <div class="flex items-center space-x-6">
                     <div class="relative group">
                         <img src="{{ Auth::user()->Foto_Profil ? asset('storage/' . Auth::user()->Foto_Profil) : asset('images/user-placeholder.jpg') }}" 
-                            alt="{{ Auth::user()->Nama_Pengguna }}" 
-                            class="w-20 h-20 rounded-full border-4 border-orange-200 object-cover transition-transform group-hover:scale-110"
-                            onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=80'">
+                             alt="{{ Auth::user()->Nama_Pengguna }}" 
+                             class="w-20 h-20 rounded-full border-4 border-orange-200 object-cover transition-transform group-hover:scale-110"
+                             onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=80'">
                         <a href="" 
-                            class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                           class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fas fa-cog text-white text-lg"></i>
                         </a>
                     </div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="flex space-x-4">
                     <a href="{{ route('donatur.food-listing.create') }}" 
-                        class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200 animate-pulse-slow">
+                       class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200 animate-pulse-slow">
                         <i class="fas fa-plus mr-2"></i> Tambah Donasi
                     </a>
                 </div>
@@ -247,7 +247,7 @@
                         class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition animate-scale shadow-lg shadow-orange-200">
                             <i class="fas fa-plus mr-2"></i> Tambah Donasi
                         </a>
-                        <a href="" 
+                        <a href="{{ route('donatur.forum.index') }}" 
                         class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-comments"></i> Forum
                         </a>

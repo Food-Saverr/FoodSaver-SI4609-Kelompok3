@@ -58,11 +58,11 @@
                     </div>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="#" 
+                    <a href="{{ route('pengguna.forum.index') }}" 
                        class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
                         <i class="fas fa-comments"></i> Forum Komunitas
                     </a>
-                    <a href="" 
+                    <a href="{{ route ('artikel.pengguna') }}" 
                        class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2 shadow-md">
                         <i class="fas fa-newspaper"></i> Artikel & Tips
                     </a>
@@ -211,11 +211,11 @@
                     <p class="text-xl font-semibold text-gray-600">Belum Ada Makanan Tersedia</p>
                     <p class="text-sm text-gray-500 mt-2 max-w-md mx-auto">Jelajahi artikel kami untuk tips mengurangi limbah makanan atau bergabung di forum komunitas!</p>
                     <div class="flex justify-center space-x-4 mt-6">
-                        <a href="" 
+                        <a href="{{ route ('artikel.pengguna') }}" 
                            class="bg-purple-100 text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-newspaper"></i> Lihat Artikel
                         </a>
-                        <a href="#" 
+                        <a href="{{ route('pengguna.forum.index') }}" 
                            class="bg-blue-100 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-200 transition animate-scale inline-flex items-center gap-2">
                             <i class="fas fa-comments"></i> Forum
                         </a>
