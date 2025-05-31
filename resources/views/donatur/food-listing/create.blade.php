@@ -201,6 +201,14 @@
                             </span>
                             @endif
                         </div>
+                        <!-- Peta Interaktif -->
+                        <div class="mt-4">
+                            <label class="block text-gray-700 font-medium mb-1">Tentukan Lokasi pada Peta</label>
+                            <div id="location-map" style="height: 350px; border-radius: 12px; margin-bottom: 10px;"></div>
+                            <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+                            <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                            <p class="text-xs text-gray-500 mt-1">Klik pada peta untuk menentukan lokasi makanan. Koordinat akan terisi otomatis.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,42 +288,39 @@
 @endsection
 
 @section('scripts')
+@parent
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Image Preview Handling
-    const fileInput = document.getElementById('Foto_Makanan');
-    const imagePreview = document.getElementById('image-preview');
-    const previewImage = document.getElementById('preview-image');
-
-    fileInput.addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                imagePreview.classList.remove('hidden');
-                imagePreview.classList.add('flex');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            imagePreview.classList.add('hidden');
-            imagePreview.classList.remove('flex');
-            previewImage.src = '';
+    let map;
+    let marker;
+    document.addEventListener('DOMContentLoaded', function() {
+        map = L.map('location-map').setView([-6.2088, 106.8456], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        // Get user's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                map.setView([lat, lng], 13);
+                marker = L.marker([lat, lng]).addTo(map);
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
         }
-    });
-
-    // Form Submission Debugging
-    const form = document.getElementById('food-form');
-    form.addEventListener('submit', function(e) {
-        console.log('Form submitting...');
-        console.log('Foto_Makanan selected:', fileInput.files.length > 0 ? fileInput.files[0].name : 'No file selected');
-    });
-
-    // Reset image preview on form reset
-    form.addEventListener('reset', function() {
-        imagePreview.classList.add('hidden');
-        imagePreview.classList.remove('flex');
-        previewImage.src = '';
-        fileInput.value = '';
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng]).addTo(map);
+            }
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+        });
     });
 </script>
 @endsection

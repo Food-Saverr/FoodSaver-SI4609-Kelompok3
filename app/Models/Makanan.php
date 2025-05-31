@@ -21,6 +21,9 @@ class Makanan extends Model
         'Status_Makanan',
         'Tanggal_Kedaluwarsa',
         'Lokasi_Makanan',
+        'latitude',
+        'longitude',
+        'Lokasi_Makanan',
         'Jumlah_Makanan',
         'id_user',
     ];
