@@ -565,6 +565,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
     public static $classMap = array (
         'App\\Http\\Controllers\\AdminDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminDashboardController.php',
         'App\\Http\\Controllers\\AdminDonationController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminDonationController.php',
+        'App\\Http\\Controllers\\AdminForumController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminForumController.php',
         'App\\Http\\Controllers\\AdminMakananController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminMakananController.php',
         'App\\Http\\Controllers\\AdminRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminRequestController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
@@ -577,6 +578,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Controllers\\DonaturPaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturPaymentController.php',
         'App\\Http\\Controllers\\DonaturRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/DonaturRequestController.php',
         'App\\Http\\Controllers\\FoodListingController' => __DIR__ . '/../..' . '/app/Http/Controllers/FoodListingController.php',
+        'App\\Http\\Controllers\\ForumDonaturController' => __DIR__ . '/../..' . '/app/Http/Controllers/ForumDonaturController.php',
         'App\\Http\\Controllers\\ForumPenggunaController' => __DIR__ . '/../..' . '/app/Http/Controllers/ForumPenggunaController.php',
         'App\\Http\\Controllers\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
@@ -587,6 +589,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Models\\ForumComment' => __DIR__ . '/../..' . '/app/Models/ForumComment.php',
         'App\\Models\\ForumLike' => __DIR__ . '/../..' . '/app/Models/ForumLike.php',
         'App\\Models\\ForumPost' => __DIR__ . '/../..' . '/app/Models/ForumPost.php',
+        'App\\Models\\ForumReport' => __DIR__ . '/../..' . '/app/Models/ForumReport.php',
         'App\\Models\\Makanan' => __DIR__ . '/../..' . '/app/Models/Makanan.php',
         'App\\Models\\Payment' => __DIR__ . '/../..' . '/app/Models/Payment.php',
         'App\\Models\\Pengguna' => __DIR__ . '/../..' . '/app/Models/Pengguna.php',

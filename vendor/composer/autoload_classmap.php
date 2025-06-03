@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Http\\Controllers\\AdminDashboardController' => $baseDir . '/app/Http/Controllers/AdminDashboardController.php',
     'App\\Http\\Controllers\\AdminDonationController' => $baseDir . '/app/Http/Controllers/AdminDonationController.php',
+    'App\\Http\\Controllers\\AdminForumController' => $baseDir . '/app/Http/Controllers/AdminForumController.php',
     'App\\Http\\Controllers\\AdminMakananController' => $baseDir . '/app/Http/Controllers/AdminMakananController.php',
     'App\\Http\\Controllers\\AdminRequestController' => $baseDir . '/app/Http/Controllers/AdminRequestController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
@@ -20,6 +21,7 @@ return array(
     'App\\Http\\Controllers\\DonaturPaymentController' => $baseDir . '/app/Http/Controllers/DonaturPaymentController.php',
     'App\\Http\\Controllers\\DonaturRequestController' => $baseDir . '/app/Http/Controllers/DonaturRequestController.php',
     'App\\Http\\Controllers\\FoodListingController' => $baseDir . '/app/Http/Controllers/FoodListingController.php',
+    'App\\Http\\Controllers\\ForumDonaturController' => $baseDir . '/app/Http/Controllers/ForumDonaturController.php',
     'App\\Http\\Controllers\\ForumPenggunaController' => $baseDir . '/app/Http/Controllers/ForumPenggunaController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
@@ -30,6 +32,7 @@ return array(
     'App\\Models\\ForumComment' => $baseDir . '/app/Models/ForumComment.php',
     'App\\Models\\ForumLike' => $baseDir . '/app/Models/ForumLike.php',
     'App\\Models\\ForumPost' => $baseDir . '/app/Models/ForumPost.php',
+    'App\\Models\\ForumReport' => $baseDir . '/app/Models/ForumReport.php',
     'App\\Models\\Makanan' => $baseDir . '/app/Models/Makanan.php',
     'App\\Models\\Payment' => $baseDir . '/app/Models/Payment.php',
     'App\\Models\\Pengguna' => $baseDir . '/app/Models/Pengguna.php',
