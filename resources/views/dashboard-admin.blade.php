@@ -15,7 +15,7 @@
         </div>
         
         <!-- Quick Stats Cards -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 animate-fade-up animate-scale">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
 
             <a href="{{ route('DashboardAdmin.pengguna') }}" class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                 <div class="flex items-center space-x-4 mb-6">
@@ -79,7 +79,8 @@
                 </div>
                 <div class="flex justify-between items-start">
                     <div class="space-y-3">
-                        {{-- <p class="text-gray-700 text-lg">Jumlah Artikel: <strong class="text-blue-600">{{ $totalArtikel }}</strong></p> --}}
+                        <p class="text-gray-700 text-lg">Jumlah Artikel: <strong class="text-blue-600">{{ $totalArtikel }}</strong></p>
+                        <p class="text-sm text-gray-500">Statistik 4 minggu terakhir</p>
                     </div>
                     <div class="w-40 h-40">
                         <canvas id="totalArtikelChart"></canvas>
@@ -161,7 +162,9 @@
                         <p class="text-sm text-gray-500">Monitoring donasi keuangan untuk FoodSaver</p>
                     </div>
                 </a>
-        
+            </div>
+        </div>
+
         <!-- Recent Activities -->
         <div>
             <h2 class="text-2xl font-bold mb-6 title-font">Aktivitas Terbaru</h2>
@@ -228,185 +231,74 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <script>
-  var ctxPengguna = document.getElementById('penggunaChart').getContext('2d');
-  var penggunaChart = new Chart(ctxPengguna, {
-    type: 'pie',
-    data: {
-      labels: ['Donatur', 'Penerima'],
-      datasets: [{
-        data: [{{ $jumlahDonatur }}, {{ $jumlahPenerima }}],
-        backgroundColor: ['#3b82f6', '#10b981'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { 
-          position: 'bottom',
-          labels: {
-            padding: 20,
-            font: {
-              size: 14
-            }
-          }
-        }
-      }
-    }
-  });
-
-  var ctx2 = document.getElementById('makananChart').getContext('2d');
-  var makananChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-      labels: ['Tersedia', 'Didonasikan'],
-      datasets: [{
-        label: 'Jumlah Makanan',
-        data: [{{ $jumlahMakananTersedia ?? 0 }}, {{ $jumlahMakananDidonasikan ?? 0 }}],
-        backgroundColor: ['#4caf50', '#ff9800'],
-        borderColor: ['#fff', '#fff'],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        y: { 
-          beginAtZero: true, 
-          precision: 0,
-          ticks: {
-            font: {
-              size: 14
-            }
-          }
+document.addEventListener('DOMContentLoaded', function() {
+    // Chart Total Artikel
+    var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
+    var artikelChart = new Chart(ctxArtikel, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($artikelLabels) !!},
+            datasets: [{
+                label: 'Artikel per Minggu',
+                data: {!! json_encode($artikelData) !!},
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#3b82f6',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4
+            }]
         },
-        x: {
-          ticks: {
-            font: {
-              size: 14
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 10,
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        stepSize: 1,
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 10
+                        },
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  });
-
-  var ctxDonasi = document.getElementById('donasiChart').getContext('2d');
-  var donasiChart = new Chart(ctxDonasi, {
-    type: 'line',
-    data: {
-      labels: ['Total Donasi'],
-      datasets: [{
-        data: [{{ $totalDonasi }}],
-        borderColor: '#8b5cf6',
-        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-        borderWidth: 2,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        y: { 
-          beginAtZero: true,
-          ticks: {
-            font: {
-              size: 14
-            }
-          }
-        },
-        x: {
-          ticks: {
-            font: {
-              size: 14
-            }
-          }
-        }
-      }
-    }
-  });
-
-  // Chart: Total Artikel Terpublikasi
-  var ctxArtikel = document.getElementById('totalArtikelChart').getContext('2d');
-  var totalArtikelChart = new Chart(ctxArtikel, {
-    type: 'bar',
-    data: {
-      labels: ['Total Artikel'],
-      datasets: [{
-        label: 'Total Artikel',
-        data: [{{ $totalArtikel ?? 0 }}],
-        backgroundColor: ['#3b82f6'],
-        borderColor: ['#2563eb'],
-        borderWidth: 1,
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: 'Total Artikel Terpublikasi',
-          font: { size: 16 }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            stepSize: 1,
-            font: { size: 14 }
-          }
-        },
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 14 } }
-        }
-      }
-    }
-  });
-
-  // var ctxForum = document.getElementById('forumPieChart').getContext('2d');
-  // var forumChart = new Chart(ctxForum, {
-  //   type: 'pie',
-  //   data: {
-  //     labels: ['Total Forum Dibuat', 'Diskusi Aktif'],
-  //     datasets: [{
-  //       data: [{{ $totalForum }}, {{ $diskusiAktif }}],
-  //       backgroundColor: ['#6b46c1', '#d53f8c'],
-  //       borderWidth: 0
-  //     }]
-  //   },
-  //   options: {
-  //     responsive: true,
-  //     maintainAspectRatio: false,
-  //     plugins: {
-  //       legend: { 
-  //         position: 'bottom',
-  //         labels: {
-  //           padding: 20,
-  //           font: {
-  //             size: 14
-  //           }
-  //         }
-  //       }
-  //     },
-  //     cutout: '60%'
-  //   }
-  // });
+    });
+});
 </script>
 @endsection

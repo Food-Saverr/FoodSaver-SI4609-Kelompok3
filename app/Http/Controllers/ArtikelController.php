@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ArtikelController extends Controller
 {
@@ -167,5 +168,55 @@ class ArtikelController extends Controller
 
         // Silakan sesuaikan view berikut sesuai kebutuhan public (umum)
         return view('admin.artikel.DashboardAdmin-ArtikelIndex', compact('artikels'));
+    }
+
+    public function showStatistics()
+    {
+        // Get total articles
+        $totalArtikel = Artikel::count();
+
+        // Get articles per week for the last 8 weeks
+        $artikelPerMinggu = Artikel::select(
+            DB::raw('YEARWEEK(created_at, 1) as yearweek'),
+            DB::raw('MIN(DATE(created_at)) as start_of_week'),
+            DB::raw('COUNT(*) as total_artikel')
+        )
+        ->where('created_at', '>=', now()->subWeeks(8))
+        ->groupBy('yearweek')
+        ->orderBy('yearweek')
+        ->get();
+
+        // Get latest articles
+        $artikelList = Artikel::with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        // Get articles published this week
+        $artikelMingguIni = Artikel::whereBetween('created_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek()
+        ])->count();
+
+        // Get articles by category (if you have categories)
+        $artikelPerKategori = Artikel::select('kategori', DB::raw('count(*) as total'))
+            ->groupBy('kategori')
+            ->get();
+
+        // Prepare data for charts
+        $labels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->translatedFormat('d M Y');
+        });
+        
+        $data = $artikelPerMinggu->pluck('total_artikel');
+
+        return view('DashboardAdmin.artikel-admin', compact(
+            'totalArtikel',
+            'artikelList',
+            'artikelMingguIni',
+            'artikelPerKategori',
+            'labels',
+            'data'
+        ));
     }
 }

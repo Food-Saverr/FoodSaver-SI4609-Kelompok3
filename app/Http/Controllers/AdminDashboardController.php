@@ -25,8 +25,25 @@ class AdminDashboardController extends Controller
 
         $totalArtikel = Artikel::count();
 
-        // Statistik artikel per minggu berdasarkan created_at
+        // Statistik artikel per minggu untuk chart kecil di dashboard
         $artikelPerMinggu = \DB::table('artikels')
+            ->select(
+                \DB::raw('YEARWEEK(created_at, 1) as yearweek'),
+                \DB::raw('MIN(DATE(created_at)) as start_of_week'),
+                \DB::raw('COUNT(*) as total_artikel')
+            )
+            ->where('created_at', '>=', now()->subWeeks(4)) // Ambil 4 minggu terakhir untuk chart kecil
+            ->groupBy('yearweek')
+            ->orderBy('yearweek')
+            ->get();
+
+        $artikelLabels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->translatedFormat('d M');
+        });
+        $artikelData = $artikelPerMinggu->pluck('total_artikel');
+
+        // Statistik artikel per minggu untuk halaman statistik
+        $artikelPerMingguFull = \DB::table('artikels')
             ->select(
                 \DB::raw('YEARWEEK(created_at, 1) as yearweek'),
                 \DB::raw('MIN(DATE(created_at)) as start_of_week'),
@@ -36,10 +53,10 @@ class AdminDashboardController extends Controller
             ->orderBy('yearweek')
             ->get();
 
-        $artikelLabels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
-            return date('d M Y', strtotime($date));
+        $artikelLabelsFull = $artikelPerMingguFull->pluck('start_of_week')->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->translatedFormat('d M Y');
         });
-        $artikelData = $artikelPerMinggu->pluck('total_artikel');
+        $artikelDataFull = $artikelPerMingguFull->pluck('total_artikel');
 
         $totalForum = Forum::count();
         $diskusiAktif = Forum::where('is_active', true)->count();
@@ -62,6 +79,8 @@ class AdminDashboardController extends Controller
             'totalArtikel',
             'artikelLabels',
             'artikelData',
+            'artikelLabelsFull',
+            'artikelDataFull',
             'totalForum',
             'diskusiAktif',
             'bulanLabels',
@@ -128,31 +147,49 @@ class AdminDashboardController extends Controller
 
     public function showTotalArtikel()
     {
+        // Get total articles
         $totalArtikel = Artikel::count();
-        $artikelList = Artikel::latest()->get();
 
+        // Get articles per week for the last 8 weeks
         $artikelPerMinggu = \DB::table('artikels')
             ->select(
                 \DB::raw('YEARWEEK(created_at, 1) as yearweek'),
                 \DB::raw('MIN(DATE(created_at)) as start_of_week'),
                 \DB::raw('COUNT(*) as total_artikel')
             )
+            ->where('created_at', '>=', now()->subWeeks(8))
             ->groupBy('yearweek')
             ->orderBy('yearweek')
             ->get();
 
+        // Get latest articles
+        $artikelList = Artikel::with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        // Get articles published this week
+        $artikelMingguIni = Artikel::whereBetween('created_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek()
+        ])->count();
+
+        // Prepare data for charts
         $labels = $artikelPerMinggu->pluck('start_of_week')->map(function ($date) {
-            return date('d M Y', strtotime($date));
+            return \Carbon\Carbon::parse($date)->translatedFormat('d M Y');
         });
+        
         $data = $artikelPerMinggu->pluck('total_artikel');
 
         return view('DashboardAdmin.artikel-admin', compact(
             'totalArtikel',
             'artikelList',
+            'artikelMingguIni',
             'labels',
             'data'
         ));
     }
+
     public function statistikForum()
     {
         $totalForum = Forum::count();
