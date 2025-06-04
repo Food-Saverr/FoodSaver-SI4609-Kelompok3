@@ -295,10 +295,12 @@
     let map;
     let marker;
     document.addEventListener('DOMContentLoaded', function() {
+        // Map initialization and configuration
         map = L.map('location-map').setView([-6.2088, 106.8456], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
+        
         // Get user's location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -310,6 +312,7 @@
                 document.getElementById('longitude').value = lng;
             });
         }
+        
         map.on('click', function(e) {
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
@@ -330,6 +333,31 @@
                     }
                 })
                 .catch(error => console.error('Error getting address:', error));
+        });
+        
+        // Image preview functionality
+        const imageInput = document.getElementById('Foto_Makanan');
+        const previewContainer = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview-image');
+        
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.addEventListener('load', function() {
+                    previewImage.src = reader.result;
+                    previewContainer.classList.remove('hidden');
+                    previewContainer.classList.add('flex');
+                    
+                    // Hide the upload icon and text when preview is shown
+                    const uploadUI = previewContainer.previousElementSibling;
+                    uploadUI.style.opacity = '0';
+                });
+                
+                reader.readAsDataURL(file);
+            }
         });
     });
 </script>

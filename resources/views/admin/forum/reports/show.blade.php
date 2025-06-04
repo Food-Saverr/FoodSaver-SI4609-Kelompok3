@@ -175,50 +175,44 @@
                         </h3>
                     </div>
                     <div class="p-6">
-                        @if($otherReports->isEmpty())
-                            <div class="text-center py-6">
-                                <p class="text-gray-500">Tidak ada laporan lain untuk postingan ini.</p>
-                            </div>
-                        @else
-                            <div class="space-y-4">
-                                @foreach($otherReports as $otherReport)
-                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <div class="flex items-center">
-                                                <img src="{{ $otherReport->reporter->foto ? asset('storage/'.$otherReport->reporter->foto) : 'https://ui-avatars.com/api/?name='.urlencode($otherReport->reporter->Nama_Pengguna).'&color=7F9CF5&background=EBF4FF' }}" 
-                                                     class="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm" 
-                                                     alt="{{ $otherReport->reporter->Nama_Pengguna }}">
-                                                <div class="ml-3">
-                                                    <div class="text-sm font-medium text-gray-800">{{ $otherReport->reporter->Nama_Pengguna }}</div>
-                                                    <div class="text-xs text-gray-500">{{ $otherReport->created_at->format('d M Y, H:i') }}</div>
-                                                </div>
+                        <div class="space-y-4">
+                            @foreach($otherReports as $otherReport)
+                                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center">
+                                            <img src="{{ $otherReport->reporter->foto ? asset('storage/'.$otherReport->reporter->foto) : 'https://ui-avatars.com/api/?name='.urlencode($otherReport->reporter->Nama_Pengguna).'&color=7F9CF5&background=EBF4FF' }}" 
+                                                 class="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm" 
+                                                 alt="{{ $otherReport->reporter->Nama_Pengguna }}">
+                                            <div class="ml-3">
+                                                <div class="text-sm font-medium text-gray-800">{{ $otherReport->reporter->Nama_Pengguna }}</div>
+                                                <div class="text-xs text-gray-500">{{ $otherReport->created_at->format('d M Y, H:i') }}</div>
                                             </div>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-                                                {{ $otherReport->alasan_laporan == 'spam' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'inappropriate' ? 'bg-red-100 text-red-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'harassment' ? 'bg-purple-100 text-purple-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'violence' ? 'bg-red-100 text-red-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'hate_speech' ? 'bg-red-100 text-red-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'false_info' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                {{ $otherReport->alasan_laporan == 'other' ? 'bg-gray-100 text-gray-800' : '' }}
-                                            ">
-                                                {{ $otherReport->getReasonLabel() }}
-                                            </span>
                                         </div>
-                                        @if($otherReport->deskripsi)
-                                            <div class="mt-2 text-sm text-gray-600">
-                                                {{ $otherReport->deskripsi }}
-                                            </div>
-                                        @endif
-                                        <div class="mt-3 flex justify-end">
-                                            <a href="{{ route('admin.forum.reports.show', $otherReport->ID_Report) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors text-xs font-medium">
-                                                <i class="fas fa-eye mr-1"></i> Lihat Detail
-                                            </a>
-                                        </div>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                                            {{ $otherReport->alasan_laporan == 'spam' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'inappropriate' ? 'bg-red-100 text-red-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'harassment' ? 'bg-purple-100 text-purple-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'violence' ? 'bg-red-100 text-red-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'hate_speech' ? 'bg-red-100 text-red-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'false_info' ? 'bg-blue-100 text-blue-800' : '' }}
+                                            {{ $otherReport->alasan_laporan == 'other' ? 'bg-gray-100 text-gray-800' : '' }}
+                                        ">
+                                            {{ $otherReport->getReasonLabel() }}
+                                        </span>
                                     </div>
-                                @endforeach
-                            </div>
-                        @endif
+                                    @if($otherReport->deskripsi)
+                                        <div class="mt-2 text-sm text-gray-600">
+                                            {{ $otherReport->deskripsi }}
+                                        </div>
+                                    @endif
+                                    <div class="mt-3 flex justify-end">
+                                        <a href="{{ route('admin.forum.reports.show', $otherReport->ID_Report) }}" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors text-xs font-medium">
+                                            <i class="fas fa-eye mr-1"></i> Lihat Detail
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -226,50 +220,79 @@
             
             <!-- Sidebar -->
             <div class="space-y-15">
-                <!-- Action Card -->
+                <!-- Action Card - SIMPLIFIED VERSION -->
                 <div class="mt-16 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-green-50 to-green-100">
                         <h3 class="font-bold text-gray-800 flex items-center">
                             <i class="fas fa-tasks text-green-600 mr-2"></i>
-                            Tindakan
+                            Penanganan Laporan
                         </h3>
                     </div>
                     <div class="p-6">
                         <form action="{{ route('admin.forum.reports.update', $report->ID_Report) }}" method="POST">
                             @csrf
                             <div class="space-y-5">
+                                <!-- SIMPLIFIED STATUS OPTIONS -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                    <div class="space-y-2">
-                                        <div class="flex items-center">
-                                            <input type="radio" name="status" id="status_pending" value="pending" {{ $report->status == 'pending' ? 'checked' : '' }} class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                                            <label for="status_pending" class="ml-2 block text-sm text-gray-700">Menunggu</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">Status Laporan</label>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="relative">
+                                            <input type="radio" name="status" id="status_pending" value="pending" 
+                                                {{ $report->status == 'pending' ? 'checked' : '' }} 
+                                                class="peer absolute h-0 w-0 opacity-0">
+                                            <label for="status_pending" 
+                                                class="flex flex-col items-center justify-center p-3 rounded-lg border border-gray-200 
+                                                       cursor-pointer bg-white hover:bg-yellow-50 peer-checked:bg-yellow-100 
+                                                       peer-checked:border-yellow-400 peer-checked:ring-2 peer-checked:ring-yellow-200 
+                                                       transition-all duration-200">
+                                                <i class="fas fa-hourglass-half text-lg text-yellow-500 mb-1"></i>
+                                                <span class="font-medium text-gray-700">Menunggu</span>
+                                            </label>
                                         </div>
-                                        <div class="flex items-center">
-                                            <input type="radio" name="status" id="status_reviewed" value="reviewed" {{ $report->status == 'reviewed' ? 'checked' : '' }} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                            <label for="status_reviewed" class="ml-2 block text-sm text-gray-700">Sudah Ditinjau</label>
+                                        <div class="relative">
+                                            <input type="radio" name="status" id="status_rejected" value="rejected" 
+                                                {{ $report->status == 'rejected' ? 'checked' : '' }} 
+                                                class="peer absolute h-0 w-0 opacity-0">
+                                            <label for="status_rejected" 
+                                                class="flex flex-col items-center justify-center p-3 rounded-lg border border-gray-200 
+                                                       cursor-pointer bg-white hover:bg-gray-50 peer-checked:bg-gray-100 
+                                                       peer-checked:border-gray-400 peer-checked:ring-2 peer-checked:ring-gray-200 
+                                                       transition-all duration-200">
+                                                <i class="fas fa-times-circle text-lg text-gray-500 mb-1"></i>
+                                                <span class="font-medium text-gray-700">Ditolak</span>
+                                            </label>
                                         </div>
-                                        <div class="flex items-center">
-                                            <input type="radio" name="status" id="status_rejected" value="rejected" {{ $report->status == 'rejected' ? 'checked' : '' }} class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded">
-                                            <label for="status_rejected" class="ml-2 block text-sm text-gray-700">Ditolak</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="radio" name="status" id="status_actioned" value="actioned" {{ $report->status == 'actioned' ? 'checked' : '' }} class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                                            <label for="status_actioned" class="ml-2 block text-sm text-gray-700">Ditindaklanjuti</label>
+                                        <div class="relative">
+                                            <input type="radio" name="status" id="status_actioned" value="actioned" 
+                                                {{ $report->status == 'actioned' ? 'checked' : '' }} 
+                                                class="peer absolute h-0 w-0 opacity-0">
+                                            <label for="status_actioned" 
+                                                class="flex flex-col items-center justify-center p-3 rounded-lg border border-gray-200 
+                                                       cursor-pointer bg-white hover:bg-green-50 peer-checked:bg-green-100 
+                                                       peer-checked:border-green-400 peer-checked:ring-2 peer-checked:ring-green-200 
+                                                       transition-all duration-200">
+                                                <i class="fas fa-check-circle text-lg text-green-500 mb-1"></i>
+                                                <span class="font-medium text-gray-700">Ditindaklanjuti</span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="border-t border-gray-200 pt-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tindakan</label>
-                                    <div class="space-y-2">
-                                        <div class="flex items-center">
-                                            <input type="radio" name="action" id="action_none" value="none" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                            <label for="action_none" class="ml-2 block text-sm text-gray-700">Tidak Ada Tindakan</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="radio" name="action" id="action_delete_post" value="delete_post" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                                            <label for="action_delete_post" class="ml-2 block text-sm text-gray-700">Hapus Postingan</label>
+                                <!-- CONDITIONAL ACTION SELECTION (only shows when status is "actioned") -->
+                                <div id="actionContainer" class="border-t border-gray-200 pt-4 transition-all duration-300">
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">Tindakan</label>
+                                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                                        <div class="relative">
+                                            <input type="radio" name="action" id="action_delete_post" value="delete_post" class="peer absolute h-0 w-0 opacity-0">
+                                            <label for="action_delete_post" class="flex items-center p-3 w-full cursor-pointer hover:bg-red-50 peer-checked:bg-red-100 transition-colors">
+                                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                                                    <i class="fas fa-trash-alt text-red-500"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-medium text-gray-800">Hapus Postingan</div>
+                                                    <div class="text-xs text-gray-500">Postingan akan dihapus permanen dari forum</div>
+                                                </div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -351,14 +374,11 @@
                                 <div class="mt-1">
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
                                         {{ $report->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                        {{ $report->status == 'reviewed' ? 'bg-blue-100 text-blue-800' : '' }}
                                         {{ $report->status == 'rejected' ? 'bg-gray-100 text-gray-800' : '' }}
                                         {{ $report->status == 'actioned' ? 'bg-green-100 text-green-800' : '' }}
                                     ">
                                         @if($report->status == 'pending')
-                                            <i class="fas fa-clock mr-2"></i> Menunggu Tindakan
-                                        @elseif($report->status == 'reviewed')
-                                            <i class="fas fa-eye mr-2"></i> Sudah Ditinjau
+                                            <i class="fas fa-hourglass-half mr-2"></i> Menunggu Tindakan
                                         @elseif($report->status == 'rejected')
                                             <i class="fas fa-times-circle mr-2"></i> Ditolak
                                         @elseif($report->status == 'actioned')
@@ -367,11 +387,14 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-16 h-16 rounded-full border-4 {{ $report->status == 'pending' ? 'border-yellow-400' : ($report->status == 'reviewed' ? 'border-blue-400' : ($report->status == 'rejected' ? 'border-gray-400' : 'border-green-400')) }} flex items-center justify-center text-xl font-bold {{ $report->status == 'pending' ? 'text-yellow-500' : ($report->status == 'reviewed' ? 'text-blue-500' : ($report->status == 'rejected' ? 'text-gray-500' : 'text-green-500')) }}">
+                            <div class="w-16 h-16 rounded-full border-4 
+                                {{ $report->status == 'pending' ? 'border-yellow-400' : 
+                                   ($report->status == 'rejected' ? 'border-gray-400' : 'border-green-400') }} 
+                                flex items-center justify-center text-xl font-bold 
+                                {{ $report->status == 'pending' ? 'text-yellow-500' : 
+                                   ($report->status == 'rejected' ? 'text-gray-500' : 'text-green-500') }}">
                                 @if($report->status == 'pending')
                                     <i class="fas fa-hourglass-half"></i>
-                                @elseif($report->status == 'reviewed')
-                                    <i class="fas fa-eye"></i>
                                 @elseif($report->status == 'rejected')
                                     <i class="fas fa-times"></i>
                                 @elseif($report->status == 'actioned')
@@ -430,12 +453,33 @@
 
 @push('scripts')
 <script>
-    function confirmDeleteReport() {
-        document.getElementById('deleteReportModal').classList.remove('hidden');
-    }
-    
-    function closeDeleteModal() {
-        document.getElementById('deleteReportModal').classList.add('hidden');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const actionContainer = document.getElementById('actionContainer');
+        const statusRadios = document.querySelectorAll('input[name="status"]');
+        const deletePostAction = document.getElementById('action_delete_post');
+        
+        // Function to toggle action container visibility
+        function toggleActionContainer() {
+            const isActioned = document.getElementById('status_actioned').checked;
+            
+            if (isActioned) {
+                actionContainer.classList.remove('hidden');
+                actionContainer.classList.add('block');
+                deletePostAction.checked = true;
+            } else {
+                actionContainer.classList.add('hidden');
+                actionContainer.classList.remove('block');
+                deletePostAction.checked = false;
+            }
+        }
+        
+        // Initialize action container visibility
+        toggleActionContainer();
+        
+        // Add event listeners to all status radios
+        statusRadios.forEach(radio => {
+            radio.addEventListener('change', toggleActionContainer);
+        });
+    });
 </script>
 @endpush
