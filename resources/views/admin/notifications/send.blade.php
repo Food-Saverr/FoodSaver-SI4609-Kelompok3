@@ -56,7 +56,7 @@
             <label class="block font-semibold mb-1">Pesan</label>
             <textarea name="message" class="w-full border rounded p-2" required maxlength="255"></textarea>
         </div>
-        <button type="submit" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Kirim</button>
+        <button dusk="submit-notification" type="submit" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Kirim</button>
     </form>
 </div>
 <script>

@@ -47,6 +47,7 @@ class NotificationService
                 'maintenance' => $preferences->maintenance,
                 'announcement' => $preferences->announcements_enabled,
                 'advertisement' => $preferences->ads_enabled,
+                'expiration_alert' => $preferences->expiration_alerts,
                 default => true
             };
 
@@ -129,5 +130,32 @@ class NotificationService
             $message,
             $data
         );
+    }
+
+    public function notifyExpiringFood(Pengguna $donatur, array $data = []): void
+    {
+        $daysLeft = $data['days_left'] ?? 0;
+        $hoursLeft = $data['hours_left'] ?? 0;
+        $makananNama = $data['makanan_nama'] ?? 'makanan';
+        
+        $title = 'Peringatan Kedaluwarsa Makanan';
+        $message = "Makanan '{$makananNama}' akan kedaluwarsa dalam {$daysLeft} hari dan {$hoursLeft} jam. Silakan periksa status makanan Anda.";
+        
+        $this->createNotification(
+            $donatur,
+            'expiration_alert',
+            $title,
+            $message,
+            $data
+        );
+        
+        // Log the notification attempt
+        Log::info('Expiration notification sent', [
+            'donatur_id' => $donatur->id_user,
+            'makanan_id' => $data['makanan_id'] ?? null,
+            'makanan_nama' => $makananNama,
+            'days_left' => $daysLeft,
+            'hours_left' => $hoursLeft
+        ]);
     }
 } 

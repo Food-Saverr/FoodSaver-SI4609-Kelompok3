@@ -95,21 +95,21 @@ class AdminDashboardController extends Controller
 
         $donaturPerBulan = DB::table('penggunas')
             ->select(
-                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
+                DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('Role_Pengguna', 'Donatur')
-            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy('bulan')
             ->get();
 
         $penerimaPerBulan = DB::table('penggunas')
             ->select(
-                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
+                DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('Role_Pengguna', 'Pengguna')
-            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy('bulan')
             ->get();
 
@@ -130,11 +130,11 @@ class AdminDashboardController extends Controller
 
         $makananPerBulan = DB::table('makanans')
             ->select(
-                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
+                DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('SUM(CASE WHEN Status_Makanan != "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_tersedia'),
                 DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_didonasi')
             )
-            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy('bulan')
             ->get();
 
@@ -221,10 +221,10 @@ class AdminDashboardController extends Controller
 
         $donasiPerBulan = DB::table('makanans')
             ->select(
-                DB::raw('cast(strftime("%m", created_at) as integer) as bulan'),
+                DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('SUM(CASE WHEN Status_Makanan = "Habis" THEN Jumlah_Makanan ELSE 0 END) as total_donasi')
             )
-            ->groupBy(DB::raw('cast(strftime("%m", created_at) as integer)'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy('bulan')
             ->get();
 

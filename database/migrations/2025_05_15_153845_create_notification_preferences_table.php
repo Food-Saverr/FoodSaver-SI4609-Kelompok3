@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('maintenance')->default(true); // System maintenance notifications
             $table->boolean('announcements_enabled')->default(true); // Notifications for announcements
             $table->boolean('ads_enabled')->default(true); // Notifications for ads
+            $table->boolean('expiration_alerts')->default(true); // Notifications for expiring food
             $table->timestamps();
         });
     }

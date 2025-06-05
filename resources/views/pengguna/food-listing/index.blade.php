@@ -7,10 +7,9 @@
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-8 custom-shadow">
         <!-- Button Riwayat Permintaan -->
         <div class="flex justify-start mb-4">
-            <a href="{{ route('pengguna.request.index') }}"
-               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-1 rounded-lg font-medium transition animate-scale shadow-md flex items-center text-sm">
+            <button dusk="riwayat-permintaan" onclick="window.location.href='{{ route('pengguna.request.index') }}';" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-1 rounded-lg font-medium transition animate-scale shadow-md flex items-center text-sm">
                 <i class="fas fa-history mr-2"></i>Riwayat Permintaan
-            </a>
+            </button>
         </div>
         <!-- Header -->
         <div class="text-center mb-10">

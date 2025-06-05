@@ -277,7 +277,7 @@
 
                                     <div class="flex space-x-3">
                                         <button onclick="openEditPickupModal('{{ $request->ID_Request }}', '{{ $request->Waktu_Pengambilan ? $request->Waktu_Pengambilan->format('Y-m-d\TH:i') : '' }}', '{{ $request->makanan->Lokasi_Makanan }}')" 
-                                            class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
+                                            class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center" dusk="ubah-jadwal">
                                             <i class="fas fa-edit mr-2"></i>Ubah Jadwal
                                         </button>
                                         @if($request->Status_Request === 'Pending')

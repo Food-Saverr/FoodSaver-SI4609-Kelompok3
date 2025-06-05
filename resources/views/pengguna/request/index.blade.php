@@ -98,11 +98,10 @@
                                     </td>
                                     <td class="py-4 px-4">{{ $request->created_at->setTimezone('Asia/Jakarta')->format('d/m/Y H:i') }}</td>
                                     <td class="py-4 px-4">
-                                        <div class="flex space-x-2">
+                                        <div class="flex space-x-2"  dusk="pickup-button">
                                             @if($request->Status_Request === 'Approved')
                                                 @if($request->Status_Pengambilan === 'Belum_Dijadwalkan')
-                                                    <button onclick="openPickupModal('{{ $request->ID_Request }}', '', '{{ $request->makanan->Lokasi_Makanan }}')" 
-                                                        class="text-sm bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors flex items-center">
+                                                    <button onclick="openPickupModal('{{ $request->ID_Request }}', '', '{{ $request->makanan->Lokasi_Makanan }}')" class="text-sm bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors flex items-center">
                                                         <i class="fas fa-calendar-plus mr-2"></i>Pickup
                                                     </button>
                                                 @else
